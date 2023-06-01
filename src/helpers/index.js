@@ -1,4 +1,4 @@
-const allCourts = ['2', '3', '4', '5', '6', '7', '8', '9', '10', 'J', 'Q', 'K', 'A', 'X'];
+const allCourts = ['A','2', '3', '4', '5', '6', '7', '8', '9', '10', 'J', 'Q', 'K', 'X'];
 const allSuits = ['spades', 'hearts', 'diamonds', 'clubs'];
 
 const shuffle = (array) => {
@@ -13,21 +13,22 @@ const shuffle = (array) => {
 const newDeck = (options) => {
   const { 
     courts = allCourts,
-    players = courts.length * 4
+    players = courts.length * 4,
+    perCourt = 4,
   } = options
 
   const deck = []
   // Add cards for each court and player
   for (const court of courts) {
-    for (const suit of allSuits) {
+    for(let count = 0; count < perCourt; count++) {
       if (deck.length < players)
-      deck.push({ court, suit, drawn: false });
+      deck.push({ court, suit: allSuits[count] });
     }
   }
 
   // Add jokers to fill in extra players
   while (deck.length < players) {
-    deck.push({ court: 'X', suit: 'none', drawn: false })
+    deck.push({ court: 'X', suit: 'none' })
   }
   return shuffle(deck)
 }
@@ -45,4 +46,5 @@ const newSlug = (length = 5) => {
 export {
   newDeck,
   newSlug,
+  allCourts,
 }

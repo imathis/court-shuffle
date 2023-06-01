@@ -10,10 +10,8 @@
  */
 
 import type { ApiFromModules } from "convex/api";
-import type * as createGame from "../createGame";
 import type * as drawCard from "../drawCard";
-import type * as getGame from "../getGame";
-import type * as resetGame from "../resetGame";
+import type * as game from "../game";
 
 /**
  * A type describing your app's public Convex API.
@@ -25,8 +23,6 @@ import type * as resetGame from "../resetGame";
  * `ConvexReactClient` to create app-specific types.
  */
 export type API = ApiFromModules<{
-  createGame: typeof createGame;
   drawCard: typeof drawCard;
-  getGame: typeof getGame;
-  resetGame: typeof resetGame;
+  game: typeof game;
 }>;
