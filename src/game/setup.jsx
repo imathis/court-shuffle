@@ -67,7 +67,7 @@ const Players = ({ players, max, update }) => {
       <h2 className="setup-title">Players</h2>
       <div className="setup-players">
         <input type="range" min={3} max={max} defaultValue={players.length} ref={playersRef} onChange={updatePlayers} /> 
-        { players }
+        <div className="setup-players-number">{ players }</div>
       </div>
     </div>
   )
@@ -91,11 +91,14 @@ const Setup = () => {
 
   return (
     <div className='setup-screen'>
-      <Format perCourt={perCourt} update={setPerCourt} />
-      <Courts courts={courts} update={setCourts} />
-      <Players players={players} update={setPlayers} max={maxPlayers} />
-      <div className="setup-action">
-        <button onClick={setupGame} disabled={!courts.length}>Done</button>
+      <div className="setup-actions">
+        <button className="setup-action" onClick={null}>Back</button>
+        <button className="setup-action" onClick={setupGame} disabled={!courts.length}>Save</button>
+      </div>
+      <div className="setup-settings">
+        <Format perCourt={perCourt} update={setPerCourt} />
+        <Courts courts={courts} update={setCourts} />
+        <Players players={players} update={setPlayers} max={maxPlayers} />
       </div>
     </div>
   )

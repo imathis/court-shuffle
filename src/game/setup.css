@@ -1,12 +1,49 @@
+@keyframes slide-up {
+  0% { transform: translateY(200vh); }   
+  100% { transform: translateY(0); }
+}
+
+.setup-screen {
+  border-top-left-radius: 12px;
+  border-top-right-radius: 12px;
+  background: #111;
+  position: fixed;
+  bottom: 0;
+  left: 5px; right: 5px;
+  animation: slide-up .5s;
+}
+.setup-settings {
+  max-height: calc(100vh - 62px);
+  overflow: auto;
+}
+
+.setup-actions {
+  display: grid;
+  justify-content: space-between;
+  align-items: stretch;
+  text-align: center;
+  gap: 5px;
+  padding: 8px;
+  grid-template-columns: min-content min-content;
+  background: #333;
+  height: 60px;
+  border-top-left-radius: 12px;
+  border-top-right-radius: 12px;
+}
+
+button.setup-action {
+  font-size: 1em;
+}
+
 .setup-title {
   text-transform: uppercase;
   font-weight: 800;
   width: 100%;
   text-align: center;
-  font-size: 2em;
+  font-size: 1.5em;
   margin: 0;
   padding: 5px 0;
-  background-color: #656565;
+  background-color: #444;
 }
 
 .setup-button {
@@ -14,8 +51,11 @@
   border: none;
   text-transform: uppercase;
   color: #4A4A4A;
-  font-size: 2.5em;
+  font-size: 2.1em;
   padding: 20px 10px;
+}
+.setup-button:hover {
+  color: rgba(255,255,255,.5);
 }
 .setup-button[data-selected] {
   color: #f50;
@@ -23,15 +63,21 @@
 
 .setup-checkbutton {
   margin: 0;
-  font-size: 2.5em; 
+  font-size: 2.1em; 
   font-weight: 600;
-  color: #4A4A4A;
+  color: rgba(255,255,255,.25);
   padding: 10px 6px;
   text-align: center;
   cursor: pointer;
 }
+.setup-checkbutton:hover {
+  color: rgba(255,255,255,.5);
+}
 
 .setup-checkbutton[data-selected] {
+  color: #f50;
+}
+.setup-checkbutton[data-selected]:hover {
   color: #f50;
 }
 
@@ -75,10 +121,12 @@
   align-items: center;
 }
 
-.setup-action {
-  text-align: center;
-  padding: 
+.setup-players-number {
+  font-size: 2.5em; 
+  font-weight: 600;
+  color: #f50;
 }
+
 
 input[type="range"] {
   -webkit-appearance: none;
