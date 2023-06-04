@@ -1,15 +1,20 @@
 import React from 'react'
-import { useGame } from '../hooks'
 import { Navigate } from 'react-router-dom'
+import { useMutation } from "../../convex/_generated/react";
 
 const NewGame = () => {
-  const { create, game, slug } = useGame()
+  const create = useMutation("game:create")
+  const [slug, setSlug] = React.useState()
 
   React.useEffect(() => {
-    create()
+    const createGame = async () => {
+      const gameSlug = await create()
+      setSlug(gameSlug)
+    }
+    createGame()
   }, [create])
 
-  if (game) {
+  if (slug) {
     return <Navigate to={`../${slug}/setup`} />
   }
   return <h1>Loading…</h1>

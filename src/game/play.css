@@ -1,0 +1,17 @@
+.play-screen {
+  background: #333;
+  min-height: 100vh;
+  transition: background-color .25s ease-in-out;
+}
+
+.play-screen[data-suit=black] {
+  background-color: #333333;
+}
+.play-screen[data-suit=red] {
+  background-color: #700808;
+}
+
+.play-screen[data-suit=purple] {
+  background-color: #430671;
+}
+
