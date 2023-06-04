@@ -55,7 +55,7 @@ export const draw = mutation(async ({ db }, { slug }) => {
 
     if (cards[index]) {
       await db.patch(game._id, { lastDrawn: index })
-      return cards[index]
+      return { card: cards[index], index }
     } else {
       return null
     }

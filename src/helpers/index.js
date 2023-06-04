@@ -1,5 +1,12 @@
-const allCourts = ['A','2', '3', '4', '5', '6', '7', '8', '9', '10', 'J', 'Q', 'K', 'X'];
-const allSuits = ['spades', 'hearts', 'diamonds', 'clubs'];
+const allCourts = Array(13).fill('').map((_, index) => index)
+const suits = ['spades', 'hearts', 'diamonds', 'clubs'];
+
+const sort = (a, b) => {
+  if (a?.localeCompare) return a.localeCompare(b)
+  if (a < b) return -1
+  if (b < a) return 1
+  return 0
+}
 
 const shuffle = (array) => {
   for (let i = array.length - 1; i > 0; i--) {
@@ -19,16 +26,16 @@ const newDeck = (options) => {
 
   const deck = []
   // Add cards for each court and player
-  for (const court of courts) {
+  for (const court of courts.sort()) {
     for(let count = 0; count < perCourt; count++) {
       if (deck.length < players)
-      deck.push({ court, suit: allSuits[count] });
+      deck.push({ court, suit: suits[count] });
     }
   }
 
-  // Add jokers to fill in extra players
-  while (deck.length < players) {
-    deck.push({ court: 'X', suit: 'none' })
+  // For each extra player grab one court starting at the end
+  for(let count = 0; deck.length < players; count++) {
+    deck.push({ court: courts.reverse()[count], suit: 'joker' })
   }
   return shuffle(deck)
 }
@@ -47,4 +54,5 @@ export {
   newDeck,
   newSlug,
   allCourts,
+  sort,
 }
