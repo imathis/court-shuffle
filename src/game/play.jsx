@@ -41,6 +41,7 @@ const Play = () => {
       updateDeck({ card: currentCard })
     } else {
       updateDeck('reset')
+    setShowNextRound(false)
     }
   }, [currentCard])
 
