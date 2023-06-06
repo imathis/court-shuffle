@@ -24,7 +24,7 @@ html {
   margin: 0;
 
   --bg: #242424;
-  --panel-bg: #222;
+  --panel-bg: #242424;
   --input-accent-color: #00B404;
   --input-subtle-color: rgba(255,255,255, .4);
   --input-subtle-color-hover: rgba(255,255,255, .7);
@@ -36,6 +36,7 @@ html {
   --link-color: #646cff;
   --link-color-hover: #535bf2;
   --shadow-color: rgba(0, 0, 0, 0.1);
+  background: var(--bg);
 }
 
 /* @media (prefers-color-scheme: light) { */
@@ -57,13 +58,14 @@ body {
   margin: 0;
   padding: 0;
   min-width: 320px;
-  min-height: 100vh;
+  min-height: 100%;
   background-color: var(--bg);
+  display: grid;
 }
 
 #root {
   position: relative;
-  min-height: 100vh;
+  min-height: 100%;
 }
 
 a {
@@ -94,6 +96,7 @@ button {
   transition:
     background-color 0.25s,
     border-color 0.25s;
+  color: currentColor;
 }
 
 button.primary {
