@@ -10,67 +10,58 @@ const suits = {
   diamonds: 'D',
 }
 
-const CardSvg = ({ court, suit }) => {
+const Card = ({ court, suit }) => {
   const card = suit === 'joker' ? 'cardX' : `card${[courts[court]]}${suits[suit]}`
   const Svg = cards[card]
 
   return <Svg className="court-card" />
 }
 
-const Next = ({ next }) => (
-  next 
-    ? (
-      <button
-        aria-label="next card"
-        onClick={next}
-      >
-        <Icon name="forward" />
-      </button>
-    ) : <span /> 
-)
-const Back = ({ back }) => (
-  back 
-    ? (
-      <button
-        className="prev-card"
-        aria-label="previous card"
-        onClick={back}
-      >
-        <Icon name="backward" />
-      </button>
-    ) : <span /> 
+const NavButton = ({ text, icon, onClick }) => (
+  onClick ? (
+    <button aria-label={text} onClick={onClick} >
+      <Icon name={icon} />
+    </button>
+  ) : <span /> 
 )
 
-const Card = ({ inProgress, card, draw, next, back, drawing, openConfig, nextRound }) => {
-  const { court, suit } = card || {}
+const CourtAssignment = ({ suit, court }) => (
+  <div className="court-assignment">
+    <div className="court-play-type">
+      You're {suit === 'joker' ? 'rotating' : 'playing'} on
+    </div>
+    <div className="court-number">
+      COURT {court + 1}
+    </div>
+  </div>
+)
+
+const NextRound = ({ nextRound, openConfig }) => (
+  <div className="next-round-actions">
+    <p>All cards were drawn</p>
+    <button className="next-round" onClick={nextRound}>Next Round</button>
+    <button onClick={openConfig}>Court Settings</button>
+  </div>
+)
+
+const CardNav = ({ back, next, openConfig }) => {
   return (
-    <div className="court-assignment">
-      { nextRound ? (
-        <div className="next-round-actions">
-          <p>All Cards were drawn</p>
-          <button className="next-round" onClick={nextRound}>Next Round</button>
-          <button onClick={openConfig}>Change Settings</button>
-        </div>
-      ) : null }
-      <CardSvg court={court} suit={suit} />
-      <div className="court-assignment-wrapper">
-        { inProgress ? <button className="card-draw-button" onClick={draw} disabled={drawing}>Draw</button> : null }
-        <div className="court-assignment-strip">
-          <div className="court-play-type">
-            You're {suit === 'joker' ? 'rotating' : 'playing'} on
-          </div>
-          <div className="court-number">
-            COURT {court + 1}
-          </div>
-        </div>
-        <div className="draw-nav">
-          <Back back={back} />
-          <button onClick={openConfig}><Icon name="gear" /></button>
-          <Next next={next} />
-        </div>
-      </div>
+    <div className="card-nav">
+      <NavButton onClick={back} icon="backward" text="Previous Card" />
+      <button onClick={openConfig}><Icon name="gear" /></button>
+      <NavButton onClick={next} icon="forward" text="Next Card" />
     </div>
   )
 }
 
-export { Card }
+const Draw = ({ draw, drawing, inProgress }) => (
+  inProgress ? <button className="card-draw-button" onClick={draw} disabled={drawing}>Draw</button> : null
+)
+
+export {
+  Card,
+  NextRound,
+  Draw,
+  CourtAssignment,
+  CardNav,
+}

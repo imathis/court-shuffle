@@ -83,15 +83,20 @@ const Share = ({ url }) => {
   )
 }
 
-const Setup = ({ game, setup, configVisible, closeConfig, url }) => {
+const Setup = ({ game, inProgress, setup, configVisible, closeConfig, url }) => {
   const [courts, setCourts] = React.useState(game?.courts || [])
   const [players, setPlayers] = React.useState(game?.players)
   const [perCourt, setPerCourt] = React.useState(game?.perCourt || 4)
   const maxPlayers = (courts.length * perCourt) + courts.length
 
   const setupGame = async () => {
-    await setup({ perCourt, courts, players })
-    closeConfig()
+    const newRound = async () => {
+      await setup({ perCourt, courts, players })
+      closeConfig()
+    }
+    if (inProgress) {
+      if(window.confirm('There is a round in progress. Begin a new round with these settings?')) { newRound() } else { closeConfig() }
+    } else newRound()
   }
 
   React.useEffect(() => {
@@ -108,7 +113,7 @@ const Setup = ({ game, setup, configVisible, closeConfig, url }) => {
       >
         <div className="setup-screen">
           <div className="setup-actions">
-            { game?.cards ? <button className="setup-action" onClick={closeConfig}>Back</button> : <span /> }
+            { game?.cards ? <button className="setup-action" onClick={closeConfig}>Close</button> : <span /> }
             <button className="setup-action primary" onClick={setupGame} disabled={!courts.length}>Save</button>
           </div>
           <div className="setup-settings">

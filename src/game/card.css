@@ -9,6 +9,11 @@
   }
 }
 
+@keyframes fade-in {
+  0% { opacity: 0; }
+  100% { opacity: 1; }
+}
+
 @keyframes drop-down {
   0% {
     transform: translate(0, -15vh);
@@ -18,15 +23,26 @@
   }
 }
 
-.court-assignment {
+@keyframes slide-up {
+  0% {
+    transform: translate(0, 100vh);
+  }
+  100% {
+    transform: translate(0, 0);
+  }
+}
+
+.court-play {
   position: relative;
+  height: 100vh;
   max-height: 100vh;
   max-width: 100vw;
   overflow: hidden;
 }
 
 [data-round-over] .court-card,
-[data-round-over] .court-assignment-strip {
+[data-round-over] .court-assignment,
+[data-round-over] .card-nav {
   filter: brightness(50%);
 }
 
@@ -61,21 +77,13 @@
   transform: translate(25vw, 10vh) rotate(-15deg);
   background: #fff;
   display: inline-block;
-  animation: .35s card-appear cubic-bezier(0.0, 0.3, 0.8, 1.0);
+  animation: 0.4s card-appear cubic-bezier(0.0, 0.3, 0.9, 1.0);
   transition: filter 0.5s;
   box-shadow: 
     -2px 2px 3px rgba(0,0,0,0.1),
     -4px 4px 6px rgba(0,0,0,0.08),
     -6px 8px 12px rgba(0,0,0,0.2),
     -8px 16px 32px rgba(0,0,0,0.25);
-}
-
-.card-mark {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 5px;
-  font-size: 148px;
-  font-weight: 800;
 }
 
 .card-draw-button {
@@ -100,10 +108,10 @@
 
 .card-draw-button[disabled] {
   background-color: var(--suit-play-strip);
-  transform: translateY(120px) scale(0.8);
+  transform: translateY(20vh) scale(0.8);
 }
 
-.court-assignment-wrapper {
+.court-info {
   transition: filter 0.5s;
   position: absolute;
   left: 0;
@@ -132,9 +140,8 @@
   padding: 15px 0;
 }
 
-.court-assignment-strip {
+.court-assignment {
   position: relative;
-  z-index: 1;
   box-shadow: 
     0 2px 3px rgba(0,0,0,0.1),
     0 4px 6px rgba(0,0,0,0.08),
@@ -142,31 +149,30 @@
     0 16px 24px rgba(0,0,0,0.25);
   color: var(--suit-bg);
   transition: color .25s ease-in-out;
+  animation: drop-down .25s cubic-bezier(0.0, 0.3, 0.9, 1.0);
 }
 
-.draw-nav {
+.card-nav {
   height: 80px;
   display: grid;
   justify-content: space-between;
   align-items: stretch;
   gap: 5px;
   padding: 8px;
-  /* margin: 8px; */
-  /* border-radius: 15px; */
   grid-template-columns: 1fr 1fr 1fr;
   z-index: 1;
-  background: rgba(0, 0, 0, .8);
-  background: var(--panel-bg);
-  /* -webkit-backdrop-filter: blur(5px); */
+  background: rgba(20, 20, 20, .9);
+  /* background: var(--panel-bg); */
+  -webkit-backdrop-filter: blur(5px);
 }
-.draw-nav button {
+.card-nav button {
   background: rgba(255,255,255,.1);
   background: none;
   border: none;
   padding: 0;
 }
 
-.draw-nav svg {
+.card-nav svg {
   fill: currentColor;
   height: 2em;
 }
