@@ -15,3 +15,7 @@
   --suit-bg: #430671;
   --suit-play-strip: #7A009D;
 }
+
+.play-screen[data-round-over] {
+  --suit-bg: #222;
+}
