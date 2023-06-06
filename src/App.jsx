@@ -7,7 +7,7 @@ const App = () => (
     <BrowserRouter>
       <Routes>
         <Route path="/">
-          <Route index element={<GameIndex />}/>
+          <Route index element={<NewGame />}/>
           <Route path="join" element={<Join />} />
           <Route path="game/*">
             <Route path="new" element={<NewGame />} />
