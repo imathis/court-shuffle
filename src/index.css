@@ -38,20 +38,20 @@ html {
   --shadow-color: rgba(0, 0, 0, 0.1);
 }
 
-@media (prefers-color-scheme: light) {
-  html {
-    color: #213547;
-    --bg: #ffffff;
-    --panel-bg: #eee; 
-    --input-accent-color: #00A203;
-    --input-subtle-color: rgba(0,0,0, .3);
-    --input-subtle-color-hover: rgba(0,0,0, .5);
-
-    --button-bg: #f9f9f9;
-    --link-color: #646cff;
-    --link-color-hover: #747bff;
-  }
-}
+/* @media (prefers-color-scheme: light) { */
+/*   html { */
+/*     color: #213547; */
+/*     --bg: #ffffff; */
+/*     --panel-bg: #eee;  */
+/*     --input-accent-color: #00A203; */
+/*     --input-subtle-color: rgba(0,0,0, .3); */
+/*     --input-subtle-color-hover: rgba(0,0,0, .5); */
+/**/
+/*     --button-bg: #f9f9f9; */
+/*     --link-color: #646cff; */
+/*     --link-color-hover: #747bff; */
+/*   } */
+/* } */
 
 body {
   margin: 0;
