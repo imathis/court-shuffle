@@ -78,7 +78,10 @@ const Share = ({ url }) => {
   return (
     <div className="setup-section">
       <h2 className="setup-title">Invite</h2>
-      <QrCode url={url} className="share-code" />
+      <div className="share-code">
+        <p className="setup-text">Draw cards from multiple devices</p>
+        <QrCode url={url} />
+      </div>
     </div>
   )
 }

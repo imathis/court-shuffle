@@ -19,3 +19,61 @@
 .play-screen[data-round-over] {
   --suit-bg: #111;
 }
+
+.instructions {
+  padding: 30px 20px 0;
+  display: grid;
+  gap: 3em;
+}
+
+.instructions[data-subtle] {
+  position: absolute;
+  top: 0; left: 0; right: 0;
+}
+
+.instructions h2 {
+  text-align: center;
+  text-transform: uppercase;
+}
+
+.instructions-text {
+  font-size: 1.3em;
+  display: grid;
+  gap: 1em;
+  color: rgba(255,255,255, .6);
+}
+
+.instructions-text ol {
+  font-size: 1.4em;
+  margin-left: 15vw;
+  color: rgba(255,255,255, 1);
+}
+
+.logo-banner {
+  display: grid;
+  grid-template-columns: min-content auto;
+  align-items: stretch;
+  justify-items: stretch;
+  /* width: 30vw; */
+  gap: 5px;
+}
+
+.logo-banner [data-icon] {
+  height: var(--logo-size);
+  fill: var(--input-accent-color);
+  transition:
+    fill 0.25s,
+    opacity 0.25s;
+}
+.logo-banner svg:first-child {
+  width: 12vw;
+}
+
+.logo-court {
+  fill: currentColor;
+}
+
+[data-subtle] [data-icon] {
+  opacity: 0.2;
+  fill: rgba(255,255,255,.3);
+}
