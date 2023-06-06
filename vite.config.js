@@ -3,28 +3,33 @@ import react from '@vitejs/plugin-react'
 import svgr from "vite-plugin-svgr"
 
 // https://vitejs.dev/config/
-export default defineConfig({
-  plugins: [
-    svgr({
-      // Set it to `true` to export React component as default.
-      // Notice that it will override the default behavior of Vite.
-      exportAsDefault: true,
+export default defineConfig(({mode}) => {
+  return {
+    build: {
+      manifest: true,
+    },
+    plugins: [
+      svgr({
+        // Set it to `true` to export React component as default.
+        // Notice that it will override the default behavior of Vite.
+        exportAsDefault: true,
 
-      // svgr options: https://react-svgr.com/docs/options/
-      svgrOptions: {
-        dimensions: false,
-      },
+        // svgr options: https://react-svgr.com/docs/options/
+        svgrOptions: {
+          dimensions: false,
+        },
 
-      // esbuild options, to transform jsx to js
-      esbuildOptions: {
-        // ...
-      },
+        // esbuild options, to transform jsx to js
+        esbuildOptions: {
+          // ...
+        },
 
-      //  A minimatch pattern, or array of patterns, which specifies the files in the build the plugin should include. By default all svg files will be included.
-      //include: "**/*.svg",
+        //  A minimatch pattern, or array of patterns, which specifies the files in the build the plugin should include. By default all svg files will be included.
+        //include: "**/*.svg",
 
-      //  A minimatch pattern, or array of patterns, which specifies the files in the build the plugin should ignore. By default no files are ignored.
-      //exclude: "",
-    }),
-    react()],
+        //  A minimatch pattern, or array of patterns, which specifies the files in the build the plugin should ignore. By default no files are ignored.
+        //exclude: "",
+      }),
+      react()],
+  }
 })
