@@ -29,6 +29,7 @@
 
 .setup-settings {
   max-height: calc(100vh - 62px);
+  max-height: calc((var(--vh, 1vh) * 100) - 62px);
   overflow: auto;
 }
 

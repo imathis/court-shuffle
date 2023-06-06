@@ -1,9 +1,11 @@
 import { BrowserRouter, Route, Routes } from 'react-router-dom'
 import { GameIndex, Setup, NewGame, Join, Play } from './game'
 import { GameProvider } from './hooks'
+import { useFixVh } from './hooks'
 
-const App = () => (
-  <>
+const App = () => {
+  useFixVh()
+  return (
     <BrowserRouter>
       <Routes>
         <Route path="/">
@@ -19,7 +21,7 @@ const App = () => (
         </Route>
       </Routes>
     </BrowserRouter>
-  </>
-)
+  )
+}
 
 export default App;
