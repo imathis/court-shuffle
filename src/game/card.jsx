@@ -16,21 +16,30 @@ const CardSvg = ({ court, suit }) => {
   return <Svg className="court-card" />
 }
 
-const Card = ({ court, suit, children }) => (
-  <div className="court-assignment">
-    <CardSvg court={court} suit={suit} />
-    <div className="court-assignment-wrapper">
-      <div className="court-assignment-strip">
-        <div className="court-play-type">
-          You're {suit === 'joker' ? 'rotating' : 'playing'} on
+const Card = ({ card, draw, next, back, drawing, openConfig, reset }) => {
+  const { court, suit } = card || {}
+  return (
+    <div className="court-assignment">
+      { reset ? <button className="reset-court" onClick={reset}>Next Round</button> : null }
+      <CardSvg court={court} suit={suit} />
+      <div className="court-assignment-wrapper">
+        { draw ? <button className="card-draw-button" onClick={draw} disabled={drawing}>Draw</button> : null }
+        <div className="court-assignment-strip">
+          <div className="court-play-type">
+            You're {suit === 'joker' ? 'rotating' : 'playing'} on
+          </div>
+          <div className="court-number">
+            COURT {court + 1}
+          </div>
         </div>
-        <div className="court-number">
-          COURT {court + 1}
+        <div className="draw-nav">
+          { back ? <button onClick={back}>Back</button> : <span /> }
+          <button onClick={openConfig}>config</button>
+          { next ? <button onClick={next}>Next</button> : <span /> }
         </div>
       </div>
-      { children }
     </div>
-  </div>
-)
+  )
+}
 
 export { Card }

@@ -26,7 +26,12 @@ const newGameSlug = async ({ db }) => {
 }
 
 export const get = query(async ({ db }, { slug }) => {
-  if (slug) return await getGame({ db, slug })
+  console.log('fetching')
+  if (slug) {
+    const game = await getGame({ db, slug })
+    console.log('done')
+    return game
+  }
 })
 
 export const create = mutation(async ({ db }, options = {}) => {

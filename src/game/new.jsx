@@ -15,7 +15,7 @@ const NewGame = () => {
   }, [create])
 
   if (slug) {
-    return <Navigate to={`../${slug}/setup`} />
+    return <Navigate to={`../${slug}`} />
   }
   return <h1>Loading…</h1>
 }

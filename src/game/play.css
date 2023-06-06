@@ -1,17 +1,17 @@
 .play-screen {
-  background: #333;
+  --suit-bg: #333333;
+  --suit-play-strip: #656565;
   min-height: 100vh;
   transition: background-color .25s ease-in-out;
+  background-color: var(--suit-bg)
 }
 
-.play-screen[data-suit=black] {
-  background-color: #333333;
-}
 .play-screen[data-suit=red] {
-  background-color: #700808;
+  --suit-bg: #700808;
+  --suit-play-strip: #9D0000; 
 }
 
 .play-screen[data-suit=purple] {
-  background-color: #430671;
+  --suit-bg: #430671;
+  --suit-play-strip: #7A009D;
 }
-
