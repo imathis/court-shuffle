@@ -31,6 +31,7 @@ const Play = () => {
   const { game, currentCard, draw, openConfig, reset, inProgress, roundOver } = useGame()
   const [currentDeck, updateDeck] = React.useReducer(reduceDeck, { cards: [], index: -1 })
   const [drawing, setDrawing] = React.useState(false)
+  const [showNextRound, setShowNextRound] = React.useState(false)
   const card = currentDeck.card
 
   React.useEffect(() => {
@@ -44,12 +45,20 @@ const Play = () => {
   }, [currentCard])
 
   React.useEffect(() => {
-    if (roundOver) { setDrawing(false) }
-  }, [roundOver])
+    if (roundOver && currentCard) {
+      setDrawing(false)
+      setTimeout(() => setShowNextRound(true), 800)
+    }
+  }, [currentCard, reset, roundOver])
 
   const drawCard = () => {
     setDrawing(true)
     draw()
+  }
+
+  const nextRound = () => {
+    setShowNextRound(false)
+    reset()
   }
 
   React.useEffect(() => {
@@ -69,13 +78,13 @@ const Play = () => {
 
   // You have no card to display but the round is still going
   if (!card && inProgress) {
-    return <button className="card-draw-button" onClick={draw} disabled={drawing}>Draw</button>  
+    return <button className="card-draw-button" onClick={drawCard} disabled={drawing}>Draw</button>  
   }
 
   // You are drawing cards
   return (
-    <div className="play-screen" data-suit={suitType[card?.suit]}>
-      <Card draw={inProgress ? drawCard : null} drawing={drawing} openConfig={openConfig} card={card} back={back} next={next} reset={roundOver ? reset : null} />
+    <div className="play-screen" data-suit={suitType[card?.suit]} data-round-over={showNextRound || null}>
+      <Card inProgress={inProgress} draw={drawCard} drawing={drawing} openConfig={openConfig} card={card} back={back} next={next} nextRound={showNextRound ? nextRound : null} />
     </div>
   )
 }
