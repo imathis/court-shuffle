@@ -8,6 +8,7 @@ const useFixVh = () => {
   })
 
   React.useEffect(() => {
+    setVh()
     const listener = window.addEventListener('resize', setVh);
     return () => {
       window.removeEventListener(listener, setVh)
