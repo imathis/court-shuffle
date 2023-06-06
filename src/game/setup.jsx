@@ -1,8 +1,9 @@
 import React from 'react'
 import { allCourts, sort } from '../helpers'
-import { useGame } from '../hooks'
 
 import './setup.css'
+import { QrCode } from './qrCode'
+import { Transition } from './Transition'
 
 const Format = ({ perCourt, update }) => {
   return (
@@ -66,22 +67,31 @@ const Players = ({ players, max, update }) => {
     <div className="setup-section">
       <h2 className="setup-title">Players</h2>
       <div className="setup-players">
-        <input type="range" min={3} max={max} defaultValue={players.length} ref={playersRef} onChange={updatePlayers} /> 
-        <div className="setup-players-number">{ players }</div>
+        <input disabled={!max} type="range" min={3} max={max} defaultValue={players.length} ref={playersRef} onChange={updatePlayers} /> 
+        <div style={{opacity: !max ? 0.5 : 1 }} className="setup-players-number">{ players }</div>
       </div>
     </div>
   )
 }
 
-const Setup = () => {
-  const { game, setup } = useGame()
+const Share = ({ url }) => {
+  return (
+    <div className="setup-section">
+      <h2 className="setup-title">Invite</h2>
+      <QrCode url={url} className="share-code" />
+    </div>
+  )
+}
+
+const Setup = ({ game, setup, configVisible, closeConfig, url }) => {
   const [courts, setCourts] = React.useState(game?.courts || [])
   const [players, setPlayers] = React.useState(game?.players)
   const [perCourt, setPerCourt] = React.useState(game?.perCourt || 4)
   const maxPlayers = (courts.length * perCourt) + courts.length
 
-  const setupGame = () => {
-    setup({ perCourt, courts, players })
+  const setupGame = async () => {
+    await setup({ perCourt, courts, players })
+    closeConfig()
   }
 
   React.useEffect(() => {
@@ -90,19 +100,35 @@ const Setup = () => {
   }, [courts, perCourt])
 
   return (
-    <div className='setup-screen'>
-      <div className="setup-actions">
-        <button className="setup-action" onClick={null}>Back</button>
-        <button className="setup-action" onClick={setupGame} disabled={!courts.length}>Save</button>
-      </div>
-      <div className="setup-settings">
-        <Format perCourt={perCourt} update={setPerCourt} />
-        <Courts courts={courts} update={setCourts} />
-        <Players players={players} update={setPlayers} max={maxPlayers} />
-      </div>
-    </div>
-  )
-  
+    <>
+      <Transition
+        type="slide-panel"
+        in={configVisible}
+        unmountOnExit
+      >
+        <div className="setup-screen">
+          <div className="setup-actions">
+            { game?.cards ? <button className="setup-action" onClick={closeConfig}>Back</button> : <span /> }
+            <button className="setup-action primary" onClick={setupGame} disabled={!courts.length}>Save</button>
+          </div>
+          <div className="setup-settings">
+            <Format perCourt={perCourt} update={setPerCourt} />
+            <Courts courts={courts} update={setCourts} />
+            <Players players={players} update={setPlayers} max={maxPlayers} />
+            <Share url={url} />
+          </div>
+        </div>
+      </Transition>
+      <Transition
+        type="fade"
+        in={configVisible}
+        unmountOnExit
+        timeout={800}
+      >
+        <div className="setup-screen-backdrop" />
+      </Transition>
+    </>
+ )
 }
 
 export { Setup }

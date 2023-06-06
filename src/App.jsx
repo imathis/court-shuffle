@@ -13,7 +13,6 @@ const App = () => (
             <Route path="new" element={<NewGame />} />
             <Route path=":game/*" element={<GameProvider />}>
               <Route index element={<Play/>} />
-              <Route path="setup" element={<Setup/>} />
               <Route path="join" element={<Join />} />
             </Route>
           </Route>
