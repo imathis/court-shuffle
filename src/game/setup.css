@@ -10,6 +10,8 @@
   border-top-left-radius: 12px;
   border-top-right-radius: 12px;
   background: var(--panel-bg);
+  background: rgba(20,20,20,.7);
+  -webkit-backdrop-filter: blur(15px);
   position: fixed;
   bottom: 0;
   left: 2vw;

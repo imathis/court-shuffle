@@ -5,35 +5,53 @@ import { Setup } from '../game/setup'
 
 const GameContext = React.createContext({})
 
+const reduceDeck = (state, action) => {
+  let { cards, index } = state
+  if (action?.card) {
+    cards = [...cards, action.card]
+    index = cards.length - 1
+  }
+  else if (action === 'back' && cards.length > 1) index --
+  else if (action === 'next' && index < cards.length - 1) index ++
+  else if (action === 'reset') { cards = []; index = -1 }
+
+  return { cards, index, card: cards[index] }
+}
+
 const useGameHooks = () => {
   const { game: slug } = useParams()
-  const [currentCard, setCurrentCard] = React.useState()
+  const [drawn, updateDrawn] = React.useReducer(reduceDeck, { cards: [], index: -1 })
+  const [isDrawing, setIsDrawing] = React.useState(false)
+  const [configVisible, setConfigVisible] = React.useState(false)
+
   const setupGame = useMutation("game:setup")
   const drawCard = useMutation("game:draw")
   const create = useMutation("game:create")
   const game = useQuery("game:get", { slug });
-  const [configVisible, setConfigVisible] = React.useState(false)
 
   const openConfig = React.useCallback(() => setConfigVisible(true), [])
   const closeConfig = React.useCallback(() => setConfigVisible(false), [])
 
   const draw = React.useCallback(async () => {
-    const card = await drawCard({ slug })
-    if (card) setCurrentCard(card)
+    setIsDrawing(true)
+    const { card } = await drawCard({ slug })
+    if (card) updateDrawn({ card })
+    setTimeout(() => setIsDrawing(false), 800)
     return card
   }, [slug, drawCard])
 
   const setup = React.useCallback(async (props = {}) => {
     await setupGame({ slug, ...props })
-    setCurrentCard(null)
+    updateDrawn('reset')
   }, [slug, setupGame])
 
+  // When game is new, reset drawn deck
   React.useEffect(() => {
-    if (game?.lastDrawn === -1) setCurrentCard(null)
+    if (game?.lastDrawn === -1) updateDrawn('reset')
   }, [game])
 
   const roundOver = game && game.lastDrawn + 1 === game?.cards?.length;
-  const inProgress = game && game.cards.length && !roundOver
+  const inProgress = game && game.cards?.length && !roundOver
 
   return React.useMemo(() => ({
     game,
@@ -41,8 +59,10 @@ const useGameHooks = () => {
     create,
     setup,
     draw,
-    currentCard: currentCard?.card,
-    currentCardIndex: currentCard?.index,
+    drawn,
+    isDrawing,
+    previous: drawn.index >= 1 ? () => updateDrawn('back') : null,
+    next: drawn.index + 1 < drawn.cards.length ? () => updateDrawn('next') : null,
     url: `https://courtshuffle.com/game/${slug}`,
     reset: () => setup(),
     roundOver,
@@ -52,7 +72,7 @@ const useGameHooks = () => {
     configVisible,
     openConfig,
     closeConfig,
-  }), [create, slug, currentCard, draw, game, setup, configVisible, openConfig, closeConfig, inProgress, roundOver])
+  }), [drawn, isDrawing, create, slug, draw, game, setup, configVisible, openConfig, closeConfig, inProgress, roundOver])
 }
 
 const GameProvider = () => {
