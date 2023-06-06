@@ -1,3 +1,8 @@
 export { default as backward } from './backward.svg'
 export { default as gear } from './gear.svg'
 export { default as forward } from './forward.svg'
+export { default as logo } from './logo.svg'
+export { default as spade } from './spade.svg'
+export { default as club } from './club.svg'
+export { default as diamond } from './diamond.svg'
+export { default as heart } from './heart.svg'

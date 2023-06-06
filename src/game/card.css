@@ -5,7 +5,7 @@
   }
   100% {
     opacity: 1;
-    transform: translate(25vw, 10vh) rotate(-15deg);
+    transform: translate(25vw, 8vh) rotate(-15deg);
   }
 }
 
@@ -42,8 +42,13 @@
 
 [data-round-over] .court-card,
 [data-round-over] .court-assignment,
+[data-round-over] .instructions,
 [data-round-over] .card-nav {
   filter: brightness(50%);
+}
+
+[data-round-over] .instructions {
+  opacity: 0.3;
 }
 
 .next-round-actions {
@@ -74,7 +79,7 @@
 .court-card {
   border-radius: 15px;
   height: 100vh;
-  transform: translate(25vw, 10vh) rotate(-15deg);
+  transform: translate(25vw, 8vh) rotate(-15deg);
   background: #fff;
   display: inline-block;
   animation: 0.4s card-appear cubic-bezier(0.0, 0.3, 0.9, 1.0);

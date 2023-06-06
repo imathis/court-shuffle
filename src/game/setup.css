@@ -22,7 +22,9 @@
 
 .share-code {
   max-width: 80vw;
-  margin: 8vw auto;
+  margin: 3vw auto;
+  display: grid;
+  gap: 10px;
 }
 
 .setup-settings {
@@ -59,13 +61,18 @@ button.setup-action {
   background-color: #444;
 }
 
+.setup-text {
+  font-size: 1.3em;
+  text-align: center;
+}
+
 .setup-button {
   background: none;
   border: none;
   text-transform: uppercase;
   color: var(--input-subtle-color);
   font-size: 2.1em;
-  padding: 20px 10px;
+  padding: 15px 10px;
 }
 .setup-button:hover {
   color: var(--input-subtle-color-hover);
@@ -79,7 +86,7 @@ button.setup-action {
   font-size: 2.1em; 
   font-weight: 600;
   color: var(--input-subtle-color);
-  padding: 10px 6px;
+  padding: 6px 0;
   text-align: center;
   cursor: pointer;
 }
@@ -113,10 +120,9 @@ button.setup-action {
 .setup-courts {
   display: grid;
   grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
-  grid-template-rows: auto;
-  justify-items: center;
-  justify-content: center;
-  padding: 15px 0;
+  align-items: center;
+  justify-items: stretch;
+  padding: 12px 0;
 }
 
 /* center courts 11,12,13 */
@@ -126,7 +132,7 @@ button.setup-action {
 
 .setup-players {
   display: grid;
-  padding: 25px;
+  padding: 15px 25px;
   grid-template-columns: 1fr min-content;
   gap: 5px;
   align-items: center;

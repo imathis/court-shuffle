@@ -4,6 +4,7 @@ import { Navigate } from 'react-router-dom'
 import {
   Card, NextRound, Draw, CourtAssignment, CardNav,
 } from './card'
+import { Icon } from './Icon'
 
 import "./play.css"
 
@@ -15,6 +16,30 @@ const suitType = {
   hearts: 'red',
   joker: 'purple',
 } 
+
+const NewGameInstructions = ({ openConfig }) => (
+  <>
+    <div className="instructions-text">
+      <h2>Before you start</h2>
+      <ol>
+        <li>Choose a format</li>
+        <li>Select courts</li>
+        <li>Adjust players</li>
+      </ol>
+    </div>
+    <button className="primary" onClick={openConfig}>Court Settings</button>
+  </>
+)
+
+const Instructions = ({ text, card, openConfig }) => (
+  <div className="instructions" data-subtle={!!card || null}>
+    <div className="logo-banner">
+      <Icon name="club" />
+      <Icon name="logo" />
+    </div>
+    { text }
+  </div>
+)
 
 const Play = () => {
   const { game, isDrawing, draw, previous, next, drawn, openConfig, reset, inProgress, roundOver } = useGame()
@@ -31,10 +56,6 @@ const Play = () => {
     if (inProgress && !card) { setShowNextRound(false) }
   }, [inProgress, card])
 
-  React.useEffect(() => {
-    if (game && !game.cards) { openConfig() }
-  }, [game, openConfig])
-
   // When round ends, show next round and settings buttons
   React.useEffect(() => {
     if (roundOver && !inProgress) setTimeout(() => setShowNextRound(true), card ? 1400 : 0)  
@@ -43,18 +64,22 @@ const Play = () => {
   // Bad URL, there is no game here
   if (!game) return <Navigate to="join" />
 
-
-
-  // You have no card to display but the round is still going
-  /* if (!card && inProgress) { */
-  /*   return <button className="card-draw-button" onClick={drawCard} disabled={drawing}>Draw</button>   */
-  /* } */
+  if (!game?.cards) {
+    return (
+      <div className="play-screen" data-suit={suitType[card?.suit]} data-round-over={showNextRound || null}>
+        <div className="court-play">
+          <Instructions card={card} text={!game?.cards ? <NewGameInstructions openConfig={openConfig} /> : null} />
+        </div>
+      </div>
+    )
+  }
 
   // You are drawing cards
   return (
     <div className="play-screen" data-suit={suitType[card?.suit]} data-round-over={showNextRound || null}>
       <div className="court-play">
         { showNextRound ? <NextRound nextRound={nextRound} openConfig={openConfig} /> : null }
+        <Instructions card={card} />
         { card ? <Card {...card} /> : null }
         <div className="court-info">
           <Draw draw={draw} drawing={isDrawing} inProgress={inProgress} />
