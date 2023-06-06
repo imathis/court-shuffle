@@ -58,8 +58,8 @@ body {
   margin: 0;
   padding: 0;
   min-width: 320px;
-  min-height: 100vh;
-  min-height: -webkit-fill-available;
+  height: 100vh;
+  height: calc(var(--vh, 1vh) * 100);
   background-color: var(--bg);
   display: grid;
 }
