@@ -79,7 +79,7 @@
 .court-card {
   border-radius: 15px;
   height: 100vh;
-  transform: translate3e(25vw, 8vh, 0) rotate(-15deg);
+  transform: translate3d(25vw, 8vh, 0) rotate(-15deg);
   background: #fff;
   display: inline-block;
   animation: 0.4s card-appear cubic-bezier(0.0, 0.3, 0.9, 1.0);
