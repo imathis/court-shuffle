@@ -23,8 +23,8 @@ html {
   padding: 0;
   margin: 0;
 
-  --bg: #242424;
-  --panel-bg: #242424;
+  --bg: #333333;
+  --panel-bg: #333333;
   --input-accent-color: #00B404;
   --input-subtle-color: rgba(255,255,255, .4);
   --input-subtle-color-hover: rgba(255,255,255, .7);
