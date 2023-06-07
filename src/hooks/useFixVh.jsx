@@ -6,7 +6,10 @@ const useFixVh = () => {
     let vh = window.innerHeight * 0.01;
     document.documentElement.style.setProperty('--vh', `${vh}px`);
   })
-  screen.orientation.onchange = setVh
+  screen.orientation.onchange = function () {
+    console.log('changing')
+    window.setTimeout(setVh, 20)
+  }
 
   React.useEffect(() => {
     setVh()
