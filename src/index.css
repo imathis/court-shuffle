@@ -38,6 +38,7 @@ html {
   --shadow-color: rgba(0, 0, 0, 0.1);
   background: var(--bg);
   overscroll-behavior-y: contain;
+}
 /* @media (prefers-color-scheme: light) { */
 /*   html { */
 /*     color: #213547; */
