@@ -11,5 +11,6 @@ export default defineSchema({
     lastDrawn: v.optional(v.number()),
     perCourt: v.optional(v.number()),
     slug: v.string(),
+    updatedAt: v.number(),
   }).index("by_slug", ["slug"]),
 });

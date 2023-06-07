@@ -3,12 +3,11 @@ import { newDeck, newSlug } from '../src/helpers'
 
 const getGame = async ({ db, slug }) => {
   return await db.query("games")
-    .filter(q => q.eq(q.field("slug"), slug))
-    .first()
+    .withIndex("by_slug", q => q.eq("slug", slug)).first()
 }
 
 const newGame = async ({ db, slug }) => {
-  await db.insert("games", { slug, lastDrawn: -1 })
+  await db.insert("games", { slug, lastDrawn: -1, updatedAt: new Date().getTime() })
 }
 
 // Ensure game slug is unique
@@ -26,10 +25,8 @@ const newGameSlug = async ({ db }) => {
 }
 
 export const get = query(async ({ db }, { slug }) => {
-  console.log('fetching')
   if (slug) {
     const game = await getGame({ db, slug })
-    console.log('done')
     return game
   }
 })
@@ -48,7 +45,7 @@ export const setup = mutation(async ({ db }, { slug, courts, players, perCourt }
       players: players || game.players,
       perCourt: perCourt || game.perCourt
     })
-    await db.patch(game._id, { cards, courts, players, lastDrawn: -1, perCourt })
+    await db.patch(game._id, { cards, courts, players, lastDrawn: -1, perCourt, updatedAt: new Date().getTime() })
   }
 })
 
@@ -59,7 +56,7 @@ export const draw = mutation(async ({ db }, { slug }) => {
     const index = lastDrawn === null ? 0 : lastDrawn + 1
 
     if (cards[index]) {
-      await db.patch(game._id, { lastDrawn: index })
+      await db.patch(game._id, { lastDrawn: index, updatedAt: new Date().getTime() })
       return { card: cards[index], index }
     } else {
       return null
