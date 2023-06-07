@@ -2,6 +2,7 @@
   --suit-bg: #333333;
   --suit-play-strip: #656565;
   min-height: 100vh;
+  min-height: calc(var(--vh, 1vh) * 100);
   transition: background-color .25s ease-in-out;
   background-color: var(--suit-bg)
 }
