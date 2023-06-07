@@ -42,7 +42,7 @@ const Instructions = ({ text, card, openConfig }) => (
 )
 
 const Play = () => {
-  const { game, isDrawing, draw, previous, next, drawn, openConfig, reset, inProgress, roundOver, configVisible } = useGame()
+  const { game, isDrawing, draw, previous, next, drawn, openConfig, reset, inProgress, roundOver } = useGame()
   const [showNextRound, setShowNextRound] = React.useState(false)
   const card = drawn.card
 
@@ -76,7 +76,7 @@ const Play = () => {
 
   // You are drawing cards
   return (
-    <div className="play-screen" data-suit={suitType[card?.suit]} data-configuring={configVisible || null} data-round-over={showNextRound || null}>
+    <div className="play-screen" data-suit={suitType[card?.suit]} data-round-over={showNextRound || null}>
       <div className="court-play">
         { showNextRound ? <NextRound nextRound={nextRound} openConfig={openConfig} /> : null }
         <Instructions card={card} />
