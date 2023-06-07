@@ -1,11 +1,11 @@
 @keyframes card-appear {
   0% {
     opacity: .5;
-    transform: translate(150vw, 150vh) rotate(-10deg) scale(0.8);
+    transform: translate3d(150vw, 150vh, 0) rotate(-10deg) scale(0.8);
   }
   100% {
     opacity: 1;
-    transform: translate(25vw, 8vh) rotate(-15deg);
+    transform: translate3d(25vw, 8vh, 0) rotate(-15deg);
   }
 }
 
@@ -79,7 +79,7 @@
 .court-card {
   border-radius: 15px;
   height: 100vh;
-  transform: translate(25vw, 8vh) rotate(-15deg);
+  transform: translate3e(25vw, 8vh, 0) rotate(-15deg);
   background: #fff;
   display: inline-block;
   animation: 0.4s card-appear cubic-bezier(0.0, 0.3, 0.9, 1.0);
