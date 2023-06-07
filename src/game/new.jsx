@@ -7,12 +7,13 @@ const NewGame = () => {
   const [slug, setSlug] = React.useState()
 
   React.useEffect(() => {
-    const createGame = async () => {
-      const gameSlug = await create()
-      setSlug(gameSlug)
+    if (!slug) {
+      (async () => {
+        const gameSlug = await create()
+        setSlug(gameSlug)
+      })()
     }
-    createGame()
-  }, [create])
+  }, [slug, create])
 
   if (slug) {
     return <Navigate to={`/game/${slug}`} />

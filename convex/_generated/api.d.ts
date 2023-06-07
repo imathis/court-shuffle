@@ -10,6 +10,8 @@
  */
 
 import type { ApiFromModules } from "convex/api";
+import type * as admin from "../admin";
+import type * as crons from "../crons";
 import type * as drawCard from "../drawCard";
 import type * as game from "../game";
 
@@ -23,6 +25,8 @@ import type * as game from "../game";
  * `ConvexReactClient` to create app-specific types.
  */
 export type API = ApiFromModules<{
+  admin: typeof admin;
+  crons: typeof crons;
   drawCard: typeof drawCard;
   game: typeof game;
 }>;
