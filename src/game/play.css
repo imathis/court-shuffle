@@ -6,9 +6,6 @@
   transition: background-color .25s ease-in-out;
   background-color: var(--suit-bg)
 }
-[data-configuring] {
-  pointer-events: none;
-}
 
 .play-screen[data-suit=red] {
   --suit-bg: #700808;
