@@ -4,6 +4,7 @@ import { allCourts, sort } from '../helpers'
 import './setup.css'
 import { QrCode } from './qrCode'
 import { Transition } from './Transition'
+import { Icon } from './Icon'
 
 const Format = ({ perCourt, update }) => {
   return (
@@ -55,20 +56,39 @@ const Courts = ({ courts, update }) => {
 
 const Players = ({ players, max, update }) => {
   const playersRef = React.useRef()
-  const updatePlayers = React.useCallback(({ target }) => {
-    update(Number.parseInt(target.value, 10))
-  }, [update])
+  const updatePlayers = (value) => {
+    playersRef.current.value = value
+    update(Number.parseInt(value, 10))
+  }
 
+  const currentValue = () => {
+    return (playersRef.current) ? Number.parseInt(playersRef.current.value) : null
+  }
+
+  const addPlayer = () => {
+    let value = currentValue()
+    if (value && value < max) {
+      updatePlayers(value + 1)
+    }
+  }
+  const removePlayer = () => {
+    let value = currentValue()
+    if (value && value > 3) {
+      updatePlayers(value - 1)
+    }
+  }
   React.useEffect(() => {
     if (playersRef.current) playersRef.current.value = players
   }, [players])
 
   return (
     <div className="setup-section">
+      <input className="player-count" disabled={!max} type="number" min={3} max={max} defaultValue={players.length} ref={playersRef} /> 
       <h2 className="setup-title">Players</h2>
       <div className="setup-players">
-        <input disabled={!max} type="range" min={3} max={max} defaultValue={players.length} ref={playersRef} onChange={updatePlayers} /> 
+        <button aria-label="remove a player" className="adjust-players" disabled={!max} onClick={removePlayer}><Icon name="minus" height="1em" /></button>
         <div style={{opacity: !max ? 0.5 : 1 }} className="setup-players-number">{ players }</div>
+        <button aria-label="add a player" className="adjust-players" disabled={!max} onClick={addPlayer}><Icon name="plus" height="1em" /></button>
       </div>
     </div>
   )
