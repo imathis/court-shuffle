@@ -6,9 +6,9 @@ const getGame = async ({ db, slug }) => {
     .withIndex("by_slug", q => q.eq("slug", slug)).first()
 }
 
-const newGame = async ({ db, slug }) => {
+const newGame = async ({ db, slug }) => (
   await db.insert("games", { slug, lastDrawn: -1, updatedAt: new Date().getTime() })
-}
+)
 
 // Ensure game slug is unique
 const newGameSlug = async ({ db }) => {
@@ -26,19 +26,18 @@ const newGameSlug = async ({ db }) => {
 
 export const get = query(async ({ db }, { slug }) => {
   if (slug) {
-    const game = await getGame({ db, slug })
-    return game
+    return getGame({ db, slug })
   }
 })
 
 export const create = mutation(async ({ db }, options = {}) => {
   const { slug = await newGameSlug({ db }) } = options
-  await newGame({ db, slug })
-  return slug
+  const game = await newGame({ db, slug })
+  return { ...game, slug }
 })
 
-export const setup = mutation(async ({ db }, { slug, courts, players, perCourt }) => {
-  const game = await getGame({ db, slug })
+export const config = mutation(async ({ db }, { game: gameProp, slug, courts, players, perCourt }) => {
+  const game = gameProp || await getGame({ db, slug })
   if (game) {
     const cards = newDeck({ 
       courts: courts || game.courts,
@@ -49,8 +48,8 @@ export const setup = mutation(async ({ db }, { slug, courts, players, perCourt }
   }
 })
 
-export const draw = mutation(async ({ db }, { slug }) => {
-  const game = await getGame({ db, slug })
+export const draw = mutation(async ({ db }, { game: gameProp, slug }) => {
+  const game = gameProp || await getGame({ db, slug })
   if (game) {
     const { cards, lastDrawn } = game
     const index = lastDrawn === null ? 0 : lastDrawn + 1

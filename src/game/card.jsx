@@ -25,7 +25,7 @@ const NavButton = ({ text, icon, onClick }) => (
   ) : <span /> 
 )
 
-const CourtAssignment = ({ suit, court }) => (
+const CourtAssignment = ({ suit, court, cardsRemaining }) => (
   <div className="court-assignment">
     <div className="court-play-type">
       You're {suit === 'joker' ? 'rotating' : 'playing'} on
@@ -35,6 +35,14 @@ const CourtAssignment = ({ suit, court }) => (
     </div>
   </div>
 )
+
+const CourtStatus = ({ cardsRemaining, players, drawn }) => {
+  return (
+    <div className="court-status">
+      { players } Players, { cardsRemaining } Card{ cardsRemaining === 1 ? '' : 's'} { cardsRemaining !== players ? 'left' : ''}
+    </div>
+  )
+}
 
 const NextRound = ({ nextRound, openConfig }) => (
   <div className="next-round-actions">
@@ -64,4 +72,5 @@ export {
   Draw,
   CourtAssignment,
   CardNav,
+  CourtStatus,
 }

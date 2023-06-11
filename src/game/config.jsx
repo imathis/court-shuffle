@@ -1,18 +1,18 @@
 import React from 'react'
 import { allCourts, sort } from '../helpers'
 
-import './setup.css'
+import './config.css'
 import { QrCode } from './qrCode'
 import { Transition } from './Transition'
 import { Icon } from './Icon'
 
 const Format = ({ perCourt, update }) => {
   return (
-    <div className="setup-section">
-      <h2 className="setup-title">Format</h2>
-      <div className="setup-format">
-        <button className="setup-button" data-selected={perCourt===2 || null} onClick={() => update(2)}>Singles</button>
-        <button className="setup-button" data-selected={perCourt===4 || null} onClick={() => update(4)}>Doubles</button>
+    <div className="config-section">
+      <h2 className="config-title">Format</h2>
+      <div className="config-format">
+        <button className="config-button" data-selected={perCourt===2 || null} onClick={() => update(2)}>Singles</button>
+        <button className="config-button" data-selected={perCourt===4 || null} onClick={() => update(4)}>Doubles</button>
       </div>
     </div>
   )
@@ -31,13 +31,13 @@ const Courts = ({ courts, update }) => {
   }, [update, courts])
 
   return (
-    <div className="setup-section">
-      <h2 className="setup-title">{ courts.length ? 'Courts' : 'Select Courts'}</h2>
-      <div className="setup-courts">
+    <div className="config-section">
+      <h2 className="config-title">{ courts.length ? 'Courts' : 'Select Courts'}</h2>
+      <div className="config-courts">
         { Array(13).fill(1).map((_court, index) => (
           <label 
             key={allCourts[index]}
-            className="setup-checkbutton"
+            className="config-checkbutton"
             data-selected={courts.includes(allCourts[index]) || null}
           >
             <input 
@@ -82,12 +82,12 @@ const Players = ({ players, max, update }) => {
   }, [players])
 
   return (
-    <div className="setup-section">
+    <div className="config-section">
       <input className="player-count" disabled={!max} type="number" min={3} max={max} defaultValue={players.length} ref={playersRef} /> 
-      <h2 className="setup-title">Players</h2>
-      <div className="setup-players">
+      <h2 className="config-title">Players</h2>
+      <div className="config-players">
         <button aria-label="remove a player" className="adjust-players" disabled={!max} onClick={removePlayer}><Icon name="minus" height="1em" /></button>
-        <div style={{opacity: !max ? 0.5 : 1 }} className="setup-players-number">{ players }</div>
+        <div style={{opacity: !max ? 0.5 : 1 }} className="config-players-number">{ players }</div>
         <button aria-label="add a player" className="adjust-players" disabled={!max} onClick={addPlayer}><Icon name="plus" height="1em" /></button>
       </div>
     </div>
@@ -96,25 +96,25 @@ const Players = ({ players, max, update }) => {
 
 const Share = ({ url }) => {
   return (
-    <div className="setup-section">
-      <h2 className="setup-title">Invite</h2>
+    <div className="config-section">
+      <h2 className="config-title">Invite</h2>
       <div className="share-code">
-        <p className="setup-text">Draw cards from multiple devices</p>
+        <p className="config-text">Draw cards from multiple devices</p>
         <QrCode url={url} />
       </div>
     </div>
   )
 }
 
-const Setup = ({ game, inProgress, setup, configVisible, closeConfig, url }) => {
+const Config = ({ game, inProgress, config, configVisible, closeConfig, url }) => {
   const [courts, setCourts] = React.useState(game?.courts || [])
   const [players, setPlayers] = React.useState(game?.players)
   const [perCourt, setPerCourt] = React.useState(game?.perCourt || 4)
   const maxPlayers = (courts.length * perCourt) + courts.length
 
-  const setupGame = async () => {
+  const configGame = async () => {
     const newRound = async () => {
-      await setup({ perCourt, courts, players })
+      await config({ perCourt, courts, players })
       closeConfig()
     }
     if (inProgress) {
@@ -134,12 +134,12 @@ const Setup = ({ game, inProgress, setup, configVisible, closeConfig, url }) => 
         in={configVisible}
         unmountOnExit
       >
-        <div className="setup-screen">
-          <div className="setup-actions">
-            { game?.cards ? <button className="setup-action" onClick={closeConfig}>Close</button> : <span /> }
-            <button className="setup-action primary" onClick={setupGame} disabled={!courts.length}>Save</button>
+        <div className="config-screen">
+          <div className="config-actions">
+            { game?.cards ? <button className="config-action" onClick={closeConfig}>Close</button> : <span /> }
+            <button className="config-action primary" onClick={configGame} disabled={!courts.length}>Save</button>
           </div>
-          <div className="setup-settings">
+          <div className="config-settings">
             <Format perCourt={perCourt} update={setPerCourt} />
             <Courts courts={courts} update={setCourts} />
             <Players players={players} update={setPlayers} max={maxPlayers} />
@@ -153,10 +153,10 @@ const Setup = ({ game, inProgress, setup, configVisible, closeConfig, url }) => 
         unmountOnExit
         timeout={800}
       >
-        <div className="setup-screen-backdrop" />
+        <div className="config-screen-backdrop" />
       </Transition>
     </>
  )
 }
 
-export { Setup }
+export { Config }

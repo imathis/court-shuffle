@@ -8,6 +8,6 @@ export const GameIndex = () => (
 )
 
 export { NewGame } from './new'
-export { Setup } from './setup'
+export { Config } from './config'
 export { Join } from './join'
 export { Play } from './play'
