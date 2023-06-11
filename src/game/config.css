@@ -1,4 +1,4 @@
-.setup-screen-backdrop {
+.config-screen-backdrop {
   position: fixed;
   inset: 0;
   z-index: 1;
@@ -6,7 +6,7 @@
   -webkit-backdrop-filter: blur(5px);
 }
 
-.setup-screen {
+.config-screen {
   border-top-left-radius: 12px;
   border-top-right-radius: 12px;
   background: var(--panel-bg);
@@ -27,31 +27,31 @@
   gap: 10px;
 }
 
-.setup-settings {
+.config-settings {
   max-height: calc(100vh - 62px);
   max-height: calc((var(--vh, 1vh) * 100) - 62px);
   overflow: auto;
 }
 
-.setup-actions {
+.config-actions {
   display: grid;
   justify-content: space-between;
-  align-items: stretch;
+  align-items: center;
   text-align: center;
   gap: 5px;
   padding: 8px;
-  grid-template-columns: min-content min-content;
+  grid-template-columns: auto auto;
   background: #666;
   height: 60px;
   border-top-left-radius: 12px;
   border-top-right-radius: 12px;
 }
 
-button.setup-action {
+button.config-action {
   font-size: 1em;
 }
 
-.setup-title {
+.config-title {
   text-transform: uppercase;
   font-weight: 800;
   width: 100%;
@@ -62,12 +62,12 @@ button.setup-action {
   background-color: #444;
 }
 
-.setup-text {
+.config-text {
   font-size: 1.3em;
   text-align: center;
 }
 
-.setup-button {
+.config-button {
   background: none;
   border: none;
   text-transform: uppercase;
@@ -75,14 +75,14 @@ button.setup-action {
   font-size: 2.1em;
   padding: 15px 10px;
 }
-.setup-button:hover {
+.config-button:hover {
   color: var(--input-subtle-color-hover);
 }
-.setup-button[data-selected] {
+.config-button[data-selected] {
   color: var(--input-accent-color);
 }
 
-.setup-checkbutton {
+.config-checkbutton {
   margin: 0;
   font-size: 2.1em; 
   font-weight: 600;
@@ -91,16 +91,16 @@ button.setup-action {
   text-align: center;
   cursor: pointer;
 }
-.setup-checkbutton:hover {
+.config-checkbutton:hover {
   color: var(--input-subtle-color-hover);
 }
 
-.setup-checkbutton[data-selected],
-.setup-checkbutton[data-selected]:hover {
+.config-checkbutton[data-selected],
+.config-checkbutton[data-selected]:hover {
   color: var(--input-accent-color);
 }
 
-.setup-checkbutton input {
+.config-checkbutton input {
   margin: 0;
   appearance: none;
   border: 0;
@@ -112,13 +112,13 @@ button.setup-action {
   z-index: -1;
 }
 
-.setup-format {
+.config-format {
   display: grid;
   grid-template-columns: 1fr 1fr;
   align-items: center;
 }
 
-.setup-courts {
+.config-courts {
   display: grid;
   grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
   align-items: center;
@@ -127,11 +127,11 @@ button.setup-action {
 }
 
 /* center courts 11,12,13 */
-.setup-courts *:nth-child(11) {
+.config-courts *:nth-child(11) {
   grid-column-start: 2;
 }
 
-.setup-players {
+.config-players {
   display: grid;
   padding: 15px 25px;
   grid-template-columns: 1fr auto 1fr;
@@ -145,17 +145,17 @@ input.player-count {
   z-index: -1;
 }
 
-.setup-players button {
+.config-players button {
   fill: #fff;
   padding: 8px 15px;
 }
-.setup-players button svg {
+.config-players button svg {
   height: 35px;
   display: block;
   margin: 0 auto;
 }
 
-.setup-players-number {
+.config-players-number {
   font-size: 2.5em; 
   font-weight: 600;
   text-align: center;

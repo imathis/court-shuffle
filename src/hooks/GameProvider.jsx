@@ -1,7 +1,7 @@
 import React from 'react'
 import { useQuery, useMutation } from "../../convex/_generated/react";
 import { useParams, Outlet } from 'react-router-dom'
-import { Setup } from '../game/setup'
+import { Config } from '../game/config'
 
 const GameContext = React.createContext({})
 
@@ -24,7 +24,7 @@ const useGameHooks = () => {
   const [isDrawing, setIsDrawing] = React.useState(false)
   const [configVisible, setConfigVisible] = React.useState(false)
 
-  const setupGame = useMutation("game:setup")
+  const configGame = useMutation("game:config")
   const drawCard = useMutation("game:draw")
   const create = useMutation("game:create")
   const game = useQuery("game:get", { slug });
@@ -34,45 +34,47 @@ const useGameHooks = () => {
 
   const draw = React.useCallback(async () => {
     setIsDrawing(true)
-    const { card } = await drawCard({ slug })
+    const { card } = await drawCard({ game, slug })
     if (card) updateDrawn({ card })
     setTimeout(() => setIsDrawing(false), 800)
     return card
-  }, [slug, drawCard])
+  }, [slug, drawCard, game])
 
-  const setup = React.useCallback(async (props = {}) => {
-    await setupGame({ slug, ...props })
+  const config = React.useCallback(async (props = {}) => {
+    await configGame({ game, slug, ...props })
     updateDrawn('reset')
-  }, [slug, setupGame])
+  }, [slug, configGame, game])
 
   // When game is new, reset drawn deck
   React.useEffect(() => {
     if (game?.lastDrawn === -1) updateDrawn('reset')
   }, [game])
 
-  const roundOver = game && game.lastDrawn + 1 === game?.cards?.length;
-  const inProgress = game && game.cards?.length && !roundOver
+  const cardsRemaining = game?.cards?.length && game.cards.length - (game.lastDrawn + 1)
+  const roundOver = game?.cards?.length && !cardsRemaining
+  const inProgress = game?.cards?.length && !roundOver
 
   return React.useMemo(() => ({
     game,
     slug,
     create,
-    setup,
+    config,
     draw,
     drawn,
     isDrawing,
     previous: drawn.index >= 1 ? () => updateDrawn('back') : null,
     next: drawn.index + 1 < drawn.cards.length ? () => updateDrawn('next') : null,
     url: `https://courtshuffle.com/game/${slug}`,
-    reset: () => setup(),
+    reset: () => config(),
     roundOver,
+    cardsRemaining,
     inProgress,
     isLoading: typeof game === 'undefined',
     notFound: game === null,
     configVisible,
     openConfig,
     closeConfig,
-  }), [drawn, isDrawing, create, slug, draw, game, setup, configVisible, openConfig, closeConfig, inProgress, roundOver])
+  }), [drawn, isDrawing, create, slug, draw, game, config, configVisible, openConfig, closeConfig, cardsRemaining, inProgress, roundOver])
 }
 
 const GameProvider = () => {
@@ -83,7 +85,7 @@ const GameProvider = () => {
         ? <h1>Loading…</h1> 
         : (<>
             <Outlet />
-            <Setup {...value}/>
+            <Config {...value}/>
           </>)
       }
     </GameContext.Provider>

@@ -9,8 +9,8 @@ const NewGame = () => {
   React.useEffect(() => {
     if (!slug) {
       (async () => {
-        const gameSlug = await create()
-        setSlug(gameSlug)
+        const game = await create()
+        setSlug(game.slug)
       })()
     }
   }, [slug, create])

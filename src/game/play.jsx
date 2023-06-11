@@ -2,7 +2,7 @@ import React from 'react'
 import { useGame } from '../hooks'
 import { Navigate } from 'react-router-dom'
 import {
-  Card, NextRound, Draw, CourtAssignment, CardNav,
+  Card, NextRound, Draw, CourtAssignment, CardNav, CourtStatus,
 } from './card'
 import { Icon } from './Icon'
 
@@ -42,7 +42,7 @@ const Instructions = ({ text, card, openConfig }) => (
 )
 
 const Play = () => {
-  const { game, isDrawing, draw, previous, next, drawn, openConfig, reset, inProgress, roundOver } = useGame()
+  const { game, isDrawing, draw, previous, next, drawn, openConfig, reset, inProgress, roundOver, cardsRemaining } = useGame()
   const [showNextRound, setShowNextRound] = React.useState(false)
   const card = drawn.card
 
@@ -83,7 +83,8 @@ const Play = () => {
         { card ? <Card {...card} /> : null }
         <div className="court-info">
           <Draw draw={draw} drawing={isDrawing} inProgress={inProgress} />
-          { card ? <CourtAssignment {...card} /> : null }
+          { card ? <CourtAssignment {...card} cardsRemaining={cardsRemaining} /> : null }
+          { inProgress ? <CourtStatus drawn={game.lastDrawn + 1} players={game.players} cardsRemaining={cardsRemaining} /> : null }
           <CardNav next={next} back={previous} openConfig={openConfig} />
         </div>
       </div>
