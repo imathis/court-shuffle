@@ -4,8 +4,10 @@ import { useDebouncedUiCallback } from './useDebounce'
 const useFixVh = () => {
   const setVh = useDebouncedUiCallback((type) => {
     console.log(type)
-    let vh = window.innerHeight * 0.01;
-    document.documentElement.style.setProperty('--vh', `${vh}px`);
+    let vh = window.innerHeight * 0.01
+    setTimeout(() => {
+      document.documentElement.style.setProperty('--vh', `${vh}px`)
+    }, 24)
   })
 
   if (screen?.orientation?.onchange) {
