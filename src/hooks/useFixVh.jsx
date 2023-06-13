@@ -4,8 +4,8 @@ import { useDebouncedUiCallback } from './useDebounce'
 const useFixVh = () => {
   const setVh = useDebouncedUiCallback((type) => {
     console.log(type)
-    let vh = window.innerHeight * 0.01
     setTimeout(() => {
+      const vh = window.innerHeight * 0.01
       document.documentElement.style.setProperty('--vh', `${vh}px`)
     }, 24)
   })
