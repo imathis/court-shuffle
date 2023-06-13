@@ -2,26 +2,18 @@ import React from 'react'
 import { useDebouncedUiCallback } from './useDebounce'
 
 const useFixVh = () => {
-  const setVh = useDebouncedUiCallback((type) => {
-    console.log(type)
+  const setVh = useDebouncedUiCallback(() => {
     setTimeout(() => {
       const vh = window.innerHeight * 0.01
       document.documentElement.style.setProperty('--vh', `${vh}px`)
     }, 24)
   })
 
-  if (screen?.orientation?.onchange) {
-    screen.orientation.onchange = function () {
-      setVh('orientation change')
-    }
-  }
-
   React.useEffect(() => {
-    setVh('iniital')
-    const resized = () => setVh('resized')
-    const listener = window.addEventListener('resize', resized);
+    setVh()
+    const listener = window.addEventListener('resize', setVh);
     return () => {
-      window.removeEventListener(listener, resized)
+      window.removeEventListener(listener, setVh)
     }
   })
 }
