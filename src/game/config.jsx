@@ -84,7 +84,7 @@ const Players = ({ players, max, update }) => {
 
   return (
     <div className="config-section">
-      <input className="player-count" disabled={!max} type="number" min={3} max={max} defaultValue={players.length} ref={playersRef} /> 
+      <input className="player-count" disabled={!max} type="number" min={3} max={max} defaultValue={players?.length} ref={playersRef} /> 
       <h2 className="config-title">Players</h2>
       <div className="config-players">
         <button aria-label="remove a player" className="adjust-players" disabled={!max} onClick={removePlayer}><Icon name="minus" height="1em" /></button>
