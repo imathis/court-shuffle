@@ -5,22 +5,32 @@ import { Config } from '../game/config'
 
 const GameContext = React.createContext({})
 
+const isOddFormat = ({ card, game }) => {
+  const onCourt = game.cards.filter(({ court }) => court === card.court).length
+  if (onCourt < game.perCourt) {
+    if (onCourt === 2) return 'singles'
+    return '3 players'
+  }
+  return null
+}
+
 const reduceDeck = (state, action) => {
-  let { cards, index } = state
+  let { cards, index, oddFormat } = state
   if (action?.card) {
     cards = [...cards, action.card]
     index = cards.length - 1
+    oddFormat = isOddFormat(action)
   }
   else if (action === 'back' && cards.length > 1) index --
   else if (action === 'next' && index < cards.length - 1) index ++
   else if (action === 'reset') { cards = []; index = -1 }
 
-  return { cards, index, card: cards[index] }
+  return { cards, index, card: cards[index], oddFormat }
 }
 
 const useGameHooks = () => {
   const { game: slug } = useParams()
-  const [drawn, updateDrawn] = React.useReducer(reduceDeck, { cards: [], index: -1 })
+  const [drawn, updateDrawn] = React.useReducer(reduceDeck, { cards: [], index: -1, oddFormat: null })
   const [isDrawing, setIsDrawing] = React.useState(false)
   const [configVisible, setConfigVisible] = React.useState(false)
 
@@ -35,7 +45,7 @@ const useGameHooks = () => {
   const draw = React.useCallback(async () => {
     setIsDrawing(true)
     const { card } = await drawCard({ game, slug })
-    if (card) updateDrawn({ card })
+    if (card) updateDrawn({ card, game })
     setTimeout(() => setIsDrawing(false), 800)
     return card
   }, [slug, drawCard, game])

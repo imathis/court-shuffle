@@ -54,7 +54,7 @@
 .next-round-actions {
   font-size: 1.6em;
   position: absolute;
-  top: 3vh;
+  bottom: 32vh;
   text-align: center;
   left: 5vw; right: 5vw;
   z-index: 1;

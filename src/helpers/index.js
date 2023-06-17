@@ -20,13 +20,14 @@ const shuffle = (array) => {
 const newDeck = (options) => {
   const { 
     courts = allCourts,
-    players = courts.length * 4,
     perCourt = 4,
+    players = courts.length * perCourt,
   } = options
 
   const deck = []
+  const sortedCourts = courts.sort().reverse()
   // Add cards for each court and player
-  for (const court of courts.sort()) {
+  for (const court of sortedCourts) {
     for(let count = 0; count < perCourt; count++) {
       if (deck.length < players)
       deck.push({ court, suit: suits[count] });
@@ -35,7 +36,7 @@ const newDeck = (options) => {
 
   // For each extra player grab one court starting at the end
   for(let count = 0; deck.length < players; count++) {
-    deck.push({ court: courts.reverse()[count], suit: 'joker' })
+    deck.push({ court: sortedCourts[count], suit: 'joker' })
   }
   return shuffle(deck)
 }
