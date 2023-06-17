@@ -31,7 +31,7 @@ const NewGameInstructions = ({ openConfig }) => (
   </>
 )
 
-const Instructions = ({ text, card, openConfig }) => (
+const Instructions = ({ text, card }) => (
   <div className="instructions" data-subtle={!!card || null}>
     <div className="logo-banner">
       <Icon name="club" />
@@ -83,7 +83,7 @@ const Play = () => {
         { card ? <Card {...card} /> : null }
         <div className="court-info">
           <Draw draw={draw} drawing={isDrawing} inProgress={inProgress} />
-          { card ? <CourtAssignment {...card} cardsRemaining={cardsRemaining} /> : null }
+          { card ? <CourtAssignment oddFormat={drawn.oddFormat} {...card} cardsRemaining={cardsRemaining} /> : null }
           { inProgress ? <CourtStatus drawn={game.lastDrawn + 1} players={game.players} cardsRemaining={cardsRemaining} /> : null }
           <CardNav next={next} back={previous} openConfig={openConfig} />
         </div>

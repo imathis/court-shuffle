@@ -41,9 +41,10 @@ const Courts = ({ courts, update }) => {
             data-selected={courts.includes(allCourts[index]) || null}
           >
             <input 
+              name={`court${index+1}`}
               type="checkbox"
               onChange={toggleCourt}
-              defaultChecked={courts.includes(allCourts[index])}
+              checked={courts.includes(allCourts[index])}
               value={allCourts[index]}
             />
             {index + 1}
@@ -106,6 +107,12 @@ const Share = ({ url }) => {
   )
 }
 
+const removeEmptyCourts = ({ courts, perCourt, players }) => {
+  const lessPlayers = (courts.length * perCourt) - players
+  const remove = Math.floor(lessPlayers / perCourt)
+  return courts.slice(0, courts.length - remove)
+}
+
 const Config = ({ game, inProgress, config, configVisible, closeConfig, url }) => {
   const [courts, setCourts] = React.useState(game?.courts || [])
   const [players, setPlayers] = React.useState(game?.players)
@@ -122,14 +129,26 @@ const Config = ({ game, inProgress, config, configVisible, closeConfig, url }) =
     } else newRound()
   }
 
-  React.useEffect(() => {
-    const defaultPlayers = courts.length * perCourt
+  const updateCourts = (c) => {
+    setCourts(c)
+    const defaultPlayers = c.length * perCourt
     setPlayers(defaultPlayers)
-  }, [courts, perCourt])
+  }
+
+  const updatePlayers = (p) => {
+    setPlayers(p)
+    const c = removeEmptyCourts({ players: p, courts, perCourt })
+    if (c.length !== courts.length) setCourts(c)
+  }
+
+  const updatePerCourt = (count) => {
+    setPerCourt(count)
+    const defaultPlayers = courts.length * count
+    setPlayers(defaultPlayers)
+  }
 
   return (
-    <>
-      <Transition
+    <> <Transition
         type="slide-panel"
         in={configVisible}
         unmountOnExit
@@ -140,9 +159,9 @@ const Config = ({ game, inProgress, config, configVisible, closeConfig, url }) =
             <button className="config-action primary" onClick={configGame} disabled={!courts.length}>Save</button>
           </div>
           <div className="config-settings">
-            <Format perCourt={perCourt} update={setPerCourt} />
-            <Courts courts={courts} update={setCourts} />
-            <Players players={players} update={setPlayers} max={maxPlayers} />
+            <Format perCourt={perCourt} update={updatePerCourt} />
+            <Courts courts={courts} update={updateCourts} />
+            <Players players={players} update={updatePlayers} max={maxPlayers} />
             <Share url={url} />
           </div>
         </div>
