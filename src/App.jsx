@@ -1,5 +1,5 @@
 import { BrowserRouter, Route, Routes } from 'react-router-dom'
-import { GameIndex, NewGame, Join, Play } from './game'
+import { NewGame, Join, Play } from './game'
 import { GameProvider } from './hooks'
 import { useFixVh } from './hooks'
 

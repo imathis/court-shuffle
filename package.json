@@ -11,7 +11,7 @@
     "optimize": "vite optimize"
   },
   "dependencies": {
-    "convex": "^0.15.0",
+    "convex": "^1.5.1",
     "prop-types": "^15.8.1",
     "qrcode-svg-table": "^1.1.2",
     "react": "^18.2.0",
