@@ -1,6 +1,6 @@
 import React from 'react'
 import { Navigate } from 'react-router-dom'
-import { useMutation } from "../../convex/_generated/react";
+import { useMutation } from 'convex/react';
 
 const NewGame = () => {
   const create = useMutation("game:create")

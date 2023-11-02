@@ -1,5 +1,5 @@
 import React from 'react'
-import { useQuery, useMutation } from "../../convex/_generated/react";
+import { useQuery, useMutation } from 'convex/react';
 import { useParams, Outlet } from 'react-router-dom'
 import { Config } from '../game/config'
 
