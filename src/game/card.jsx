@@ -32,18 +32,22 @@ const CourtAssignment = ({ suit, court, oddFormat }) => (
         {oddFormat} on
       </div>
     ) : null}
-    { suit === 'joker' ? (
-      <div className="court-play-type">
-        You're {suit === 'joker' ? 'rotating' : 'playing'} on
-      </div>
-    ) : null }
-    <div className="court-number">
-      COURT {court + 1}
+    <div className="court-play-type">
+      You’re {suit === 'joker' ? 'rotating' : 'playing'} on
     </div>
+    { suit === 'joker' ? (
+      <div className="court-number">
+        BONUS COURT
+      </div>
+    ) : (
+      <div className="court-number">
+        COURT {court + 1}
+      </div>
+    ) }
   </div>
 )
 
-const CourtStatus = ({ cardsRemaining, players, drawn }) => {
+const CourtStatus = ({ cardsRemaining, players }) => {
   return (
     <div className="court-status">
       { players } Players, { cardsRemaining } Card{ cardsRemaining === 1 ? '' : 's'} { cardsRemaining !== players ? 'left' : ''}

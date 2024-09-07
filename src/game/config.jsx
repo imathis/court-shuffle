@@ -117,7 +117,7 @@ const Config = ({ game, inProgress, config, configVisible, closeConfig, url }) =
   const [courts, setCourts] = React.useState(game?.courts || [])
   const [players, setPlayers] = React.useState(game?.players)
   const [perCourt, setPerCourt] = React.useState(game?.perCourt || 4)
-  const maxPlayers = (courts.length * perCourt) + courts.length
+  const maxPlayers = (courts.length * perCourt) + (perCourt - 1)
 
   const configGame = async () => {
     const newRound = async () => {
