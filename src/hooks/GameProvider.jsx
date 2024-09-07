@@ -5,32 +5,31 @@ import { Config } from '../game/config'
 
 const GameContext = React.createContext({})
 
-const isOddFormat = ({ card, game }) => {
+const getFormat = ({ card, game }) => {
   const onCourt = game.cards.filter(({ court }) => court === card.court).length
-  if (onCourt < game.perCourt) {
-    if (onCourt === 2) return 'singles'
-    return '3 players'
-  }
-  return null
+  if (onCourt === 1) return 'rotating'
+  if (onCourt === 2) return 'playing singles'
+  if (onCourt === 3) return 'with 3 players'
+  return 'playing doubles'
 }
 
 const reduceDeck = (state, action) => {
-  let { cards, index, oddFormat } = state
+  let { cards, index, format } = state
   if (action?.card) {
     cards = [...cards, action.card]
     index = cards.length - 1
-    oddFormat = isOddFormat(action)
+    format = getFormat(action)
   }
   else if (action === 'back' && cards.length > 1) index --
   else if (action === 'next' && index < cards.length - 1) index ++
   else if (action === 'reset') { cards = []; index = -1 }
 
-  return { cards, index, card: cards[index], oddFormat }
+  return { cards, index, card: cards[index], format }
 }
 
 const useGameHooks = () => {
   const { game: slug } = useParams()
-  const [drawn, updateDrawn] = React.useReducer(reduceDeck, { cards: [], index: -1, oddFormat: null })
+  const [drawn, updateDrawn] = React.useReducer(reduceDeck, { cards: [], index: -1, format: null })
   const [isDrawing, setIsDrawing] = React.useState(false)
   const [configVisible, setConfigVisible] = React.useState(false)
 

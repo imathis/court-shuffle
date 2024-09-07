@@ -25,25 +25,14 @@ const NavButton = ({ text, icon, onClick }) => (
   ) : <span /> 
 )
 
-const CourtAssignment = ({ suit, court, oddFormat }) => (
+const CourtAssignment = ({ suit, court, format }) => (
   <div className="court-assignment">
-    { oddFormat ? (
-      <div className="court-play-type">
-        {oddFormat} on
-      </div>
-    ) : null}
     <div className="court-play-type">
-      You’re {suit === 'joker' ? 'rotating' : 'playing'} on
+      {format} on
     </div>
-    { suit === 'joker' ? (
-      <div className="court-number">
-        BONUS COURT
-      </div>
-    ) : (
-      <div className="court-number">
-        COURT {court + 1}
-      </div>
-    ) }
+    <div className="court-number">
+      { suit === 'joker' ? 'BONUS' : `COURT ${court + 1}`}
+    </div>
   </div>
 )
 

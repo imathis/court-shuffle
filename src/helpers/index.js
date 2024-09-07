@@ -1,4 +1,4 @@
-const allCourts = Array(13).fill('').map((_, index) => index)
+const allCourts = Array(14).fill('').map((_, index) => index)
 const suits = ['spades', 'hearts', 'diamonds', 'clubs'];
 
 const sort = (a, b) => {
@@ -36,7 +36,7 @@ const newDeck = (options) => {
 
   // For each extra player grab one court starting at the end
   for(let count = 0; deck.length < players; count++) {
-    deck.push({ court: sortedCourts[count], suit: 'joker' })
+    deck.push({ court: 14, suit: 'joker' })
   }
   return shuffle(deck)
 }
