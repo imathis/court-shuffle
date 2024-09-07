@@ -7,7 +7,7 @@ const GameContext = React.createContext({})
 
 const getFormat = ({ card, game }) => {
   const onCourt = game.cards.filter(({ court }) => court === card.court).length
-  if (onCourt === 1) return 'rotating'
+  if (onCourt === 1) return 'you’re rotating'
   if (onCourt === 2) return 'playing singles'
   if (onCourt === 3) return 'with 3 players'
   return 'playing doubles'
