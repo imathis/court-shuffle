@@ -99,7 +99,7 @@
   color: #fff;
   font-size: 2em;
   width: calc(100% - 40px);
-  padding: .4em 0;
+  padding: .35em 0 .4em;
   margin: 0 auto 20px;
   display: block;
   border: none;
@@ -142,12 +142,12 @@
   font-size: 4.5em;
   letter-spacing: -2px;
   line-height: 1em;
-  padding: 15px 0;
+  padding: 12px 0 15px;
 }
 
 .court-status {
   display: grid;
-  padding: 8px 0;
+  padding: 5px 0 8px;
   text-align: center;
   font-size: 1.5em;
   color: #fff;
@@ -165,6 +165,11 @@
   color: var(--suit-bg);
   transition: color .25s ease-in-out;
   animation: drop-down .25s cubic-bezier(0.0, 0.3, 0.9, 1.0);
+}
+
+[data-empty] {
+  height: 0;
+  overflow: hidden;
 }
 
 .card-nav {
