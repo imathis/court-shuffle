@@ -5,8 +5,8 @@ import { Config } from '../game/config'
 
 const GameContext = React.createContext({})
 
-const getFormat = ({ card, game }) => {
-  const onCourt = game.cards.filter(({ court }) => court === card.court).length
+const getFormat = ({ card, deck }) => {
+  const onCourt = deck.filter(({ court }) => court === card.court).length
   if (onCourt === 1) return 'ROTATION'
   if (onCourt === 2) return 'SINGLES'
   if (onCourt === 3) return '3 PLAYER'
@@ -14,24 +14,26 @@ const getFormat = ({ card, game }) => {
 }
 
 const reduceDeck = (state, action) => {
-  let { cards, index, format } = state
+  let { cards, index, format, deck } = state
   if (action?.cards) { cards = action.cards }
-  if (action?.lastDrawn) { index = action.lastDrawn }
+  if (typeof action?.lastDrawn === 'number') { index = action.lastDrawn }
   if (action?.card) {
     cards = [...cards, action.card]
     index = cards.length - 1
-    format = getFormat(action)
   }
-  else if (action === 'back' && cards.length > 1) index --
-  else if (action === 'next' && index < cards.length - 1) index ++
-  else if (action === 'reset') { cards = []; index = -1 }
+  if (action?.game && !deck.length) { deck = action.game.cards }
+  if (action === 'back' && cards.length > 1) index --
+  if (action === 'next' && index < cards.length - 1) index ++
+  if (action === 'reset') { cards = []; index = -1 }
 
-  return { cards, index, card: cards[index], format }
+  const card = cards[index]
+  format = card ? getFormat({ card: cards[index], deck }) : format
+  return { cards, index, card, deck, format }
 }
 
 const useGameHooks = () => {
   const { game: slug } = useParams()
-  const [drawn, updateDrawn] = React.useReducer(reduceDeck, { cards: [], index: -1, format: null })
+  const [drawn, updateDrawn] = React.useReducer(reduceDeck, { cards: [], index: -1, deck: [], format: null })
   const [isDrawing, setIsDrawing] = React.useState(false)
   const [configVisible, setConfigVisible] = React.useState(false)
 
@@ -60,7 +62,11 @@ const useGameHooks = () => {
   React.useEffect(() => {
     if (game?.lastDrawn === -1) updateDrawn('reset')
     if (drawn.cards.length === 0 && game?.cards?.length && game?.lastDrawn !== -1) {
-      updateDrawn({ cards: game.cards.slice(0, game.lastDrawn + 1), lastDrawn: game.lastDrawn })
+      updateDrawn({
+        game,
+        cards: game.cards.slice(0, game.lastDrawn + 1),
+        lastDrawn: game.lastDrawn,
+      })
     }
   }, [game])
 
