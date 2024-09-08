@@ -15,6 +15,8 @@ const getFormat = ({ card, game }) => {
 
 const reduceDeck = (state, action) => {
   let { cards, index, format } = state
+  if (action?.cards) { cards = action.cards }
+  if (action?.lastDrawn) { index = action.lastDrawn }
   if (action?.card) {
     cards = [...cards, action.card]
     index = cards.length - 1
@@ -57,6 +59,9 @@ const useGameHooks = () => {
   // When game is new, reset drawn deck
   React.useEffect(() => {
     if (game?.lastDrawn === -1) updateDrawn('reset')
+    if (drawn.cards.length === 0 && game?.cards?.length && game?.lastDrawn !== -1) {
+      updateDrawn({ cards: game.cards.slice(0, game.lastDrawn + 1), lastDrawn: game.lastDrawn })
+    }
   }, [game])
 
   const cardsRemaining = game?.cards?.length && game.cards.length - (game.lastDrawn + 1)
