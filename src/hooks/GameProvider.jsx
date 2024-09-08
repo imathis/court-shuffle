@@ -74,7 +74,9 @@ const useGameHooks = () => {
     previous: drawn.index >= 1 ? () => updateDrawn('back') : null,
     next: drawn.index + 1 < drawn.cards.length ? () => updateDrawn('next') : null,
     url: `https://courtshuffle.com/game/${slug}`,
-    reset: () => config(),
+    reset: () => {
+      config({ game })
+    },
     roundOver,
     cardsRemaining,
     inProgress,
