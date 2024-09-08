@@ -47,6 +47,7 @@ const Play = () => {
   const card = drawn.card
 
   const nextRound = () => {
+    console.log(game)
     setShowNextRound(false) 
     reset()
   }
