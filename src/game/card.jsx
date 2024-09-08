@@ -26,7 +26,7 @@ const NavButton = ({ text, icon, onClick }) => (
 )
 
 const CourtAssignment = ({ suit, court, format }) => (
-  <div className="court-assignment">
+  <div className="court-assignment" data-empty={typeof court !== 'number' || null}>
     {/* <div className="court-play-type"> */}
     {/*   {format} on */}
     {/* </div> */}

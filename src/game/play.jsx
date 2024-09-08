@@ -83,7 +83,7 @@ const Play = () => {
         { card ? <Card {...card} /> : null }
         <div className="court-info">
           <Draw draw={draw} drawing={isDrawing} inProgress={inProgress} />
-          { card ? <CourtAssignment format={drawn.format} {...card} cardsRemaining={cardsRemaining} /> : null }
+          <CourtAssignment format={drawn.format} {...card} cardsRemaining={cardsRemaining} />
           { inProgress ? <CourtStatus drawn={game.lastDrawn + 1} players={game.players} cardsRemaining={cardsRemaining} /> : null }
           <CardNav next={next} back={previous} openConfig={openConfig} />
         </div>
