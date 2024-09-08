@@ -27,11 +27,11 @@ const NavButton = ({ text, icon, onClick }) => (
 
 const CourtAssignment = ({ suit, court, format }) => (
   <div className="court-assignment">
-    <div className="court-play-type">
-      {format} on
-    </div>
+    {/* <div className="court-play-type"> */}
+    {/*   {format} on */}
+    {/* </div> */}
     <div className="court-number">
-      { suit === 'joker' ? 'BONUS' : `COURT ${court + 1}`}
+      { suit === 'joker' ? format : `COURT ${court + 1}`}
     </div>
   </div>
 )
