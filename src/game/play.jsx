@@ -79,8 +79,8 @@ const Play = () => {
     <div className="play-screen" data-suit={suitType[card?.suit]} data-round-over={showNextRound || null}>
       <div className="court-play">
         { showNextRound ? <NextRound nextRound={nextRound} openConfig={openConfig} /> : null }
-        <Instructions card={card} />
-        { card ? <Card {...card} /> : null }
+        <Instructions card={card} index={drawn.index} />
+        { card ? <Card {...card} index={drawn.index} /> : null }
         <div className="court-info">
           <Draw draw={draw} drawing={isDrawing} inProgress={inProgress} />
           <CourtAssignment format={drawn.format} {...card} cardsRemaining={cardsRemaining} />

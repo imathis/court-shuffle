@@ -1,4 +1,5 @@
 import "./card.css"
+import React from 'react'
 import * as cards from '../assets/cards'
 import { Icon } from './Icon'
 
@@ -10,11 +11,23 @@ const suits = {
   diamonds: 'D',
 }
 
-const Card = ({ court, suit }) => {
-  const card = suit === 'joker' ? 'cardX' : `card${[courts[court]]}${suits[suit]}`
-  const Svg = cards[card]
+const Card = ({ court, suit, index }) => {
+  const [card, setCard] = React.useState({})
 
-  return <Svg className="court-card" />
+  React.useEffect(() => {
+    const id = suit === 'joker' ? 'cardX' : `card${[courts[court]]}${suits[suit]}`
+    const svg = cards[id]
+    if (card.id === id) {
+      setCard({})
+      setTimeout(() => {
+        setCard({ id, svg })
+      }, 10)
+    } else {
+      setCard({ id, svg })
+    }
+  }, [court, suit, index])
+
+  return card.svg ? <card.svg className="court-card" /> : null
 }
 
 const NavButton = ({ text, icon, onClick }) => (
