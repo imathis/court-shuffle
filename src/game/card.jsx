@@ -49,10 +49,20 @@ const CourtAssignment = ({ suit, court, format }) => (
   </div>
 )
 
-const CourtStatus = ({ cardsRemaining, players }) => {
+const CourtStatus = ({ drawn, players }) => {
+  if (!drawn.cards.length) {
+    return (
+      <div className="court-status">{players} Players </div>
+    )
+  }
+  if (drawn.index + 2 === players) {
+    return (
+      <div className="court-status">1 Card Left</div>
+    )
+  }
   return (
     <div className="court-status">
-      { players } Players, { cardsRemaining } Card{ cardsRemaining === 1 ? '' : 's'} { cardsRemaining !== players ? 'left' : ''}
+      Card {drawn.index + 1} of { players }
     </div>
   )
 }
