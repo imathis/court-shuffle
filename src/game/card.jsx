@@ -35,7 +35,7 @@ const NavButton = ({ text, icon, onClick }) => (
     <button aria-label={text} onClick={onClick} >
       <Icon name={icon} />
     </button>
-  ) : <span /> 
+  ) : <span />
 )
 
 const CourtAssignment = ({ suit, court, format }) => (
@@ -44,7 +44,7 @@ const CourtAssignment = ({ suit, court, format }) => (
     {/*   {format} on */}
     {/* </div> */}
     <div className="court-number">
-      { suit === 'joker' ? format : `COURT ${court + 1}`}
+      {suit === 'joker' ? format : `COURT ${court + 1}`}
     </div>
   </div>
 )
@@ -62,7 +62,7 @@ const CourtStatus = ({ drawn, players }) => {
   }
   return (
     <div className="court-status">
-      Card {drawn.index + 1} of { players }
+      Card {drawn.index + 1} of {players}
     </div>
   )
 }
