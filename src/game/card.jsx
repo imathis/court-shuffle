@@ -1,6 +1,6 @@
 import "./card.css"
 import React from 'react'
-import * as cards from '../assets/cards'
+import { CardSvg, availableCards } from '../assets/cards'
 import { Icon } from './Icon'
 
 const courts = ['A', '2', '3', '4', '5', '6', '7', '8', '9', '0', 'J', 'Q', 'K', 'X']
@@ -15,19 +15,18 @@ const Card = ({ court, suit, index }) => {
   const [card, setCard] = React.useState({})
 
   React.useEffect(() => {
-    const id = suit === 'joker' ? 'cardX' : `card${[courts[court]]}${suits[suit]}`
-    const svg = cards[id]
+    const id = suit === 'joker' ? 'X' : `${[courts[court]]}${suits[suit]}`
     if (card.id === id) {
       setCard({})
       setTimeout(() => {
-        setCard({ id, svg })
+        setCard({ id })
       }, 10)
     } else {
-      setCard({ id, svg })
+      setCard({ id })
     }
   }, [court, suit, index])
 
-  return card.svg ? <card.svg className="court-card" /> : null
+  return availableCards.includes(card.id) ? <CardSvg name={card.id} className="court-card" /> : null
 }
 
 const NavButton = ({ text, icon, onClick }) => (
