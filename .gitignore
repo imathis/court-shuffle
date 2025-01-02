@@ -24,3 +24,4 @@ convex/_generated/
 *.sln
 *.sw?
 .yarn
+.pnp.*
