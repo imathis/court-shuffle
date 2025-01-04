@@ -3,8 +3,12 @@ import react from '@vitejs/plugin-react'
 import svgr from "vite-plugin-svgr"
 
 // https://vitejs.dev/config/
-export default defineConfig(({mode}) => {
+export default defineConfig(({ mode }) => {
   return {
+    server: {
+      host: '0.0.0.0',
+      port: 5172,
+    },
     build: {
       manifest: true,
     },
