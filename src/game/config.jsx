@@ -5,7 +5,6 @@ import "./config.css";
 import { QrCode } from "./qrCode";
 import { Transition } from "./Transition";
 import { Icon } from "./Icon";
-import { preloadCards } from "../assets/cards";
 
 const Format = ({ perCourt, update }) => {
   return (
@@ -170,15 +169,10 @@ const Config = ({
   closeConfig,
   url,
 }) => {
-  const [courts, setCourtsState] = React.useState(game?.courts || []);
+  const [courts, setCourts] = React.useState(game?.courts || []);
   const [players, setPlayers] = React.useState(game?.players);
   const [perCourt, setPerCourt] = React.useState(game?.perCourt || 4);
   const maxPlayers = courts.length * perCourt + (perCourt - 1);
-
-  const setCourts = (c) => {
-    preloadCards({ cards: c });
-    setCourtsState(c);
-  };
 
   const configGame = async () => {
     const newRound = async () => {
