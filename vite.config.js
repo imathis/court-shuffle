@@ -12,6 +12,7 @@ export default defineConfig(({ mode }) => {
     },
     build: {
       manifest: true,
+      sourcemaps: true,
     },
     plugins: [
       svgr({

@@ -1,6 +1,6 @@
 import React from "react";
-import { useQuery, useMutation } from "convex/react";
-import { useParams, Outlet } from "react-router-dom";
+import { Outlet } from "react-router-dom";
+import { useGameStore } from "../store/gameStore";
 import { Config } from "../game/config";
 
 const GameContext = React.createContext({});
@@ -13,84 +13,57 @@ const getFormat = ({ card, deck }) => {
   return null;
 };
 
-const reduceDeck = (state, action) => {
-  let { cards, index, format, deck } = state;
-  if (action?.cards) {
-    cards = action.cards;
-  }
-  if (typeof action?.lastDrawn === "number") {
-    index = action.lastDrawn;
-  }
-  if (action?.card) {
-    cards = [...cards, action.card];
-    index = cards.length - 1;
-  }
-  if (action?.game && !deck.length) {
-    deck = action.game.cards;
-  }
-  if (action === "back" && cards.length > 1) index--;
-  if (action === "next" && index < cards.length - 1) index++;
-  if (action === "reset") {
-    cards = [];
-    index = -1;
-  }
-
-  const card = cards[index];
-  format = card ? getFormat({ card: cards[index], deck }) : format;
-  return { cards, index, card, deck, format };
-};
-
 const useGameHooks = () => {
-  const { game: slug } = useParams();
-  const [drawn, updateDrawn] = React.useReducer(reduceDeck, {
-    cards: [],
-    index: -1,
-    deck: [],
-    format: null,
-  });
+  const { game, createGame, configGame, drawCard, enableSync } = useGameStore();
+  const [drawnIndex, setDrawnIndex] = React.useState(-1);
   const [isDrawing, setIsDrawing] = React.useState(false);
   const [configVisible, setConfigVisible] = React.useState(false);
-
-  const configGame = useMutation("game:config");
-  const drawCard = useMutation("game:draw");
-  const create = useMutation("game:create");
-  const game = useQuery("game:get", { slug });
 
   const openConfig = React.useCallback(() => setConfigVisible(true), []);
   const closeConfig = React.useCallback(() => setConfigVisible(false), []);
 
   const draw = React.useCallback(async () => {
     setIsDrawing(true);
-    const { card } = await drawCard({ game, slug });
-    if (card) updateDrawn({ card, game });
+    const result = await drawCard();
+    if (result?.card) {
+      setDrawnIndex(result.index);
+    }
     setTimeout(() => setIsDrawing(false), 800);
-    return card;
-  }, [slug, drawCard, game]);
+    return result?.card;
+  }, [drawCard]);
 
   const config = React.useCallback(
     async (props = {}) => {
-      await configGame({ game, slug, ...props });
-      updateDrawn("reset");
+      await configGame({
+        courts: props.courts,
+        players: props.players,
+        perCourt: props.perCourt,
+      });
+      setDrawnIndex(-1);
     },
-    [slug, configGame, game],
+    [configGame],
   );
 
-  // When game is new, reset drawn deck
+  const create = React.useCallback(() => {
+    return createGame();
+  }, [createGame]);
+
+  // Removed slugFromUrl effect since we rely on game.slug only
+  // You might need to manually trigger enableSync if you want to sync with a specific slug
+  // For now, enableSync will be called manually or via app logic
+
   React.useEffect(() => {
-    if (game?.lastDrawn === -1) updateDrawn("reset");
-    if (
-      drawn.cards.length === 0 &&
-      game?.cards?.length &&
-      game?.lastDrawn !== -1
-    ) {
-      updateDrawn({
-        game,
-        cards: game.cards.slice(0, game.lastDrawn + 1),
-        lastDrawn: game.lastDrawn,
-      });
+    if (game?.lastDrawn === -1) {
+      setDrawnIndex(-1);
+    } else if (game?.cards?.length && game?.lastDrawn >= 0) {
+      setDrawnIndex(game.lastDrawn);
     }
   }, [game]);
 
+  const slug = game?.slug; // Only from game state
+  const drawnCard = game?.cards?.[drawnIndex] || null;
+  const deck = game?.cards || [];
+  const format = drawnCard ? getFormat({ card: drawnCard, deck }) : null;
   const cardsRemaining =
     game?.cards?.length && game.cards.length - (game.lastDrawn + 1);
   const roundOver = game?.cards?.length && !cardsRemaining;
@@ -103,12 +76,19 @@ const useGameHooks = () => {
       create,
       config,
       draw,
-      drawn,
+      drawn: {
+        card: drawnCard,
+        index: drawnIndex,
+        format,
+        cards: deck.slice(0, game?.lastDrawn + 1 || 0),
+      },
       isDrawing,
-      previous: drawn.index >= 1 ? () => updateDrawn("back") : null,
+      previous: drawnIndex >= 1 ? () => setDrawnIndex((i) => i - 1) : null,
       next:
-        drawn.index + 1 < drawn.cards.length ? () => updateDrawn("next") : null,
-      url: `https://courtshuffle.com/game/${slug}`,
+        drawnIndex + 1 <= (game?.lastDrawn || -1)
+          ? () => setDrawnIndex((i) => i + 1)
+          : null,
+      url: slug ? `https://courtshuffle.com/game/${slug}` : null,
       reset: () => {
         config({ game });
       },
@@ -116,13 +96,13 @@ const useGameHooks = () => {
       cardsRemaining,
       inProgress,
       isLoading: typeof game === "undefined",
-      notFound: game === null,
+      notFound: game === null && slug, // Adjusted for no URL slug
       configVisible,
       openConfig,
       closeConfig,
     }),
     [
-      drawn,
+      drawnIndex,
       isDrawing,
       create,
       slug,

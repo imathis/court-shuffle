@@ -9,16 +9,11 @@ const App = () => {
   return (
     <BrowserRouter>
       <Routes>
-        <Route path="/">
+        <Route path="/" element={<GameProvider />}>
           <Route index element={<NewGame />} />
           <Route path="new" element={<NewGame />} />
           <Route path="join" element={<Join />} />
-          <Route path="game/*">
-            <Route path=":game/*" element={<GameProvider />}>
-              <Route index element={<Play />} />
-              <Route path="join" element={<Join />} />
-            </Route>
-          </Route>
+          <Route path="play" element={<Play />} />
         </Route>
       </Routes>
     </BrowserRouter>

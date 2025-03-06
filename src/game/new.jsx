@@ -1,24 +1,22 @@
-import React from 'react'
-import { Navigate } from 'react-router-dom'
-import { useMutation } from 'convex/react';
+import React from "react";
+import { Navigate } from "react-router-dom";
+import { useGameStore } from "../store/gameStore";
 
 const NewGame = () => {
-  const create = useMutation("game:create")
-  const [slug, setSlug] = React.useState()
+  const { game, createGame } = useGameStore();
 
   React.useEffect(() => {
-    if (!slug) {
+    if (!game) {
       (async () => {
-        const game = await create()
-        setSlug(game.slug)
-      })()
+        await createGame();
+      })();
     }
-  }, [slug, create])
+  }, [createGame]);
 
-  if (slug) {
-    return <Navigate to={`/game/${slug}`} />
+  if (game) {
+    return <Navigate to={"/play"} />;
   }
-  return <h1>Loading…</h1>
-}
+  return <h1>Loading…</h1>;
+};
 
-export { NewGame }
+export { NewGame };
