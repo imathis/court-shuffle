@@ -1,15 +1,11 @@
-import React from 'react'
-import { BrowserRouter, Route, Routes } from 'react-router-dom'
-import { NewGame, Join, Play } from './game'
-import { GameProvider } from './hooks'
-import { useFixVh } from './hooks'
-import { preloadAllCards } from './assets/cards'
+import React from "react";
+import { BrowserRouter, Route, Routes } from "react-router-dom";
+import { NewGame, Join, Play } from "./game";
+import { GameProvider } from "./hooks";
+import { useFixVh } from "./hooks";
 
 const App = () => {
-  useFixVh()
-  React.useEffect(() => {
-    preloadAllCards()
-  }, [])
+  useFixVh();
   return (
     <BrowserRouter>
       <Routes>
@@ -26,7 +22,7 @@ const App = () => {
         </Route>
       </Routes>
     </BrowserRouter>
-  )
-}
+  );
+};
 
 export default App;

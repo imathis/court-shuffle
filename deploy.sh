@@ -17,7 +17,7 @@ fi
 
 # Step 2: Sync the files
 echo "Syncing files to the server..."
-rsync -avz --delete -e "ssh" "$LOCAL_DIR" "$REMOTE_USER@$REMOTE_HOST:$REMOTE_DIR"
+rsync -avz --exclude='**/.DS_Store' --delete -e "ssh" "$LOCAL_DIR" "$REMOTE_USER@$REMOTE_HOST:$REMOTE_DIR"
 
 # Step 3: Check sync status
 if [ $? -eq 0 ]; then
