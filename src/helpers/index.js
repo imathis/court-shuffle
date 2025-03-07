@@ -52,4 +52,45 @@ const newSlug = (length = 5) => {
   return slug;
 };
 
+// Create a new game (no slug by default)
+export const createGameLogic = () => ({
+  slug: null, // Null unless synced to Convex
+  cards: undefined,
+  courts: undefined,
+  players: undefined,
+  lastDrawn: -1,
+  perCourt: undefined,
+  updatedAt: Date.now(),
+});
+
+// Configure a game
+export const configGameLogic = (game, { courts, players, perCourt }) => {
+  if (!game) return null;
+  const cards = newDeck({ courts, players, perCourt });
+  return {
+    ...game,
+    cards,
+    courts,
+    players,
+    perCourt,
+    lastDrawn: -1,
+    updatedAt: Date.now(),
+  };
+};
+
+// Draw a card
+export const drawCardLogic = (game) => {
+  if (!game || !game.cards) return null;
+  const index = game.lastDrawn === null ? 0 : game.lastDrawn + 1;
+  if (!game.cards[index]) return null;
+  return {
+    updatedGame: {
+      ...game,
+      lastDrawn: index,
+      updatedAt: Date.now(),
+    },
+    result: { card: game.cards[index], index },
+  };
+};
+
 export { newDeck, newSlug, allCourts, sort };

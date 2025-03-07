@@ -143,13 +143,19 @@ const Players = ({ players, max, update }) => {
   );
 };
 
-const Share = ({ url }) => {
+const Share = ({ url, enableSync }) => {
   return (
     <div className="config-section">
       <h2 className="config-title">Invite</h2>
       <div className="share-code">
         <p className="config-text">Draw cards from multiple devices</p>
-        <QrCode url={url} />
+        {url ? (
+          <QrCode url={url} />
+        ) : (
+          <button className="config-action secondary" onClick={enableSync}>
+            Share Deck
+          </button>
+        )}
       </div>
     </div>
   );
@@ -167,6 +173,7 @@ const Config = ({
   config,
   configVisible,
   closeConfig,
+  enableSync,
   url,
 }) => {
   const [courts, setCourts] = React.useState(game?.courts || []);
@@ -239,7 +246,7 @@ const Config = ({
               update={updatePlayers}
               max={maxPlayers}
             />
-            <Share url={url} />
+            <Share url={url} enableSync={enableSync} />
           </div>
         </div>
       </Transition>
