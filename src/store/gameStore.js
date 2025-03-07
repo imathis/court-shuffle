@@ -166,10 +166,56 @@ export function useConvexSync() {
     }
   };
 
+  // Join a game by slug
+  const joinGameBySlug = async (gameSlug) => {
+    if (!gameSlug) return null;
+
+    try {
+      gameStore.getState().setSyncStatus("syncing");
+
+      // First try to create the game with the specified slug
+      // If it already exists, this will return the existing game
+      const result = await createGameMutation({ slug: gameSlug });
+
+      if (result && result.slug) {
+        // Game created or already exists
+        const currentGame =
+          gameStore.getState().game || gameStore.getState().createGame();
+
+        const updatedGame = {
+          ...currentGame,
+          ...result,
+          syncStatus: "synced",
+        };
+
+        gameStore.setState({ game: updatedGame });
+        return updatedGame;
+      } else {
+        // If creation fails, set local game with the slug but mark as failed
+        const currentGame =
+          gameStore.getState().game || gameStore.getState().createGame();
+
+        const failedGame = {
+          ...currentGame,
+          slug: gameSlug,
+          syncStatus: "failed",
+        };
+
+        gameStore.setState({ game: failedGame });
+        return failedGame;
+      }
+    } catch (error) {
+      console.error("Join game error:", error);
+      gameStore.getState().setSyncStatus("failed");
+      return null;
+    }
+  };
+
   return {
     enableSync: syncToConvex,
     drawCardWithSync,
     configGameWithSync,
+    joinGameBySlug,
     convexGame: slug ? convexGame : null,
     isSynced: !!game?.slug,
     syncStatus: game?.syncStatus || "unsynced",
@@ -183,8 +229,13 @@ export function useGameStore() {
   const createGame = gameStore((state) => state.createGame);
 
   // Get Convex sync capabilities
-  const { enableSync, drawCardWithSync, configGameWithSync, syncStatus } =
-    useConvexSync();
+  const {
+    enableSync,
+    drawCardWithSync,
+    configGameWithSync,
+    joinGameBySlug,
+    syncStatus,
+  } = useConvexSync();
 
   // Create a game if one doesn't exist
   useEffect(() => {
@@ -199,6 +250,7 @@ export function useGameStore() {
     configGame: configGameWithSync,
     drawCard: drawCardWithSync,
     enableSync,
+    joinGame: joinGameBySlug,
     syncStatus,
   };
 }

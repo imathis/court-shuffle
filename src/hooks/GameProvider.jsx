@@ -15,8 +15,15 @@ const getFormat = ({ card, deck }) => {
 
 const GameProvider = () => {
   // Get game state from store
-  const { game, createGame, configGame, drawCard, enableSync, syncStatus } =
-    useGameStore();
+  const {
+    game,
+    createGame,
+    configGame,
+    drawCard,
+    enableSync,
+    syncStatus,
+    joinGame,
+  } = useGameStore();
 
   // Local UI state
   const [drawnIndex, setDrawnIndex] = React.useState(-1);
@@ -86,7 +93,7 @@ const GameProvider = () => {
       drawnIndex + 1 <= (game?.lastDrawn || -1)
         ? () => setDrawnIndex((i) => i + 1)
         : null,
-    url: slug ? `https://courtshuffle.com/game/${slug}` : null,
+    url: slug ? `https://courtshuffle.com/join/${slug}` : null,
     reset: () => {
       config({ game });
     },
@@ -99,6 +106,7 @@ const GameProvider = () => {
     openConfig: () => setConfigVisible(true),
     closeConfig: () => setConfigVisible(false),
     enableSync,
+    joinGame,
     syncStatus,
   };
 
