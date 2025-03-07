@@ -1,121 +1,204 @@
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
 import { useMutation, useQuery } from "convex/react";
-import { useMemo, useEffect } from "react";
+import { useRef, useEffect } from "react";
 import { createGameLogic, configGameLogic, drawCardLogic } from "../helpers";
 
-// Create the base Zustand store
-const createGameStore = () =>
-  create(
-    persist(
-      (set, get) => ({
-        game: null, // Single game object
-        createGame: () => {
-          const newGame = createGameLogic();
-          set({ game: newGame });
-          return newGame;
-        },
-        configGame: ({ courts, players, perCourt }) => {
-          const game = get().game;
-          const updatedGame = configGameLogic(game, {
-            courts,
-            players,
-            perCourt,
-          });
-          if (updatedGame) {
-            set({ game: updatedGame });
-          }
-        },
-        drawCard: () => {
-          const game = get().game;
-          const { updatedGame, result } = drawCardLogic(game) || {};
-          if (updatedGame) {
-            set({ game: updatedGame });
-            return result;
-          }
-          return null;
-        },
-        setGame: (newGame) => set({ game: newGame }), // For syncing from Convex
-      }),
-      {
-        name: "hybrid-game-state",
-        partialize: (state) => ({ game: state.game }), // Persist the single game
+// 1. Create a SINGLE store instance outside of any React components
+const gameStore = create(
+  persist(
+    (set, get) => ({
+      game: null,
+      createGame: () => {
+        const newGame = createGameLogic();
+        set({ game: newGame });
+        return newGame;
       },
-    ),
-  );
+      configGame: ({ courts, players, perCourt }) => {
+        const game = get().game;
+        const updatedGame = configGameLogic(game, {
+          courts,
+          players,
+          perCourt,
+        });
+        if (updatedGame) {
+          set({ game: updatedGame });
+        }
+      },
+      drawCard: () => {
+        const game = get().game;
+        const { updatedGame, result } = drawCardLogic(game) || {};
+        if (updatedGame) {
+          set({ game: updatedGame });
+          return result;
+        }
+        return null;
+      },
+      setGame: (newGame) => set({ game: newGame }),
+      setSyncStatus: (status) =>
+        set((state) => ({
+          game: state.game ? { ...state.game, syncStatus: status } : null,
+        })),
+    }),
+    {
+      name: "game-state",
+      partialize: (state) => ({ game: state.game }),
+    },
+  ),
+);
 
-// React custom hook to integrate Convex
-export const useGameStore = () => {
-  const store = useMemo(() => createGameStore(), []); // Memoize the store creation
+// 2. Create a separate hook to handle Convex sync logic
+export function useConvexSync() {
+  const game = gameStore((state) => state.game);
+  const slug = game?.slug;
 
-  // Convex hooks
-  const slug = store().game?.slug;
-  const convexGame = useQuery(
-    slug ? "game:get" : null, // Only query if slug exists, null skips query
-    slug ? { slug } : undefined, // Arguments only when slug is present
-  );
+  // Track if we've initiated sync in this component instance
+  const hasInitiatedSync = useRef(false);
+  const convexSyncInProgress = useRef(false);
+
+  // Convex queries and mutations
+  // Only query if we have a valid slug
+  const convexGame = useQuery("game:get", slug ? { slug } : "skip");
   const createGameMutation = useMutation("game:create");
   const configGameMutation = useMutation("game:config");
   const drawCardMutation = useMutation("game:draw");
 
-  // Sync Convex data to local store
+  // One-time sync from Convex to local store if we have remote data
   useEffect(() => {
-    if (convexGame && store().game?.slug === convexGame.slug) {
-      store.setState({ game: { ...store().game, ...convexGame } });
-    }
-  }, [convexGame, store]);
-
-  const createGame = () => store().createGame();
-
-  const configGame = ({ courts, players, perCourt }) => {
-    store().configGame({ courts, players, perCourt });
-    const game = store().game;
-    if (game?.slug) {
-      configGameMutation({ slug: game.slug, courts, players, perCourt });
-    }
-  };
-
-  const drawCard = async () => {
-    const game = store().game;
-    if (game?.slug) {
-      const result = await drawCardMutation({ slug: game.slug });
-      if (result) {
-        store.setState({
-          game: { ...game, lastDrawn: result.index, updatedAt: Date.now() },
+    if (convexGame && slug && slug === convexGame.slug) {
+      const currentGame = gameStore.getState().game;
+      // Merge convex data with local data without causing unnecessary updates
+      if (
+        currentGame &&
+        JSON.stringify(currentGame) !==
+          JSON.stringify({ ...currentGame, ...convexGame })
+      ) {
+        gameStore.setState({
+          game: { ...currentGame, ...convexGame },
         });
       }
-      return result;
     }
-    return store().drawCard();
+  }, [convexGame, slug]);
+
+  // Methods that interact with Convex
+  const syncToConvex = async () => {
+    // Prevent multiple syncs
+    if (convexSyncInProgress.current || hasInitiatedSync.current) return null;
+    if (!game) return null;
+    if (convexGame && game.slug) return game; // Already synced
+
+    try {
+      convexSyncInProgress.current = true;
+      gameStore.getState().setSyncStatus("syncing");
+
+      const opts = {};
+      if (game.slug) opts.slug = game.slug;
+      const createdGame = await createGameMutation(opts);
+      if (!createdGame || !createdGame.slug) {
+        gameStore.getState().setSyncStatus("failed");
+        return null;
+      }
+
+      const updatedGame = {
+        ...game,
+        slug: createdGame.slug,
+        syncStatus: "synced",
+      };
+
+      gameStore.setState({ game: updatedGame });
+      hasInitiatedSync.current = true;
+
+      // Configure the remote game if we have cards
+      if (game.cards) {
+        await configGameMutation({
+          slug: createdGame.slug,
+          game,
+        });
+      }
+
+      return updatedGame;
+    } catch (error) {
+      console.error("Sync error:", error);
+      gameStore.getState().setSyncStatus("failed");
+      return null;
+    } finally {
+      convexSyncInProgress.current = false;
+    }
   };
 
-  const enableSync = async () => {
-    const game = store().game;
-    if (!game || game.slug) return;
+  const drawCardWithSync = async () => {
+    if (!game) return null;
 
-    const createdGame = await createGameMutation({});
-    const updatedGame = {
-      ...game,
-      slug: createdGame.slug,
-      _id: createdGame._id,
-    };
-    store.setState({ game: updatedGame });
+    if (game.slug) {
+      try {
+        const result = await drawCardMutation({ slug: game.slug });
+        if (result) {
+          gameStore.setState({
+            game: {
+              ...game,
+              lastDrawn: result.index,
+              updatedAt: Date.now(),
+            },
+          });
+        }
+        return result;
+      } catch (error) {
+        console.error("Draw error:", error);
+      }
+    }
 
-    if (game.cards) {
-      await configGameMutation({
-        slug: createdGame.slug,
-        courts: game.courts,
-        players: game.players,
-        perCourt: game.perCourt,
-      });
+    return gameStore.getState().drawCard();
+  };
+
+  const configGameWithSync = async (params) => {
+    gameStore.getState().configGame(params);
+
+    const currentGame = gameStore.getState().game;
+    if (currentGame?.slug) {
+      try {
+        await configGameMutation({
+          slug: currentGame.slug,
+          game: currentGame,
+        });
+      } catch (error) {
+        console.error("Config error:", error);
+      }
     }
   };
 
   return {
-    game: store().game,
-    createGame,
-    configGame,
-    drawCard,
-    enableSync,
+    enableSync: syncToConvex,
+    drawCardWithSync,
+    configGameWithSync,
+    convexGame: slug ? convexGame : null,
+    isSynced: !!game?.slug,
+    syncStatus: game?.syncStatus || "unsynced",
   };
-};
+}
+
+// 3. The main hook that combines local state with Convex capabilities
+export function useGameStore() {
+  // Get current game state from store
+  const game = gameStore((state) => state.game);
+  const createGame = gameStore((state) => state.createGame);
+
+  // Get Convex sync capabilities
+  const { enableSync, drawCardWithSync, configGameWithSync, syncStatus } =
+    useConvexSync();
+
+  // Create a game if one doesn't exist
+  useEffect(() => {
+    if (!game) {
+      createGame();
+    }
+  }, [game]);
+
+  return {
+    game,
+    createGame,
+    configGame: configGameWithSync,
+    drawCard: drawCardWithSync,
+    enableSync,
+    syncStatus,
+  };
+}

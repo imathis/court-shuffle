@@ -49,6 +49,7 @@ const CourtAssignment = ({ suit, court, format }) => {
 };
 
 const CourtStatus = ({ drawn, players }) => {
+  if (drawn.index < 0) return null;
   if (!drawn.cards.length) {
     return <div className="court-status">{players} Players </div>;
   }

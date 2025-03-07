@@ -13,15 +13,17 @@ const getFormat = ({ card, deck }) => {
   return null;
 };
 
-const useGameHooks = () => {
-  const { game, createGame, configGame, drawCard, enableSync } = useGameStore();
+const GameProvider = () => {
+  // Get game state from store
+  const { game, createGame, configGame, drawCard, enableSync, syncStatus } =
+    useGameStore();
+
+  // Local UI state
   const [drawnIndex, setDrawnIndex] = React.useState(-1);
   const [isDrawing, setIsDrawing] = React.useState(false);
   const [configVisible, setConfigVisible] = React.useState(false);
 
-  const openConfig = React.useCallback(() => setConfigVisible(true), []);
-  const closeConfig = React.useCallback(() => setConfigVisible(false), []);
-
+  // Handle drawing cards
   const draw = React.useCallback(async () => {
     setIsDrawing(true);
     const result = await drawCard();
@@ -32,6 +34,7 @@ const useGameHooks = () => {
     return result?.card;
   }, [drawCard]);
 
+  // Handle configuration
   const config = React.useCallback(
     async (props = {}) => {
       await configGame({
@@ -44,14 +47,7 @@ const useGameHooks = () => {
     [configGame],
   );
 
-  const create = React.useCallback(() => {
-    return createGame();
-  }, [createGame]);
-
-  // Removed slugFromUrl effect since we rely on game.slug only
-  // You might need to manually trigger enableSync if you want to sync with a specific slug
-  // For now, enableSync will be called manually or via app logic
-
+  // Sync drawn index with game state
   React.useEffect(() => {
     if (game?.lastDrawn === -1) {
       setDrawnIndex(-1);
@@ -60,67 +56,52 @@ const useGameHooks = () => {
     }
   }, [game]);
 
-  const slug = game?.slug; // Only from game state
+  // Calculate derived values
+  const slug = game?.slug;
   const drawnCard = game?.cards?.[drawnIndex] || null;
   const deck = game?.cards || [];
   const format = drawnCard ? getFormat({ card: drawnCard, deck }) : null;
-  const cardsRemaining =
-    game?.cards?.length && game.cards.length - (game.lastDrawn + 1);
-  const roundOver = game?.cards?.length && !cardsRemaining;
-  const inProgress = game?.cards?.length && !roundOver;
+  const cardsRemaining = game?.cards?.length
+    ? game.cards.length - (game.lastDrawn + 1)
+    : 0;
+  const roundOver = Boolean(game?.cards?.length && !cardsRemaining);
+  const inProgress = Boolean(game?.cards?.length && !roundOver);
 
-  return React.useMemo(
-    () => ({
-      game,
-      slug,
-      create,
-      config,
-      draw,
-      drawn: {
-        card: drawnCard,
-        index: drawnIndex,
-        format,
-        cards: deck.slice(0, game?.lastDrawn + 1 || 0),
-      },
-      isDrawing,
-      previous: drawnIndex >= 1 ? () => setDrawnIndex((i) => i - 1) : null,
-      next:
-        drawnIndex + 1 <= (game?.lastDrawn || -1)
-          ? () => setDrawnIndex((i) => i + 1)
-          : null,
-      url: slug ? `https://courtshuffle.com/game/${slug}` : null,
-      reset: () => {
-        config({ game });
-      },
-      roundOver,
-      cardsRemaining,
-      inProgress,
-      isLoading: typeof game === "undefined",
-      notFound: game === null && slug, // Adjusted for no URL slug
-      configVisible,
-      openConfig,
-      closeConfig,
-    }),
-    [
-      drawnIndex,
-      isDrawing,
-      create,
-      slug,
-      draw,
-      game,
-      config,
-      configVisible,
-      openConfig,
-      closeConfig,
-      cardsRemaining,
-      inProgress,
-      roundOver,
-    ],
-  );
-};
+  // Create context value
+  const value = {
+    game,
+    slug,
+    create: createGame,
+    config,
+    draw,
+    drawn: {
+      card: drawnCard,
+      index: drawnIndex,
+      format,
+      cards: deck.slice(0, game?.lastDrawn + 1 || 0),
+    },
+    isDrawing,
+    previous: drawnIndex >= 1 ? () => setDrawnIndex((i) => i - 1) : null,
+    next:
+      drawnIndex + 1 <= (game?.lastDrawn || -1)
+        ? () => setDrawnIndex((i) => i + 1)
+        : null,
+    url: slug ? `https://courtshuffle.com/game/${slug}` : null,
+    reset: () => {
+      config({ game });
+    },
+    roundOver,
+    cardsRemaining,
+    inProgress,
+    isLoading: typeof game === "undefined",
+    notFound: game === null && slug,
+    configVisible,
+    openConfig: () => setConfigVisible(true),
+    closeConfig: () => setConfigVisible(false),
+    enableSync,
+    syncStatus,
+  };
 
-const GameProvider = () => {
-  const value = useGameHooks();
   return (
     <GameContext.Provider value={value}>
       {value.isLoading ? (

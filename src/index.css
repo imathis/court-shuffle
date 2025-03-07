@@ -1,5 +1,5 @@
 :root {
-  font-family: 'Oswald', Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
+  font-family: "Oswald", Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
   line-height: 1.5;
   font-weight: 400;
 
@@ -24,16 +24,20 @@ html {
 
   --bg: #333333;
   --panel-bg: #333333;
-  --input-accent-color: #00B404;
-  --input-subtle-color: rgba(255,255,255, .4);
-  --input-subtle-color-hover: rgba(255,255,255, .7);
+  --input-accent-color: #00b404;
+  --input-subtle-color: rgba(255, 255, 255, 0.4);
+  --input-subtle-color-hover: rgba(255, 255, 255, 0.7);
   --button-bg: #1a1a1a;
-  --primary-background: linear-gradient(45deg,
-    #00B404 0%,
+  --primary-background: linear-gradient(
+    45deg,
+    #00b404 0%,
     #007402 50%,
-    #00B404 100%);
+    #00b404 100%
+  );
   --link-color: #646cff;
   --link-color-hover: #535bf2;
+  --input-secondary-color: #fcfcfc;
+  --input-secondary-text: #333;
   --shadow-color: rgba(0, 0, 0, 0.1);
   background: var(--bg);
   overscroll-behavior-y: contain;
@@ -100,6 +104,12 @@ button {
 
 button.primary {
   background-color: var(--input-accent-color);
+  background-size: 20vh;
+}
+
+button.secondary {
+  background-color: var(--input-secondary-color);
+  color: var(--input-secondary-text);
   background-size: 20vh;
 }
 

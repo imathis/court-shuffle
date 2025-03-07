@@ -1,6 +1,5 @@
 import React from "react";
 import { useGame } from "../hooks";
-import { Navigate } from "react-router-dom";
 import {
   Card,
   NextRound,
@@ -60,10 +59,9 @@ const Play = () => {
     reset,
     inProgress,
     roundOver,
-    cardsRemaining,
   } = useGame();
   const [showNextRound, setShowNextRound] = React.useState(false);
-  const card = drawn.card;
+  const card = drawn?.card;
 
   const nextRound = () => {
     setShowNextRound(false);
@@ -71,8 +69,8 @@ const Play = () => {
   };
 
   React.useEffect(() => {
-    preloadCards({ cards: game.courts });
-  }, [game.courts]);
+    preloadCards({ cards: game?.courts });
+  }, [game?.courts]);
 
   // When new (in progress) game is loaded, or game is restarted resest state
   React.useEffect(() => {
@@ -86,9 +84,6 @@ const Play = () => {
     if (roundOver && !inProgress)
       setTimeout(() => setShowNextRound(true), card ? 1400 : 0);
   }, [roundOver, inProgress, card]);
-
-  // Bad URL, there is no game here
-  if (!game) return <Navigate to="join" />;
 
   if (!game?.cards) {
     return (

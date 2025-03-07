@@ -41,31 +41,21 @@ export const create = mutation(async ({ db }, options = {}) => {
   return { ...game, slug };
 });
 
-export const config = mutation(
-  async (
-    { db },
-    {
-      slug,
-      game: gameProp,
-      courts = gameProp.courts,
-      players = gameProp.players,
-      perCourt = gameProp.perCourt,
-    },
-  ) => {
-    const game = gameProp || (await getGame({ db, slug }));
-    if (game) {
-      const cards = newDeck({ courts, players, perCourt });
-      await db.patch(game._id, {
-        cards,
-        courts,
-        players,
-        lastDrawn: -1,
-        perCourt,
-        updatedAt: new Date().getTime(),
-      });
-    }
-  },
-);
+export const config = mutation(async ({ db }, { slug, game }) => {
+  const dbGame = await getGame({ db, slug });
+  const { cards, courts, players, perCourt, lastDrawn } = game;
+
+  if (dbGame) {
+    await db.patch(dbGame._id, {
+      cards,
+      courts,
+      players,
+      perCourt,
+      lastDrawn,
+      updatedAt: new Date().getTime(),
+    });
+  }
+});
 
 export const draw = mutation(async ({ db }, { game: gameProp, slug }) => {
   const game = gameProp || (await getGame({ db, slug }));

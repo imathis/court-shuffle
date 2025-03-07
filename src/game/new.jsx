@@ -13,9 +13,9 @@ const NewGame = () => {
     }
   }, [createGame]);
 
-  if (game) {
-    return <Navigate to={"/play"} />;
-  }
+  // if (game) {
+  //   return <Navigate to={"/play"} />;
+  // }
   return <h1>Loading…</h1>;
 };
 
