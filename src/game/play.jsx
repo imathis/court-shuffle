@@ -1,5 +1,4 @@
 import React from "react";
-import { useGame } from "../hooks";
 import {
   Card,
   NextRound,
@@ -9,6 +8,8 @@ import {
   CourtStatus,
 } from "./card";
 import { Icon } from "./Icon";
+import { useGameStore } from "../store/gameStore";
+import { Config } from "../game/config";
 
 import "./play.css";
 import { preloadCards } from "../assets/cards";
@@ -47,25 +48,32 @@ const Instructions = ({ text, card }) => (
   </div>
 );
 
+const getFormat = ({ card, cards }) => {
+  if (!card) return null;
+  const onCourt = cards.filter(({ court }) => court === card.court).length;
+  if (onCourt === 1) return "ROTATION";
+  if (onCourt === 2) return "SINGLES";
+  if (onCourt === 3) return "3 PLAYER";
+  return null;
+};
+
 const Play = () => {
-  const {
-    game,
-    isDrawing,
-    draw,
-    previous,
-    next,
-    drawn,
-    openConfig,
-    reset,
-    inProgress,
-    roundOver,
-  } = useGame();
+  const { gameStore, setGameConfig, drawCard } = useGameStore();
+  const game = gameStore((state) => state.game);
+  const card = gameStore((state) => state.currentCard);
+  const isDrawing = gameStore((state) => state.isDrawing);
+  const drawnIndex = gameStore((state) => state.drawnIndex);
+  const getNavigation = gameStore((state) => state.getNavigation);
+  const setConfigVisible = gameStore((state) => state.setConfigVisible);
+
+  const roundOver = gameStore((state) => state.getRoundOver)();
+  const inProgress = gameStore((state) => state.getInProgress)();
   const [showNextRound, setShowNextRound] = React.useState(false);
-  const card = drawn?.card;
+  console.log({ card, inProgress });
 
   const nextRound = () => {
     setShowNextRound(false);
-    reset();
+    setGameConfig();
   };
 
   React.useEffect(() => {
@@ -97,7 +105,9 @@ const Play = () => {
             card={card}
             text={
               !game?.cards ? (
-                <NewGameInstructions openConfig={openConfig} />
+                <NewGameInstructions
+                  openConfig={() => setConfigVisible(true)}
+                />
               ) : null
             }
           />
@@ -108,27 +118,39 @@ const Play = () => {
 
   // You are drawing cards
   return (
-    <div
-      className="play-screen"
-      data-suit={suitType[card?.suit]}
-      data-round-over={showNextRound || null}
-    >
-      <div className="court-play">
-        {showNextRound ? (
-          <NextRound nextRound={nextRound} openConfig={openConfig} />
-        ) : null}
-        <Instructions card={card} index={drawn.index} />
-        {card ? <Card {...card} index={drawn.index} /> : null}
-        <div className="court-info">
-          <Draw draw={draw} drawing={isDrawing} inProgress={inProgress} />
-          <CourtAssignment format={drawn.format} {...card} />
-          {inProgress ? (
-            <CourtStatus drawn={drawn} players={game.players} />
+    <>
+      <div
+        className="play-screen"
+        data-suit={suitType[card?.suit]}
+        data-round-over={showNextRound || null}
+      >
+        <div className="court-play">
+          {showNextRound ? (
+            <NextRound
+              nextRound={nextRound}
+              openConfig={() => setConfigVisible(true)}
+            />
           ) : null}
-          <CardNav next={next} back={previous} openConfig={openConfig} />
+          <Instructions card={card} index={drawnIndex} />
+          {card ? <Card {...card} index={drawnIndex} /> : null}
+          <div className="court-info">
+            <Draw draw={drawCard} drawing={isDrawing} inProgress={inProgress} />
+            <CourtAssignment
+              format={getFormat({ card, cards: game.cards })}
+              {...card}
+            />
+            {inProgress ? (
+              <CourtStatus index={drawnIndex} players={game.players} />
+            ) : null}
+            <CardNav
+              getNavigation={getNavigation}
+              openConfig={() => setConfigVisible(true)}
+            />
+          </div>
         </div>
       </div>
-    </div>
+      <Config />
+    </>
   );
 };
 

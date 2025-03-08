@@ -82,7 +82,9 @@ export const config = mutation({
 });
 
 export const draw = mutation({
-  args: { slug: v.string() },
+  args: {
+    slug: v.string(),
+  },
   handler: async ({ db }, { slug }) => {
     const game = await getGame({ db, slug });
     if (game) {

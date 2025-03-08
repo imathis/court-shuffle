@@ -2,11 +2,12 @@ import React from "react";
 import PropTypes from "prop-types";
 
 import { Navigate, useParams } from "react-router-dom";
-import { useGame } from "../hooks";
+import { useGameStore } from "../store/gameStore";
 
 const Join = () => {
   const { slug } = useParams();
-  const { game, joinGame } = useGame();
+  const { gameStore, joinGame } = useGameStore();
+  const game = gameStore((state) => state.game);
   React.useEffect(() => {
     if (slug) {
       joinGame(slug);

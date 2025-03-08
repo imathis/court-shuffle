@@ -2,7 +2,6 @@ import React from "react";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import { Join } from "./game/join";
 import { Play } from "./game/play";
-import { GameProvider } from "./hooks";
 import { useFixVh } from "./hooks";
 
 const App = () => {
@@ -10,7 +9,7 @@ const App = () => {
   return (
     <BrowserRouter>
       <Routes>
-        <Route path="/" element={<GameProvider />}>
+        <Route path="/">
           <Route index element={<Play />} />
           <Route path="join/:slug" element={<Join />} />
         </Route>

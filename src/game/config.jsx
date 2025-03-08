@@ -5,6 +5,7 @@ import "./config.css";
 import { QrCode } from "./qrCode";
 import { Transition } from "./Transition";
 import { Icon } from "./Icon";
+import { useGameStore } from "../store/gameStore";
 
 const Format = ({ perCourt, update }) => {
   return (
@@ -167,15 +168,14 @@ const removeEmptyCourts = ({ courts, perCourt, players }) => {
   return courts.slice(0, courts.length - remove);
 };
 
-const Config = ({
-  game,
-  inProgress,
-  config,
-  configVisible,
-  closeConfig,
-  enableSync,
-  url,
-}) => {
+const Config = () => {
+  const { gameStore, setGameConfig, enableSync } = useGameStore();
+  const game = gameStore((state) => state.game);
+  const setConfigVisible = gameStore((state) => state.setConfigVisible);
+  const configVisible = gameStore((state) => state.configVisible);
+  const getUrl = gameStore((state) => state.getUrl);
+  const inProgress = gameStore((state) => state.getInProgress)();
+
   const [courts, setCourts] = React.useState(game?.courts || []);
   const [players, setPlayers] = React.useState(game?.players);
   const [perCourt, setPerCourt] = React.useState(game?.perCourt || 4);
@@ -183,8 +183,8 @@ const Config = ({
 
   const configGame = async () => {
     const newRound = async () => {
-      await config({ perCourt, courts, players });
-      closeConfig();
+      await setGameConfig({ perCourt, courts, players });
+      setConfigVisible(false);
     };
     if (inProgress) {
       if (
@@ -194,7 +194,7 @@ const Config = ({
       ) {
         newRound();
       } else {
-        closeConfig();
+        setConfigVisible(false);
       }
     } else newRound();
   };
@@ -224,7 +224,10 @@ const Config = ({
         <div className="config-screen">
           <div className="config-actions">
             {game?.cards ? (
-              <button className="config-action" onClick={closeConfig}>
+              <button
+                className="config-action"
+                onClick={() => setConfigVisible(false)}
+              >
                 Close
               </button>
             ) : (
@@ -246,7 +249,7 @@ const Config = ({
               update={updatePlayers}
               max={maxPlayers}
             />
-            <Share url={url} enableSync={enableSync} />
+            <Share url={getUrl()} enableSync={enableSync} />
           </div>
         </div>
       </Transition>

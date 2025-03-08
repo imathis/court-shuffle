@@ -45,16 +45,16 @@ const CourtAssignment = ({ suit, court, format }) => {
   );
 };
 
-const CourtStatus = ({ drawn, players }) => {
-  if (drawn.index < 0) {
+const CourtStatus = ({ index, players }) => {
+  if (index < 0) {
     return <div className="court-status">{players} Players </div>;
   }
-  if (drawn.index + 2 === players) {
+  if (index + 2 === players) {
     return <div className="court-status">1 Card Left</div>;
   }
   return (
     <div className="court-status">
-      Card {drawn.index + 1} of {players}
+      Card {index + 1} of {players}
     </div>
   );
 };
@@ -69,7 +69,8 @@ const NextRound = ({ nextRound, openConfig }) => (
   </div>
 );
 
-const CardNav = ({ back, next, openConfig }) => {
+const CardNav = ({ getNavigation, openConfig }) => {
+  const { back, next } = getNavigation();
   return (
     <div className="card-nav">
       <NavButton onClick={back} icon="backward" text="Previous Card" />

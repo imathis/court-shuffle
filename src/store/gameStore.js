@@ -3,39 +3,125 @@ import { persist } from "zustand/middleware";
 import { useMutation, useQuery } from "convex/react";
 import { api } from "../../convex/_generated/api";
 import { useRef, useEffect } from "react";
-import { createGameLogic, configGameLogic, drawCardLogic } from "../helpers";
+import { newDeck } from "../helpers";
+
+const init = {
+  slug: null, // Null unless synced to Convex
+  cards: undefined,
+  courts: undefined,
+  players: undefined,
+  lastDrawn: -1,
+  perCourt: undefined,
+  updatedAt: Date.now(),
+};
 
 // Local game store
 const gameStore = create(
   persist(
     (set, get) => ({
-      game: null,
-      createGame: () => {
-        const newGame = createGameLogic();
-        set({ game: newGame });
-        return newGame;
-      },
-      configGame: ({ courts, players, perCourt }) => {
-        const game = get().game;
-        const updatedGame = configGameLogic(game, {
-          courts,
-          players,
-          perCourt,
+      game: init,
+      isDrawing: false,
+      configVisible: false,
+      drawnIndex: -1,
+      currentCard: undefined,
+
+      configGame: (args = {}) => {
+        set(({ game }) => {
+          const { courts, players, perCourt } = { ...game, ...args };
+          return {
+            game: {
+              slug: game.slug,
+              cards: newDeck({ courts, players, perCourt }),
+              courts,
+              players,
+              perCourt,
+              lastDrawn: -1,
+              updatedAt: Date.now(),
+            },
+            drawnIndex: -1,
+            currentCard: undefined,
+          };
         });
-        if (updatedGame) {
-          set({ game: updatedGame });
-        }
       },
+
+      unshareGame: () => {
+        set((state) => ({
+          game: {
+            ...state.game,
+            slug: undefined,
+            syncStatus: "unsynced",
+            updatedAt: Date.now(),
+          },
+        }));
+      },
+
+      setDrawnCard: (index) => {
+        set((state) => ({
+          game: {
+            ...state.game,
+            lastDrawn: index,
+            updatedAt: Date.now(),
+          },
+          currentCard: state.game.cards[index],
+          drawnIndex: index,
+        }));
+      },
+
       drawCard: () => {
+        set({ isDrawing: true });
         const game = get().game;
-        const { updatedGame, result } = drawCardLogic(game) || {};
-        if (updatedGame) {
-          set({ game: updatedGame });
-          return result;
+
+        if (game.cards) {
+          const index = game.lastDrawn + 1;
+          if (game.cards[index]) {
+            get().setDrawnCard(index);
+          }
         }
-        return null;
+        setTimeout(() => set({ isDrawing: false }), 800);
+      },
+      setConfigVisible: (visible) => {
+        set({ configVisible: visible });
+      },
+      getNavigation: () => {
+        const {
+          drawnIndex,
+          game: { lastDrawn, cards },
+        } = get();
+        return {
+          back:
+            drawnIndex > 0
+              ? () =>
+                  set({
+                    currentCard: cards[drawnIndex - 1],
+                    drawnIndex: drawnIndex - 1,
+                  })
+              : null,
+          next:
+            drawnIndex + 1 <= lastDrawn
+              ? () =>
+                  set({
+                    currentCard: cards[drawnIndex + 1],
+                    drawnIndex: drawnIndex + 1,
+                  })
+              : null,
+        };
+      },
+      getUrl: () => {
+        const slug = get().game.slug;
+        return slug ? `https://courtshuffle.com/join/${slug}` : null;
+      },
+      getRoundOver: () => {
+        const { cards, lastDrawn } = get().game;
+        const cardsRemaining = cards?.length
+          ? cards.length - (lastDrawn + 1)
+          : 0;
+        return Boolean(cards?.length && !cardsRemaining);
+      },
+      getInProgress: () => {
+        return Boolean(get().game.cards?.length && !get().getRoundOver());
       },
       setGame: (newGame) => set({ game: newGame }),
+
       setSyncStatus: (status) =>
         set((state) => ({
           game: state.game ? { ...state.game, syncStatus: status } : null,
@@ -43,15 +129,34 @@ const gameStore = create(
     }),
     {
       name: "game-state",
-      partialize: (state) => ({ game: state.game }),
     },
   ),
 );
 
+// Helper function to check if a timestamp is from a previous day
+const isFromPreviousDay = (timestamp) => {
+  if (!timestamp) return false;
+
+  const updatedDate = new Date(timestamp);
+  const today = new Date();
+
+  // Reset hours to compare just the dates
+  updatedDate.setHours(0, 0, 0, 0);
+  today.setHours(0, 0, 0, 0);
+
+  // Check if the update was before today
+  return updatedDate < today;
+};
+
 //Convex Sync logic
 export function useConvexSync() {
   const game = gameStore((state) => state.game);
-  const slug = game?.slug;
+  const setGame = gameStore((state) => state.setGame);
+  const setSyncStatus = gameStore((state) => state.setSyncStatus);
+  const configGame = gameStore((state) => state.configGame);
+  const unShareGame = gameStore((state) => state.unShareGame);
+  const setDrawnCard = gameStore((state) => state.setDrawnCard);
+  const slug = game.slug;
 
   // Track if we've initiated sync in this component instance
   const hasInitiatedSync = useRef(false);
@@ -64,35 +169,31 @@ export function useConvexSync() {
   const configGameMutation = useMutation(api.game.config);
   const drawCardMutation = useMutation(api.game.draw);
 
-  // One-time sync from Convex to local store if we have remote data
-  // Also handle recreation of missing games
+  // Sync from Convex to local store if we have remote data
   useEffect(() => {
-    if (convexGame && slug && slug === convexGame.slug) {
-      const currentGame = gameStore.getState().game;
-      // Merge convex data with local data without causing unnecessary updates
+    const currentGame = gameStore.getState().game;
+
+    // Conditions to convert to local-only game:
+    // 1. Game not found on Convex but we have a local game with a slug
+    // 2. Game was updated during the previous day
+    const shouldConvertToLocalOnly =
+      (currentGame.slug && convexGame === null) ||
+      (convexGame && isFromPreviousDay(currentGame.updatedAt));
+
+    if (shouldConvertToLocalOnly) {
+      // Convert to local-only game by removing the slug
+      unShareGame();
+    } else {
+      console.log("got here");
       if (
+        convexGame &&
         currentGame &&
         JSON.stringify(currentGame) !==
           JSON.stringify({ ...currentGame, ...convexGame })
       ) {
-        gameStore.setState({
-          game: { ...currentGame, ...convexGame },
-        });
+        // Merge convex data with local data without causing unnecessary updates
+        setGame({ ...currentGame, ...convexGame });
       }
-    } else if (slug && convexGame === null && game) {
-      // Game not found on Convex but we have a local game with a slug
-      // This happens when the game was removed from Convex (e.g., after 60 days)
-      // Convert to local-only game by removing the slug
-      console.log("Game not found on Convex, converting to local-only game");
-
-      gameStore.setState({
-        game: {
-          ...game,
-          slug: undefined,
-          syncStatus: "unsynced",
-          updatedAt: Date.now(),
-        },
-      });
     }
   }, [convexGame, slug, game]);
 
@@ -100,18 +201,17 @@ export function useConvexSync() {
   const syncToConvex = async () => {
     // Prevent multiple syncs
     if (convexSyncInProgress.current || hasInitiatedSync.current) return null;
-    if (!game) return null;
     if (convexGame && game.slug) return game; // Already synced
 
     try {
       convexSyncInProgress.current = true;
-      gameStore.getState().setSyncStatus("syncing");
+      setSyncStatus("syncing");
 
       const opts = {};
       if (game.slug) opts.slug = game.slug;
       const createdGame = await createGameMutation(opts);
       if (!createdGame || !createdGame.slug) {
-        gameStore.getState().setSyncStatus("failed");
+        setSyncStatus("failed");
         return null;
       }
 
@@ -121,7 +221,7 @@ export function useConvexSync() {
         syncStatus: "synced",
       };
 
-      gameStore.setState({ game: updatedGame });
+      setGame(updatedGame);
       hasInitiatedSync.current = true;
 
       // Configure the remote game if we have cards
@@ -135,7 +235,7 @@ export function useConvexSync() {
       return updatedGame;
     } catch (error) {
       console.error("Sync error:", error);
-      gameStore.getState().setSyncStatus("failed");
+      setSyncStatus("failed");
       return null;
     } finally {
       convexSyncInProgress.current = false;
@@ -149,13 +249,7 @@ export function useConvexSync() {
       try {
         const result = await drawCardMutation({ slug: game.slug });
         if (result) {
-          gameStore.setState({
-            game: {
-              ...game,
-              lastDrawn: result.index,
-              updatedAt: Date.now(),
-            },
-          });
+          setDrawnCard(result.index);
         }
         return result;
       } catch (error) {
@@ -168,14 +262,7 @@ export function useConvexSync() {
             "Game not found on Convex during draw, converting to local-only game",
           );
 
-          const updatedGame = {
-            ...game,
-            slug: undefined,
-            syncStatus: "unsynced",
-            updatedAt: Date.now(),
-          };
-
-          gameStore.setState({ game: updatedGame });
+          unShareGame();
         }
       }
     }
@@ -184,7 +271,7 @@ export function useConvexSync() {
   };
 
   const configGameWithSync = async (params) => {
-    gameStore.getState().configGame(params);
+    configGame(params);
 
     const currentGame = gameStore.getState().game;
     if (currentGame?.slug) {
@@ -203,25 +290,19 @@ export function useConvexSync() {
             "Game not found on Convex during config, converting to local-only game",
           );
 
-          gameStore.setState({
-            game: {
-              ...currentGame,
-              slug: undefined,
-              syncStatus: "unsynced",
-              updatedAt: Date.now(),
-            },
-          });
+          unShareGame();
         }
       }
     }
   };
 
   // Join a game by slug
+  // TODO: Just set the currrent game slug
   const joinGameBySlug = async (slug) => {
     if (!slug) return null;
 
     try {
-      gameStore.getState().setSyncStatus("syncing");
+      setSyncStatus("syncing");
 
       // First try to create the game with the specified slug
       // If it already exists, this will return the existing game
@@ -229,8 +310,7 @@ export function useConvexSync() {
 
       if (result && result.slug) {
         // Game created or already exists
-        const currentGame =
-          gameStore.getState().game || gameStore.getState().createGame();
+        const currentGame = gameStore.getState().game;
 
         const updatedGame = {
           ...currentGame,
@@ -238,25 +318,23 @@ export function useConvexSync() {
           syncStatus: "synced",
         };
 
-        gameStore.setState({ game: updatedGame });
+        setGame(updatedGame);
         return updatedGame;
       } else {
         // If creation fails, set local game with the slug but mark as failed
-        const currentGame =
-          gameStore.getState().game || gameStore.getState().createGame();
-
+        const currentGame = gameStore.getState().game;
         const failedGame = {
           ...currentGame,
           slug,
           syncStatus: "failed",
         };
 
-        gameStore.setState({ game: failedGame });
+        setGame(failedGame);
         return failedGame;
       }
     } catch (error) {
       console.error("Join game error:", error);
-      gameStore.getState().setSyncStatus("failed");
+      setSyncStatus("failed");
       return null;
     }
   };
@@ -274,10 +352,6 @@ export function useConvexSync() {
 
 // Main hook for interacting, abstracts away convex, and local game store
 export function useGameStore() {
-  // Get current game state from store
-  const game = gameStore((state) => state.game);
-  const createGame = gameStore((state) => state.createGame);
-
   // Get Convex sync capabilities
   const {
     enableSync,
@@ -287,17 +361,9 @@ export function useGameStore() {
     syncStatus,
   } = useConvexSync();
 
-  // Create a game if one doesn't exist
-  useEffect(() => {
-    if (!game) {
-      createGame();
-    }
-  }, [game]);
-
   return {
-    game,
-    createGame,
-    configGame: configGameWithSync,
+    gameStore,
+    setGameConfig: configGameWithSync,
     drawCard: drawCardWithSync,
     enableSync,
     joinGame: joinGameBySlug,
