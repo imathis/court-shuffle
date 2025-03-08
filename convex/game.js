@@ -1,5 +1,6 @@
 import { mutation, query } from "./_generated/server";
-import { newDeck, newSlug } from "../src/helpers";
+import { newSlug } from "../src/helpers";
+import { v } from "convex/values";
 
 const getGame = async ({ db, slug }) => {
   return await db
@@ -29,48 +30,59 @@ const newGameSlug = async ({ db }) => {
   return slug;
 };
 
-export const get = query(async ({ db }, { slug }) => {
-  if (slug) {
-    return getGame({ db, slug });
-  }
+export const get = query({
+  args: { slug: v.string() },
+  handler: async ({ db }, { slug } = {}) => {
+    if (slug) {
+      return getGame({ db, slug });
+    }
+  },
 });
 
-export const create = mutation(async ({ db }, options = {}) => {
-  const { slug = await newGameSlug({ db }) } = options;
-  const game = await newGame({ db, slug });
-  return { ...game, slug };
+export const create = mutation({
+  args: { slug: v.optional(v.string()) },
+  handler: async ({ db }, args) => {
+    const { slug = await newGameSlug({ db }) } = args;
+    const game = await newGame({ db, slug });
+    return { ...game, slug };
+  },
 });
 
-export const config = mutation(async ({ db }, { slug, game }) => {
-  const dbGame = await getGame({ db, slug });
-  const { cards, courts, players, perCourt, lastDrawn } = game;
-
-  if (dbGame) {
-    await db.patch(dbGame._id, {
-      cards,
-      courts,
-      players,
-      perCourt,
-      lastDrawn,
-      updatedAt: new Date().getTime(),
-    });
-  }
-});
-
-export const draw = mutation(async ({ db }, { game: gameProp, slug }) => {
-  const game = gameProp || (await getGame({ db, slug }));
-  if (game) {
-    const { cards, lastDrawn } = game;
-    const index = lastDrawn === null ? 0 : lastDrawn + 1;
-
-    if (cards[index]) {
-      await db.patch(game._id, {
-        lastDrawn: index,
+export const config = mutation({
+  args: { slug: v.string(), game: v.optional(v.object()) },
+  handler: async ({ db }, { slug, game }) => {
+    const dbGame = await getGame({ db, slug });
+    const { cards, courts, players, perCourt, lastDrawn } = game;
+    if (dbGame) {
+      await db.patch(dbGame._id, {
+        cards,
+        courts,
+        players,
+        perCourt,
+        lastDrawn,
         updatedAt: new Date().getTime(),
       });
-      return { card: cards[index], index };
-    } else {
-      return null;
     }
-  }
+  },
+});
+
+export const draw = mutation({
+  args: { slug: v.string(), game: v.optional(v.object()) },
+  handler: async ({ db }, { game: gameProp, slug }) => {
+    const game = gameProp || (await getGame({ db, slug }));
+    if (game) {
+      const { cards, lastDrawn } = game;
+      const index = lastDrawn === null ? 0 : lastDrawn + 1;
+
+      if (cards?.[index]) {
+        await db.patch(game._id, {
+          lastDrawn: index,
+          updatedAt: new Date().getTime(),
+        });
+        return { card: cards[index], index };
+      } else {
+        return null;
+      }
+    }
+  },
 });

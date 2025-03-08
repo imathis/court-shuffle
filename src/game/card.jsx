@@ -38,9 +38,6 @@ const CourtAssignment = ({ suit, court, format }) => {
       className="court-assignment"
       data-empty={typeof court !== "number" || null}
     >
-      {/* <div className="court-play-type"> */}
-      {/*   {format} on */}
-      {/* </div> */}
       <div className="court-number">
         {suit === "joker" ? format : `COURT ${court}`}
       </div>
@@ -49,8 +46,7 @@ const CourtAssignment = ({ suit, court, format }) => {
 };
 
 const CourtStatus = ({ drawn, players }) => {
-  if (drawn.index < 0) return null;
-  if (!drawn.cards.length) {
+  if (drawn.index < 0) {
     return <div className="court-status">{players} Players </div>;
   }
   if (drawn.index + 2 === players) {

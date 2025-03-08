@@ -23,5 +23,6 @@ convex/_generated/
 *.njsproj
 *.sln
 *.sw?
+*.afdesign~lock~
 .yarn
 .pnp.*

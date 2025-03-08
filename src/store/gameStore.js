@@ -1,10 +1,11 @@
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
 import { useMutation, useQuery } from "convex/react";
+import { api } from "../../convex/_generated/api";
 import { useRef, useEffect } from "react";
 import { createGameLogic, configGameLogic, drawCardLogic } from "../helpers";
 
-// 1. Create a SINGLE store instance outside of any React components
+// Local game store
 const gameStore = create(
   persist(
     (set, get) => ({
@@ -47,7 +48,7 @@ const gameStore = create(
   ),
 );
 
-// 2. Create a separate hook to handle Convex sync logic
+//Convex Sync logic
 export function useConvexSync() {
   const game = gameStore((state) => state.game);
   const slug = game?.slug;
@@ -58,12 +59,13 @@ export function useConvexSync() {
 
   // Convex queries and mutations
   // Only query if we have a valid slug
-  const convexGame = useQuery("game:get", slug ? { slug } : "skip");
-  const createGameMutation = useMutation("game:create");
-  const configGameMutation = useMutation("game:config");
-  const drawCardMutation = useMutation("game:draw");
+  const convexGame = useQuery(api.game.get, slug ? { slug } : "skip");
+  const createGameMutation = useMutation(api.game.create);
+  const configGameMutation = useMutation(api.game.config);
+  const drawCardMutation = useMutation(api.game.draw);
 
   // One-time sync from Convex to local store if we have remote data
+  // Also handle recreation of missing games
   useEffect(() => {
     if (convexGame && slug && slug === convexGame.slug) {
       const currentGame = gameStore.getState().game;
@@ -77,8 +79,22 @@ export function useConvexSync() {
           game: { ...currentGame, ...convexGame },
         });
       }
+    } else if (slug && convexGame === null && game) {
+      // Game not found on Convex but we have a local game with a slug
+      // This happens when the game was removed from Convex (e.g., after 60 days)
+      // Convert to local-only game by removing the slug
+      console.log("Game not found on Convex, converting to local-only game");
+
+      gameStore.setState({
+        game: {
+          ...game,
+          slug: undefined,
+          syncStatus: "unsynced",
+          updatedAt: Date.now(),
+        },
+      });
     }
-  }, [convexGame, slug]);
+  }, [convexGame, slug, game]);
 
   // Methods that interact with Convex
   const syncToConvex = async () => {
@@ -144,6 +160,23 @@ export function useConvexSync() {
         return result;
       } catch (error) {
         console.error("Draw error:", error);
+
+        // If the error is because the game doesn't exist on Convex anymore,
+        // convert to local-only game
+        if (error.message?.includes("not found") || error.code === 404) {
+          console.log(
+            "Game not found on Convex during draw, converting to local-only game",
+          );
+
+          const updatedGame = {
+            ...game,
+            slug: undefined,
+            syncStatus: "unsynced",
+            updatedAt: Date.now(),
+          };
+
+          gameStore.setState({ game: updatedGame });
+        }
       }
     }
 
@@ -162,20 +195,37 @@ export function useConvexSync() {
         });
       } catch (error) {
         console.error("Config error:", error);
+
+        // If the error is because the game doesn't exist on Convex anymore,
+        // convert to local-only game
+        if (error.message?.includes("not found") || error.code === 404) {
+          console.log(
+            "Game not found on Convex during config, converting to local-only game",
+          );
+
+          gameStore.setState({
+            game: {
+              ...currentGame,
+              slug: undefined,
+              syncStatus: "unsynced",
+              updatedAt: Date.now(),
+            },
+          });
+        }
       }
     }
   };
 
   // Join a game by slug
-  const joinGameBySlug = async (gameSlug) => {
-    if (!gameSlug) return null;
+  const joinGameBySlug = async (slug) => {
+    if (!slug) return null;
 
     try {
       gameStore.getState().setSyncStatus("syncing");
 
       // First try to create the game with the specified slug
       // If it already exists, this will return the existing game
-      const result = await createGameMutation({ slug: gameSlug });
+      const result = await createGameMutation({ slug });
 
       if (result && result.slug) {
         // Game created or already exists
@@ -197,7 +247,7 @@ export function useConvexSync() {
 
         const failedGame = {
           ...currentGame,
-          slug: gameSlug,
+          slug,
           syncStatus: "failed",
         };
 
@@ -222,7 +272,7 @@ export function useConvexSync() {
   };
 }
 
-// 3. The main hook that combines local state with Convex capabilities
+// Main hook for interacting, abstracts away convex, and local game store
 export function useGameStore() {
   // Get current game state from store
   const game = gameStore((state) => state.game);
