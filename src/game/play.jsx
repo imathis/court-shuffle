@@ -9,7 +9,7 @@ import {
 } from "./card";
 import { Icon } from "./Icon";
 import { useGameStore } from "../store/gameStore";
-import { Config } from "../game/config";
+import { Config } from "./config";
 
 import "./play.css";
 import { preloadCards } from "../assets/cards";
@@ -69,7 +69,6 @@ const Play = () => {
   const roundOver = gameStore((state) => state.getRoundOver)();
   const inProgress = gameStore((state) => state.getInProgress)();
   const [showNextRound, setShowNextRound] = React.useState(false);
-  console.log({ card, inProgress });
 
   const nextRound = () => {
     setShowNextRound(false);
@@ -95,24 +94,27 @@ const Play = () => {
 
   if (!game?.cards) {
     return (
-      <div
-        className="play-screen"
-        data-suit={suitType[card?.suit]}
-        data-round-over={showNextRound || null}
-      >
-        <div className="court-play">
-          <Instructions
-            card={card}
-            text={
-              !game?.cards ? (
-                <NewGameInstructions
-                  openConfig={() => setConfigVisible(true)}
-                />
-              ) : null
-            }
-          />
+      <>
+        <div
+          className="play-screen"
+          data-suit={suitType[card?.suit]}
+          data-round-over={showNextRound || null}
+        >
+          <div className="court-play">
+            <Instructions
+              card={card}
+              text={
+                !game?.cards ? (
+                  <NewGameInstructions
+                    openConfig={() => setConfigVisible(true)}
+                  />
+                ) : null
+              }
+            />
+          </div>
         </div>
-      </div>
+        <Config />
+      </>
     );
   }
 

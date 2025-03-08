@@ -184,7 +184,6 @@ export function useConvexSync() {
       // Convert to local-only game by removing the slug
       unShareGame();
     } else {
-      console.log("got here");
       if (
         convexGame &&
         currentGame &&

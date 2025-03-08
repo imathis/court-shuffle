@@ -10,7 +10,9 @@ import { useGameStore } from "../store/gameStore";
 const Format = ({ perCourt, update }) => {
   return (
     <div className="config-section">
-      <h2 className="config-title">Format</h2>
+      <h2 className="config-title">
+        {perCourt ? "Format" : "Choose a Format"}
+      </h2>
       <div className="config-format">
         <button
           className="config-button"
@@ -178,7 +180,7 @@ const Config = () => {
 
   const [courts, setCourts] = React.useState(game?.courts || []);
   const [players, setPlayers] = React.useState(game?.players);
-  const [perCourt, setPerCourt] = React.useState(game?.perCourt || 4);
+  const [perCourt, setPerCourt] = React.useState(game?.perCourt);
   const maxPlayers = courts.length * perCourt + (perCourt - 1);
 
   const configGame = async () => {
@@ -219,41 +221,42 @@ const Config = () => {
 
   return (
     <>
-      {" "}
       <Transition type="slide-panel" in={configVisible} unmountOnExit>
         <div className="config-screen">
           <div className="config-actions">
-            {game?.cards ? (
-              <button
-                className="config-action"
-                onClick={() => setConfigVisible(false)}
-              >
-                Close
-              </button>
-            ) : (
-              <span />
-            )}
             <button
-              className="config-action primary"
-              onClick={configGame}
-              disabled={!courts.length}
+              className="config-action"
+              onClick={() => setConfigVisible(false)}
             >
-              Save
+              Close
             </button>
+            {perCourt && players ? (
+              <button
+                className="config-action primary"
+                onClick={configGame}
+                disabled={!courts.length}
+              >
+                Save
+              </button>
+            ) : null}
           </div>
           <div className="config-settings">
             <Format perCourt={perCourt} update={updatePerCourt} />
-            <Courts courts={courts} update={updateCourts} />
-            <Players
-              players={players}
-              update={updatePlayers}
-              max={maxPlayers}
-            />
-            <Share url={getUrl()} enableSync={enableSync} />
+            {perCourt ? <Courts courts={courts} update={updateCourts} /> : null}
+            {courts.length ? (
+              <>
+                <Players
+                  players={players}
+                  update={updatePlayers}
+                  max={maxPlayers}
+                />
+                <Share url={getUrl()} enableSync={enableSync} />
+              </>
+            ) : null}
           </div>
         </div>
       </Transition>
-      <Transition type="fade" in={configVisible} unmountOnExit timeout={800}>
+      <Transition type="fade" in={configVisible} unmountOnExit timeout={300}>
         <div className="config-screen-backdrop" />
       </Transition>
     </>
