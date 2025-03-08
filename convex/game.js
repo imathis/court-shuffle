@@ -49,7 +49,22 @@ export const create = mutation({
 });
 
 export const config = mutation({
-  args: { slug: v.string(), game: v.optional(v.object()) },
+  args: {
+    slug: v.string(),
+    game: v.optional(
+      v.object({
+        cards: v.optional(
+          v.array(v.object({ court: v.number(), suit: v.string() })),
+        ),
+        courts: v.optional(v.array(v.number())),
+        players: v.optional(v.number()),
+        lastDrawn: v.optional(v.number()),
+        perCourt: v.optional(v.number()),
+        slug: v.string(),
+        updatedAt: v.number(),
+      }),
+    ),
+  },
   handler: async ({ db }, { slug, game }) => {
     const dbGame = await getGame({ db, slug });
     const { cards, courts, players, perCourt, lastDrawn } = game;
@@ -67,9 +82,9 @@ export const config = mutation({
 });
 
 export const draw = mutation({
-  args: { slug: v.string(), game: v.optional(v.object()) },
-  handler: async ({ db }, { game: gameProp, slug }) => {
-    const game = gameProp || (await getGame({ db, slug }));
+  args: { slug: v.string() },
+  handler: async ({ db }, { slug }) => {
+    const game = await getGame({ db, slug });
     if (game) {
       const { cards, lastDrawn } = game;
       const index = lastDrawn === null ? 0 : lastDrawn + 1;
