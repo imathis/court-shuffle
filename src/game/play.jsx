@@ -10,6 +10,7 @@ import {
 import { Icon } from "./Icon";
 import { useGameStore } from "../store/gameStore";
 import { Config } from "./config";
+import { useSyncThemeColorToBackground } from "../hooks/theme";
 
 import "./play.css";
 import { preloadCards } from "../assets/cards";
@@ -69,6 +70,8 @@ const Play = () => {
   const roundOver = gameStore((state) => state.getRoundOver)();
   const inProgress = gameStore((state) => state.getInProgress)();
   const [showNextRound, setShowNextRound] = React.useState(false);
+  const screenRef = React.useRef();
+  useSyncThemeColorToBackground(screenRef);
 
   const nextRound = () => {
     setShowNextRound(false);
@@ -99,6 +102,7 @@ const Play = () => {
           className="play-screen"
           data-suit={suitType[card?.suit]}
           data-round-over={showNextRound || null}
+          ref={screenRef}
         >
           <div className="court-play">
             <Instructions
@@ -125,6 +129,7 @@ const Play = () => {
         className="play-screen"
         data-suit={suitType[card?.suit]}
         data-round-over={showNextRound || null}
+        ref={screenRef}
       >
         <div className="court-play">
           {showNextRound ? (

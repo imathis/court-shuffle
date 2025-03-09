@@ -119,6 +119,7 @@ button.config-action {
   padding: 6px 0;
   text-align: center;
   cursor: pointer;
+  -webkit-user-select: none;
 }
 .config-checkbutton:hover {
   color: var(--input-subtle-color-hover);
