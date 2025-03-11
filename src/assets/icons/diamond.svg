@@ -1,17 +1,1 @@
-<?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
-<svg width="100%" height="100%" viewBox="0 0 200 200" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xml:space="preserve" xmlns:serif="http://www.serif.com/" style="fill-rule:evenodd;clip-rule:evenodd;stroke-linejoin:round;stroke-miterlimit:2;">
-    <g transform="matrix(1,0,0,1,-21762.8,-3327)">
-        <g id="Artboard5" transform="matrix(1,0,0,1,670.207,-0.359681)">
-            <rect x="21092.6" y="3327.36" width="199.981" height="199.981" style="fill:none;"/>
-            <clipPath id="_clip1">
-                <rect x="21092.6" y="3327.36" width="199.981" height="199.981"/>
-            </clipPath>
-            <g clip-path="url(#_clip1)">
-                <g transform="matrix(0.795944,0,0,0.795944,20821.6,2910.34)">
-                    <path d="M373.45,650.552C414.784,610.21 441.929,566.229 467.896,523.93C490.664,570.469 523.342,611.188 558.679,650.552C520.87,689.59 491.567,731.324 468.009,775.204C441.892,730.22 414.407,689.489 373.45,650.552Z" style="fill-rule:nonzero;"/>
-                </g>
-            </g>
-        </g>
-    </g>
-</svg>
+<svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg" fill-rule="evenodd" clip-rule="evenodd" stroke-linejoin="round" stroke-miterlimit="2"><g transform="translate(-21092.593 -3327.36)"><path fill="none" d="M21092.6 3327.36H21292.581V3527.3410000000003H21092.6z"/><clipPath id="a"><path d="M21092.6 3327.36H21292.581V3527.3410000000003H21092.6z"/></clipPath><g clip-path="url(#a)"><path d="M21118.845 3428.143c32.9-32.11 54.506-67.116 75.174-100.784 18.122 37.042 44.132 69.452 72.258 100.784-30.094 31.072-53.417 64.29-72.168 99.216-20.788-35.805-42.664-68.224-75.264-99.216z" fill-rule="nonzero"/></g></g></svg>

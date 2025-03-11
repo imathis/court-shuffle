@@ -1,3 +1,10 @@
+@font-face {
+  font-family: "Oswald";
+  src: url("/src/assets/fonts/Oswald.woff2") format("woff2");
+  font-weight: 200 400 600;
+  font-display: fallback;
+}
+
 :root {
   font-family: "Oswald", Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
   line-height: 1.5;
@@ -24,15 +31,16 @@ html {
 
   --bg: #333333;
   --panel-bg: #333333;
-  --input-accent-color: #00b404;
+  --accent-color: #8fe300;
+  --input-accent-color: #8fe300;
   --input-subtle-color: rgba(255, 255, 255, 0.4);
   --input-subtle-color-hover: rgba(255, 255, 255, 0.7);
   --button-bg: #1a1a1a;
   --primary-background: linear-gradient(
     45deg,
-    #00b404 0%,
-    #007402 50%,
-    #00b404 100%
+    hsl(82 100% 20%) 0%,
+    hsl(82 100% 45%) 50%,
+    hsl(82 100% 20%) 100%
   );
   --link-color: #646cff;
   --link-color-hover: #535bf2;
@@ -100,21 +108,36 @@ button {
     background-color 0.25s,
     border-color 0.25s;
   color: currentColor;
+  width: min(100%, 600px);
+}
+
+button:hover {
+  border-color: var(--input-accent-color);
 }
 
 button.primary {
-  background-color: var(--input-accent-color);
-  background-size: 20vh;
+  background: var(--primary-background);
+  color: #222;
+}
+
+button.big {
+  font-size: 1.9em;
+  padding: 0.25em 0 0.3em;
+  margin: 0 auto;
+}
+
+button.config-primary {
+  background: var(--accent-color);
+  color: #222;
+}
+button.config-primary:hover {
+  border-color: #444;
 }
 
 button.secondary {
   background-color: var(--input-secondary-color);
   color: var(--input-secondary-text);
   background-size: 20vh;
-}
-
-button:hover {
-  border-color: var(--input-accent-color);
 }
 
 button:focus,

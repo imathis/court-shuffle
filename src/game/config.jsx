@@ -232,7 +232,7 @@ const Config = () => {
             </button>
             {perCourt && players ? (
               <button
-                className="config-action primary"
+                className="config-action config-primary"
                 onClick={configGame}
                 disabled={!courts.length}
               >

@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from "react";
+import { useEffect, useRef } from "react";
 
 // Custom hook to watch the element's background color and update the theme color
 export const useSyncThemeColorToBackground = (ref) => {
@@ -16,12 +16,16 @@ export const useSyncThemeColorToBackground = (ref) => {
     metaTag.content = color;
   };
 
+  const setColor = () => {
+    const computedStyle = window.getComputedStyle(ref.current);
+    const currentColor = computedStyle.backgroundColor;
+    updateThemeColor(currentColor);
+  };
+
   // Function to get the current background color and update the theme color
   const updateColor = () => {
     if (ref.current && isTransitioning.current) {
-      const computedStyle = window.getComputedStyle(ref.current);
-      const currentColor = computedStyle.backgroundColor;
-      updateThemeColor(currentColor);
+      setColor();
       animationFrameId.current = requestAnimationFrame(updateColor);
     }
   };
@@ -29,6 +33,7 @@ export const useSyncThemeColorToBackground = (ref) => {
   useEffect(() => {
     const element = ref.current;
     if (!element) return;
+    setColor(); // sync color on load
 
     // Start polling when the transition begins
     const handleTransitionStart = (event) => {
@@ -73,5 +78,5 @@ export const useSyncThemeColorToBackground = (ref) => {
     };
   }, [ref]);
 
-  return null; // This hook doesn't need to return anything
+  return null;
 };

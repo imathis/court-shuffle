@@ -1,6 +1,6 @@
 @keyframes card-appear {
   0% {
-    opacity: .5;
+    opacity: 0.5;
     transform: translate3d(150vw, 150vh, 0) rotate(-10deg) scale(0.8);
   }
   100% {
@@ -10,8 +10,12 @@
 }
 
 @keyframes fade-in {
-  0% { opacity: 0; }
-  100% { opacity: 1; }
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
 }
 
 @keyframes drop-down {
@@ -56,24 +60,27 @@
   position: absolute;
   bottom: 32vh;
   text-align: center;
-  left: 5vw; right: 5vw;
+  left: 5vw;
+  right: 5vw;
   z-index: 1;
-  animation: .35s drop-down cubic-bezier(0.0, 0.3, 0.8, 1.0);
+  animation: 0.35s drop-down cubic-bezier(0, 0.3, 0.8, 1);
   display: grid;
   gap: 20px;
+  justify-content: center;
 }
 
 .next-round-actions button {
   width: 100%;
-  box-shadow: 
-    -2px 2px 3px rgba(0,0,0,0.1),
-    -4px 4px 6px rgba(0,0,0,0.08),
-    -6px 8px 12px rgba(0,0,0,0.2),
-    -8px 16px 32px rgba(0,0,0,0.25);
+  box-shadow:
+    -2px 2px 3px rgba(0, 0, 0, 0.1),
+    -4px 4px 6px rgba(0, 0, 0, 0.08),
+    -6px 8px 12px rgba(0, 0, 0, 0.2),
+    -8px 16px 32px rgba(0, 0, 0, 0.25);
 }
 
 .next-round {
   background-color: var(--input-accent-color);
+  color: #222;
 }
 
 .court-card {
@@ -82,32 +89,29 @@
   transform: translate3d(25vw, 8vh, 0) rotate(-15deg);
   background: #fff;
   display: inline-block;
-  animation: 0.4s card-appear cubic-bezier(0.0, 0.3, 0.9, 1.0);
+  animation: 0.4s card-appear cubic-bezier(0, 0.3, 0.9, 1);
   transition: filter 0.5s;
-  box-shadow: 
-    -2px 2px 3px rgba(0,0,0,0.1),
-    -4px 4px 6px rgba(0,0,0,0.08),
-    -6px 8px 12px rgba(0,0,0,0.2),
-    -8px 16px 32px rgba(0,0,0,0.25);
+  box-shadow:
+    -2px 2px 3px rgba(0, 0, 0, 0.1),
+    -4px 4px 6px rgba(0, 0, 0, 0.08),
+    -6px 8px 12px rgba(0, 0, 0, 0.2),
+    -8px 16px 32px rgba(0, 0, 0, 0.25);
 }
 
 .card-draw-button {
-  background: linear-gradient(45deg,
-    #00CA04 0%,
-    #007402 50%,
-    #00CA04 100%);
-  color: #fff;
-  font-size: 2em;
-  width: calc(100% - 40px);
-  padding: .35em 0 .4em;
+  background: var(--primary-background);
+  color: #222;
+  font-size: 2.5em;
+  width: min(calc(100% - 40px), 600px);
+  padding: 0.25em 0 0.3em;
   margin: 0 auto 20px;
   display: block;
   border: none;
-  box-shadow: 
-    0 2px 3px rgba(0,0,0,0.1),
-    0 4px 6px rgba(0,0,0,0.08),
-    0 8px 12px rgba(0,0,0,0.2),
-    0 16px 24px rgba(0,0,0,0.25);
+  box-shadow:
+    0 2px 3px rgba(0, 0, 0, 0.1),
+    0 4px 6px rgba(0, 0, 0, 0.08),
+    0 8px 12px rgba(0, 0, 0, 0.2),
+    0 16px 24px rgba(0, 0, 0, 0.25);
   transition: transform 0.25s;
 }
 
@@ -132,7 +136,7 @@
   font-size: 1.6em;
   padding: 5px 0;
   background-color: var(--suit-play-strip);
-  transition: background-color .25s ease-in-out,
+  transition: background-color 0.25s ease-in-out;
 }
 
 .court-number {
@@ -151,20 +155,20 @@
   text-align: center;
   font-size: 1.5em;
   color: #fff;
-  background: rgba(0,0,0,.9);
+  background: rgba(0, 0, 0, 0.9);
   -webkit-backdrop-filter: blur(5px);
 }
 
 .court-assignment {
   position: relative;
-  box-shadow: 
-    0 2px 3px rgba(0,0,0,0.1),
-    0 4px 6px rgba(0,0,0,0.08),
-    0 8px 12px rgba(0,0,0,0.2),
-    0 16px 24px rgba(0,0,0,0.25);
+  box-shadow:
+    0 2px 3px rgba(0, 0, 0, 0.1),
+    0 4px 6px rgba(0, 0, 0, 0.08),
+    0 8px 12px rgba(0, 0, 0, 0.2),
+    0 16px 24px rgba(0, 0, 0, 0.25);
   color: var(--suit-bg);
-  transition: color .25s ease-in-out;
-  animation: drop-down .25s cubic-bezier(0.0, 0.3, 0.9, 1.0);
+  transition: color 0.25s ease-in-out;
+  animation: drop-down 0.25s cubic-bezier(0, 0.3, 0.9, 1);
 }
 
 [data-empty] {
@@ -181,12 +185,12 @@
   padding: 8px;
   grid-template-columns: 1fr 1fr 1fr;
   z-index: 1;
-  background: rgba(20, 20, 20, .9);
+  background: rgba(20, 20, 20, 0.9);
   /* background: var(--panel-bg); */
   -webkit-backdrop-filter: blur(5px);
 }
 .card-nav button {
-  background: rgba(255,255,255,.1);
+  background: rgba(255, 255, 255, 0.1);
   background: none;
   border: none;
   padding: 0;
@@ -196,4 +200,3 @@
   fill: currentColor;
   height: 2em;
 }
-
