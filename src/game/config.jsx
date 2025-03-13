@@ -149,16 +149,16 @@ const Players = ({ players, max, update }) => {
 const Share = ({ url, enableSync }) => {
   return (
     <div className="config-section">
-      <h2 className="config-title">Invite</h2>
+      <h2 className="config-title">Share Deck</h2>
       <div className="share-code">
-        <p className="config-text">Draw cards from multiple devices</p>
         {url ? (
           <QrCode url={url} />
         ) : (
           <button className="config-action secondary" onClick={enableSync}>
-            Share Deck
+            Share Deck Code
           </button>
         )}
+        <p className="config-text">Draw cards from multiple devices</p>
       </div>
     </div>
   );

@@ -49,16 +49,15 @@
 }
 
 .share-code {
-  max-width: 80vw;
+  justify-content: center;
   margin: 3vw auto;
   display: grid;
   gap: 10px;
 }
 
 .config-settings {
-  min-height: calc(100vh - 62px);
-  /*max-height: calc((var(--vh, 1vh) * 100) - 62px);*/
-  overflow: auto;
+  max-height: calc((var(--vh, 1vh) * 100) - 62px);
+  overflow-y: auto;
 }
 
 .config-actions {
