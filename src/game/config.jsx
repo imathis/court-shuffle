@@ -250,7 +250,7 @@ const Config = () => {
                   update={updatePlayers}
                   max={maxPlayers}
                 />
-                <Share url={getUrl()} enableSync={enableSync} />
+                {/* <Share url={getUrl()} enableSync={enableSync} /> */}
               </>
             ) : null}
           </div>

@@ -13,6 +13,7 @@ dist
 dist-ssr
 *.local
 convex/_generated/
+.deploy-config
 
 # Editor directories and files
 .vscode/*
