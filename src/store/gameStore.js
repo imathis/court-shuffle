@@ -148,7 +148,7 @@ const isFromPreviousDay = (timestamp) => {
   return updatedDate < today;
 };
 
-//Convex Sync logic
+// Convex Sync logic
 export function useConvexSync() {
   const game = gameStore((state) => state.game);
   const setGame = gameStore((state) => state.setGame);
@@ -161,6 +161,8 @@ export function useConvexSync() {
   // Track if we've initiated sync in this component instance
   const hasInitiatedSync = useRef(false);
   const convexSyncInProgress = useRef(false);
+  // Track the previous lastDrawn value to detect resets
+  const previousLastDrawn = useRef(game.lastDrawn);
 
   // Convex queries and mutations
   // Only query if we have a valid slug
@@ -190,6 +192,22 @@ export function useConvexSync() {
         JSON.stringify(currentGame) !==
           JSON.stringify({ ...currentGame, ...convexGame })
       ) {
+        // Check if lastDrawn was reset to -1 (new game started)
+        if (
+          convexGame.lastDrawn === -1 &&
+          previousLastDrawn.current !== -1 &&
+          previousLastDrawn.current !== undefined
+        ) {
+          // Reset local currentCard and drawnIndex
+          gameStore.setState({
+            currentCard: undefined,
+            drawnIndex: -1,
+          });
+        }
+
+        // Update previousLastDrawn for the next comparison
+        previousLastDrawn.current = convexGame.lastDrawn;
+
         // Merge convex data with local data without causing unnecessary updates
         setGame({ ...currentGame, ...convexGame });
       }
@@ -227,7 +245,7 @@ export function useConvexSync() {
       if (game.cards) {
         await configGameMutation({
           slug: createdGame.slug,
-          game,
+          game: updatedGame,
         });
       }
 
@@ -270,6 +288,7 @@ export function useConvexSync() {
   };
 
   const configGameWithSync = async (params) => {
+    // Configure the game, which sets lastDrawn to -1 and resets local state
     configGame(params);
 
     const currentGame = gameStore.getState().game;
@@ -296,7 +315,6 @@ export function useConvexSync() {
   };
 
   // Join a game by slug
-  // TODO: Just set the currrent game slug
   const joinGameBySlug = async (slug) => {
     if (!slug) return null;
 
