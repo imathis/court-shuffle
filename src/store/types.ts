@@ -1,4 +1,6 @@
 import { Id } from "../../convex/_generated/dataModel";
+import { StoreApi } from "zustand";
+import { UseBoundStore } from "zustand";
 
 export interface Card {
   court: number;
@@ -56,7 +58,7 @@ export interface ConvexSyncResult {
 }
 
 export interface GameStoreResult {
-  gameStore: GameStoreState & GameStoreActions;
+  gameStore: UseBoundStore<StoreApi<GameStoreState & GameStoreActions>>;
   setGameConfig: (
     params: Partial<Pick<Game, "courts" | "players" | "perCourt">>,
   ) => Promise<void>;
