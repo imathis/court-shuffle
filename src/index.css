@@ -108,7 +108,6 @@ button {
     background-color 0.25s,
     border-color 0.25s;
   color: currentColor;
-  width: min(100%, 600px);
 }
 
 button:hover {

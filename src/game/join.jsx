@@ -2,7 +2,7 @@ import React from "react";
 import PropTypes from "prop-types";
 
 import { Navigate, useParams } from "react-router-dom";
-import { useGameStore } from "../store/gameStore";
+import { useGameStore } from "../store/useGameStore";
 
 const Join = () => {
   const { slug } = useParams();

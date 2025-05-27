@@ -8,7 +8,7 @@ import {
   CourtStatus,
 } from "./card";
 import { Icon } from "./Icon";
-import { useGameStore } from "../store/gameStore";
+import { useGameStore } from "../store/useGameStore";
 import { Config } from "./config";
 import { useSyncThemeColorToBackground } from "../hooks/theme";
 
@@ -82,7 +82,7 @@ const Play = () => {
 
   // When new (in progress) game is loaded, or game is restarted resest state
   React.useEffect(() => {
-    if (inProgress && !card) {
+    if (inProgress) {
       setShowNextRound(false);
     }
   }, [inProgress, card]);

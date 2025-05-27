@@ -1,5 +1,5 @@
 import { mutation, query } from "./_generated/server";
-import { newSlug } from "../src/helpers";
+import { newSlug } from "../src/helpers/gameHelpers";
 import { v } from "convex/values";
 
 const getGame = async ({ db, slug }) => {

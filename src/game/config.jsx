@@ -1,11 +1,11 @@
 import React from "react";
-import { allCourts, sort } from "../helpers";
+import { allCourts, sort } from "../helpers/gameHelpers";
 
 import "./config.css";
 import { QrCode } from "./qrCode";
 import { Transition } from "./Transition";
 import { Icon } from "./Icon";
-import { useGameStore } from "../store/gameStore";
+import { useGameStore } from "../store/useGameStore";
 
 const Format = ({ perCourt, update }) => {
   return (
@@ -250,7 +250,7 @@ const Config = () => {
                   update={updatePlayers}
                   max={maxPlayers}
                 />
-                {/* <Share url={getUrl()} enableSync={enableSync} /> */}
+                <Share url={getUrl()} enableSync={enableSync} />
               </>
             ) : null}
           </div>

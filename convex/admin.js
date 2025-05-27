@@ -1,4 +1,4 @@
-import { mutation } from "./_generated/server";
+import { internalAction } from "./_generated/server";
 
 function hoursAgo(hours = 1) {
   var currentDate = new Date();
@@ -22,9 +22,12 @@ const getDeadGames = async ({ db }) => {
     .collect();
 };
 
-export const deleteDeadGames = mutation(async ({ db }) => {
-  const deadGames = await getDeadGames({ db });
-  deadGames.forEach(async (game) => {
-    await db.delete(game._id);
-  });
+export const deleteDeadGames = internalAction({
+  args: {}, // Define any arguments if needed (none in this case)
+  handler: async ({ db }) => {
+    const deadGames = await getDeadGames({ db });
+    for (const game of deadGames) {
+      await db.delete(game._id);
+    }
+  },
 });
