@@ -1,11 +1,22 @@
 @keyframes card-appear {
   0% {
     opacity: 0.5;
-    transform: translate3d(150vw, 150vh, 0) rotate(-10deg) scale(0.8);
+    transform: translate3d(150vw, 150vh, 0) rotate(-0deg) scale(0.7);
   }
   100% {
     opacity: 1;
     transform: translate3d(25vw, 8vh, 0) rotate(-15deg);
+  }
+}
+
+@keyframes card-appear-wide {
+  0% {
+    opacity: 0.5;
+    transform: translate3d(150vw, 150vh, 0) rotate(-0deg) scale(0.7);
+  }
+  100% {
+    opacity: 1;
+    transform: translate3d(0, 8vh, 0) rotate(-15deg);
   }
 }
 
@@ -37,6 +48,7 @@
 }
 
 .court-play {
+  display: grid;
   position: relative;
   height: 100vh;
   height: calc(var(--vh, 1vh) * 100);
@@ -87,15 +99,26 @@
   border-radius: 15px;
   height: 100vh;
   transform: translate3d(25vw, 8vh, 0) rotate(-15deg);
+  transform-origin: center;
   background: #fff;
   display: inline-block;
-  animation: 0.4s card-appear cubic-bezier(0, 0.3, 0.9, 1);
-  transition: filter 0.5s;
+  animation: 0.4s cubic-bezier(0, 0.3, 0.9, 1) forwards;
+  animation-iteration-count: 1;
+  animation-name: card-appear;
   box-shadow:
     -2px 2px 3px rgba(0, 0, 0, 0.1),
     -4px 4px 6px rgba(0, 0, 0, 0.08),
     -6px 8px 12px rgba(0, 0, 0, 0.2),
     -8px 16px 32px rgba(0, 0, 0, 0.25);
+}
+
+@media screen and (min-width: 900px) {
+  .court-card {
+    place-self: center;
+    transform: translate3d(0vw, 8vh, 0) rotate(-15deg);
+    height: 80vh;
+    animation-name: card-appear-wide;
+  }
 }
 
 .card-draw-button {
@@ -186,7 +209,6 @@
   grid-template-columns: 1fr 1fr 1fr;
   z-index: 1;
   background: rgba(20, 20, 20, 0.9);
-  /* background: var(--panel-bg); */
   -webkit-backdrop-filter: blur(5px);
 }
 .card-nav button {

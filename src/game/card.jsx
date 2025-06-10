@@ -16,7 +16,7 @@ const Card = ({ court, suit, index }) => {
     } else {
       setCard({ id });
     }
-  }, [court, suit, index]);
+  }, [card.id, court, suit, index]);
 
   return availableCards.includes(card.id) ? (
     <CardSvg name={card.id} className="court-card" />

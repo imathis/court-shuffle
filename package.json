@@ -12,6 +12,7 @@
     "deploy": "./deploy.sh"
   },
   "dependencies": {
+    "@types/react-transition-group": "^4.4.12",
     "convex": "^1.19.5",
     "prop-types": "^15.8.1",
     "qrcode-svg-table": "^1.1.2",

@@ -69,7 +69,7 @@ export function useConvexSync(): ConvexSyncResult {
         setGame({ ...currentGame, ...convexGame });
       }
     }
-  }, [convexGame, slug, game]);
+  }, [convexGame, slug, setGame, unShareGame]);
 
   const syncToConvex = async (): Promise<Game | null> => {
     if (convexSyncInProgress.current || hasInitiatedSync.current) return null;
