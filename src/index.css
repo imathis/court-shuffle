@@ -1,12 +1,9 @@
-@font-face {
-  font-family: "Oswald";
-  src: url("/src/assets/fonts/Oswald.woff2") format("woff2");
-  font-weight: 200 400 600;
-  font-display: fallback;
-}
+@import "tailwindcss";
+@import "tw-animate-css";
 
+@custom-variant dark (&:is(.dark *));
 :root {
-  font-family: "Oswald", Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
+  font-family: "Inter", system-ui, -apple-system, sans-serif;
   line-height: 1.5;
   font-weight: 400;
 
@@ -15,9 +12,43 @@
 
   font-synthesis: none;
   text-rendering: optimizeLegibility;
+  --breakpoint-sm: 40rem;
+  --breakpoint-md: 48rem;
+  --breakpoint-lg: 64rem;
+  --breakpoint-xl: 80rem;
+  --breakpoint-2xl: 96rem;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   -webkit-text-size-adjust: 100%;
+  --radius: 0.625rem;
+  --background: oklch(1 0 0);
+  --foreground: oklch(0.145 0 0);
+  --card: oklch(1 0 0);
+  --card-foreground: oklch(0.145 0 0);
+  --popover: oklch(1 0 0);
+  --popover-foreground: oklch(0.145 0 0);
+  --accent: oklch(0.8295 0.2278 131.32);
+  --accent-dark: oklch(0.5356 0.1254 130.29);
+  --accent-foreground: oklch(0.1114 0.0148 131.32);
+  --primary: oklch(0.205 0 0);
+  --primary-foreground: oklch(0.985 0 0);
+  --secondary: oklch(0.97 0 0);
+  --secondary-foreground: oklch(0.205 0 0);
+  --muted: oklch(0.97 0 0);
+  --muted-foreground: oklch(0.556 0 0);
+  --accent-foreground: oklch(0.205 0 0);
+  --destructive: oklch(0.577 0.245 27.325);
+  --destructive-foreground: oklch(0.577 0.245 27.325);
+  --border: oklch(0.922 0 0);
+  --input: oklch(0.922 0 0);
+  --ring: oklch(0.708 0 0);
+  --radius: 0.625rem;
+  --card-bg: linear-gradient(
+    45deg,
+    hsl(82 100% 20%) 0%,
+    hsl(82 100% 45%) 50%,
+    hsl(82 100% 20%) 100%
+  );
 }
 
 * {
@@ -26,120 +57,78 @@
 }
 
 html {
-  padding: 0;
-  margin: 0;
-
-  --bg: #333333;
-  --panel-bg: #333333;
-  --accent-color: #8fe300;
-  --input-accent-color: #8fe300;
-  --input-subtle-color: rgba(255, 255, 255, 0.4);
-  --input-subtle-color-hover: rgba(255, 255, 255, 0.7);
-  --button-bg: #1a1a1a;
-  --primary-background: linear-gradient(
-    45deg,
-    hsl(82 100% 20%) 0%,
-    hsl(82 100% 45%) 50%,
-    hsl(82 100% 20%) 100%
-  );
-  --link-color: #646cff;
-  --link-color-hover: #535bf2;
-  --input-secondary-color: #fcfcfc;
-  --input-secondary-text: #333;
-  --shadow-color: rgba(0, 0, 0, 0.1);
-  background: var(--bg);
-  overscroll-behavior-y: contain;
+  @apply fixed grid w-full overscroll-contain;
+  height: calc(100 * var(--vh));
 }
-/* @media (prefers-color-scheme: light) { */
-/*   html { */
-/*     color: #213547; */
-/*     --bg: #ffffff; */
-/*     --panel-bg: #eee;  */
-/*     --input-accent-color: #00A203; */
-/*     --input-subtle-color: rgba(0,0,0, .3); */
-/*     --input-subtle-color-hover: rgba(0,0,0, .5); */
-/**/
-/*     --button-bg: #f9f9f9; */
-/*     --link-color: #646cff; */
-/*     --link-color-hover: #747bff; */
-/*   } */
-/* } */
 
 body {
-  margin: 0;
-  padding: 0;
-  min-width: 320px;
-  height: 100vh;
-  height: calc(var(--vh, 1vh) * 100);
-  background-color: var(--bg);
-  display: grid;
+  @apply grid min-w-xs overscroll-contain;
+  height: calc(100 * var(--vh));
 }
 
 #root {
   position: relative;
 }
 
-a {
-  /* font-weight: 500; */
-  color: var(--link-color);
-  text-decoration: inherit;
+@theme inline {
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 4px);
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+}
+@theme {
+  --color-suit-black: var(--color-slate-900);
+  --color-suit-red: hwb(0 3% 56%);
+  --color-suit-purple: var(--color-purple-950);
+  --color-suit-none: var(--color-slate-950);
+  --color-suit: var(--color-suit-black);
+  --color-accent: var(--accent);
+  --color-accent-dark: var(--accent-dark);
+  --color-accent-foreground: var(--accent-foreground);
 }
 
-a:hover {
-  color: var(--link-color-hover);
+.dark {
+  --background: oklch(0.129 0.042 264.695);
+  --foreground: oklch(0.984 0.003 247.858);
+  --card: oklch(0.208 0.042 265.755);
+  --card-foreground: oklch(0.984 0.003 247.858);
+  --popover: oklch(0.208 0.042 265.755);
+  --popover-foreground: oklch(0.984 0.003 247.858);
+  --primary: oklch(0.929 0.013 255.508);
+  --primary-foreground: oklch(0.208 0.042 265.755);
+  --secondary: oklch(0.279 0.041 260.031);
+  --secondary-foreground: oklch(0.984 0.003 247.858);
+  --muted: oklch(0.279 0.041 260.031);
+  --muted-foreground: oklch(0.704 0.04 256.788);
+  --destructive: oklch(0.704 0.191 22.216);
+  --border: oklch(1 0 0 / 10%);
+  --input: oklch(1 0 0 / 15%);
+  --ring: oklch(0.551 0.027 264.364);
 }
 
-h1 {
-  font-size: 3.2em;
-  line-height: 1.1;
-}
-
-button {
-  border-radius: 8px;
-  border: 1px solid transparent;
-  padding: 0.6em 1.2em;
-  font-size: 1em;
-  font-weight: 600;
-  font-family: inherit;
-  background-color: var(--button-bg);
-  cursor: pointer;
-  text-transform: uppercase;
-  transition:
-    background-color 0.25s,
-    border-color 0.25s;
-  color: currentColor;
-}
-
-button:hover {
-  border-color: var(--input-accent-color);
-}
-
-button.primary {
-  background: var(--primary-background);
-  color: #222;
-}
-
-button.big {
-  font-size: 1.9em;
-  padding: 0.25em 2rem 0.3em;
-  margin: 0 auto;
-}
-
-button.config-primary {
-  background: var(--accent-color);
-  color: #222;
-}
-button.config-primary:hover {
-  border-color: #444;
-}
-
-button.secondary {
-  background-color: var(--input-secondary-color);
-  color: var(--input-secondary-text);
-  background-size: 20vh;
-}
-
-button:focus,
-button:focus-visible {
-  outline: 4px auto -webkit-focus-ring-color;
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+  body {
+    @apply bg-background text-foreground;
+  }
 }

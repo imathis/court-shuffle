@@ -30,3 +30,4 @@ convex/_generated/
 .env?*
 .yarn
 .pnp.*
+.aider*

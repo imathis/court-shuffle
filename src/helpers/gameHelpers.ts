@@ -1,9 +1,7 @@
 import { Card } from "../store/types";
 
-const allCourts: number[] = Array(14)
-  .fill("")
-  .map((_, index) => index);
-const suits: string[] = ["spades", "hearts", "diamonds", "clubs"];
+const allCourts: number[] = Array.from({ length: 13 }, (_, index) => index + 1);
+const suits = ["spades", "hearts", "diamonds", "clubs"] as const;
 
 const sort = <T extends string | number>(a: T, b: T): number => {
   if (typeof a === "string" && typeof b === "string") {
@@ -22,21 +20,45 @@ const shuffle = <T>(array: T[]): T[] => {
   return array;
 };
 
+export const getShortCourtDefault = (
+  courts: number[] | undefined,
+  shortCourt: number | undefined,
+) => {
+  if (!courts?.length) {
+    return;
+  }
+  if (shortCourt && courts.includes(shortCourt)) {
+    return shortCourt;
+  } else {
+    return [...courts].sort().reverse()[0];
+  }
+};
+
 interface DeckOptions {
   courts?: number[];
   perCourt?: number;
   players?: number;
+  shortCourt?: number;
 }
 
 const newDeck = (options: DeckOptions = {}): Card[] => {
-  const {
-    courts = allCourts,
-    perCourt = 4,
-    players = courts.length * perCourt,
-  } = options;
-
+  const { courts, perCourt = 4, players, shortCourt } = options;
   const deck: Card[] = [];
-  const sortedCourts = courts.sort().reverse();
+
+  if (!courts || !players) return deck;
+
+  // If shortCourt is specified, arrange courts so shortCourt is last
+  let sortedCourts: number[];
+  if (shortCourt !== undefined && courts.includes(shortCourt)) {
+    sortedCourts = courts
+      .filter((court) => court !== shortCourt)
+      .sort()
+      .reverse();
+    sortedCourts.push(shortCourt);
+  } else {
+    // Default behavior: sort and reverse
+    sortedCourts = courts.sort().reverse();
+  }
 
   for (const court of sortedCourts) {
     for (let count = 0; count < perCourt; count++) {
@@ -60,4 +82,19 @@ const newSlug = (length: number = 5): string => {
   return slug;
 };
 
-export { newDeck, newSlug, allCourts, sort };
+const getFormat = (card: Card | undefined, cards: Card[] | undefined) => {
+  if (!card || !cards) return null;
+  const onCourt = cards.filter(({ court }) => court === card.court).length;
+  switch (onCourt) {
+    case 1:
+      return "ROTATION";
+    case 2:
+      return "SINGLES";
+    case 3:
+      return "3 PLAYER";
+    default:
+      return null;
+  }
+};
+
+export { allCourts, getFormat, newDeck, newSlug, sort };
