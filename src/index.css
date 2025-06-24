@@ -3,7 +3,11 @@
 
 @custom-variant dark (&:is(.dark *));
 :root {
-  font-family: "Inter", system-ui, -apple-system, sans-serif;
+  font-family:
+    "Inter",
+    system-ui,
+    -apple-system,
+    sans-serif;
   line-height: 1.5;
   font-weight: 400;
 
@@ -28,7 +32,7 @@
   --popover: oklch(1 0 0);
   --popover-foreground: oklch(0.145 0 0);
   --accent: oklch(0.8295 0.2278 131.32);
-  --accent-dark: oklch(0.5356 0.1254 130.29);
+  --accent-dark: oklch(0.4002 0.1254 130.29);
   --accent-foreground: oklch(0.1114 0.0148 131.32);
   --primary: oklch(0.205 0 0);
   --primary-foreground: oklch(0.985 0 0);

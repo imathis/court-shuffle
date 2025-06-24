@@ -1,7 +1,7 @@
 import { cva } from "class-variance-authority";
 
 export const buttonVariants = cva(
-  "inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium transition-all disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg:not([class*='size-'])]:size-4 shrink-0 [&_svg]:shrink-0 outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive",
+  "inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium transition-[background-color,color,opacity,border-color,box-shadow] duration-200 ease-in-out disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg:not([class*='size-'])]:size-4 shrink-0 [&_svg]:shrink-0 outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive",
   {
     variants: {
       variant: {
@@ -26,9 +26,9 @@ export const buttonVariants = cva(
         "text-toggle":
           "uppercase text-foreground opacity-50 hover:opacity-100 data-selected:opacity-100 data-selected:text-accent",
         "action-draw":
-          "w-lg max-w-[90vw] rounded-full bg-linear-to-br from-30% py-4 text-4xl font-extrabold text-slate-900 uppercase shadow-xl/40 transition-all duration-300 select-none text-shadow-xs from-accent to-accent-dark text-shadow-accent",
+          "w-lg max-w-[90vw] rounded-full bg-linear-to-br from-30% py-4 text-4xl font-extrabold text-slate-900 uppercase shadow-lg/40 transition-all duration-300 select-none text-shadow-xs from-accent to-accent-dark text-shadow-accent",
         "action-next":
-          "w-lg max-w-[90vw] rounded-full bg-linear-to-br from-30% py-4 text-4xl font-extrabold text-slate-900 uppercase shadow-xl/40 transition-all duration-300 select-none text-shadow-xs from-cyan-300 to-cyan-800 text-shadow-cyan-300",
+          "w-lg max-w-[90vw] rounded-full bg-linear-to-br from-30% py-4 text-4xl font-extrabold text-indigo-950 uppercase shadow-lg/40 transition-all duration-300 select-none text-shadow-xs from-cyan-400 to-indigo-600 text-shadow-cyan-400/60",
         none: "",
       },
       size: {
