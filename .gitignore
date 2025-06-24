@@ -6,7 +6,9 @@ yarn-debug.log*
 yarn-error.log*
 pnpm-debug.log*
 lerna-debug.log*
-mockups.afdesign
+
+# Design files
+design/
 
 node_modules
 dist
@@ -15,6 +17,11 @@ dist-ssr
 convex/_generated/
 .deploy-config
 *.tsbuildinfo
+
+# Environment files
+.env
+.env.*
+!.env.example
 
 # Editor directories and files
 .vscode/*
@@ -26,8 +33,6 @@ convex/_generated/
 *.njsproj
 *.sln
 *.sw?
-*.afdesign~lock~
-.env?*
 .yarn
 .pnp.*
 .aider*

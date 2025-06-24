@@ -1,8 +1,20 @@
 {
-  "name": "my-app",
-  "private": true,
-  "version": "0.0.0",
+  "name": "court-shuffle",
+  "private": false,
+  "version": "2.0.0",
   "type": "module",
+  "description": "A Progressive Web App for managing court-based sports games through card-based player assignments",
+  "keywords": ["sports", "court", "game", "pwa", "react", "card", "player", "assignment"],
+  "author": "Your Name",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/yourusername/court-shuffle.git"
+  },
+  "homepage": "https://github.com/yourusername/court-shuffle#readme",
+  "bugs": {
+    "url": "https://github.com/yourusername/court-shuffle/issues"
+  },
   "scripts": {
     "dev": "vite",
     "build": "bun run optimize:svg && tsc -b && vite build",

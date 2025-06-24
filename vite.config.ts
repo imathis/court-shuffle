@@ -9,7 +9,6 @@ import tailwindcss from "@tailwindcss/vite";
 export default defineConfig({
   server: {
     host: "0.0.0.0",
-    port: 5172,
   },
   build: {
     manifest: true,
@@ -18,45 +17,41 @@ export default defineConfig({
       output: {
         manualChunks: {
           // React core - changes rarely, good for caching
-          'react-vendor': ['react', 'react-dom'],
-          
+          "react-vendor": ["react", "react-dom"],
+
           // Routing - only needed on navigation
-          'router': ['react-router-dom'],
-          
+          router: ["react-router-dom"],
+
           // UI libraries - moderate size, stable
-          'ui-vendor': [
-            '@radix-ui/react-dialog',
-            '@radix-ui/react-popover', 
-            '@radix-ui/react-slot',
-            'vaul',
-            'sonner',
-            'lucide-react'
+          "ui-vendor": [
+            "@radix-ui/react-dialog",
+            "@radix-ui/react-popover",
+            "@radix-ui/react-slot",
+            "vaul",
+            "sonner",
+            "lucide-react",
           ],
-          
+
           // Backend sync - optional feature
-          'convex': ['convex'],
-          
-          
+          convex: ["convex"],
+
           // State management and utilities
-          'utils': [
-            'zustand',
-            'clsx',
-            'tailwind-merge',
-            'class-variance-authority',
-            'use-debounce'
+          utils: [
+            "zustand",
+            "clsx",
+            "tailwind-merge",
+            "class-variance-authority",
+            "use-debounce",
           ],
-          
+
           // Theme and transitions
-          'ui-support': [
-            'next-themes',
-            'react-transition-group'
-          ],
-          
+          "ui-support": ["next-themes", "react-transition-group"],
+
           // QR code generation (used conditionally)
-          'qr': ['qrcode-svg']
-        }
-      }
-    }
+          qr: ["qrcode-svg"],
+        },
+      },
+    },
   },
   css: {
     devSourcemap: true,
@@ -81,12 +76,12 @@ export default defineConfig({
         runtimeCaching: [
           {
             urlPattern: /^https:\/\/fonts\.googleapis\.com\/.*/i,
-            handler: 'CacheFirst',
+            handler: "CacheFirst",
             options: {
-              cacheName: 'google-fonts-cache',
+              cacheName: "google-fonts-cache",
               expiration: {
                 maxEntries: 10,
-                maxAgeSeconds: 60 * 60 * 24 * 365 // 365 days
+                maxAgeSeconds: 60 * 60 * 24 * 365, // 365 days
               },
             },
           },
