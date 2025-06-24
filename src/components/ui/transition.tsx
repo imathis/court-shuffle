@@ -38,9 +38,8 @@ export const Transition: React.FC<TransitionProps> = ({
   const exitDuration = durationExit ?? duration;
   const [shouldRender, setShouldRender] = useState(toggleProp);
   const [isVisible, setIsVisible] = useState(false);
-  const timeoutRef = useRef<number>();
+  const timeoutRef = useRef<number | undefined>(undefined);
 
-  // Memoize duration class mapping for performance (BEFORE early return)
   const durationClass = useMemo(() => {
     const currentDuration = isVisible ? duration : exitDuration;
     if (currentDuration <= 100) return "duration-100";
@@ -54,10 +53,9 @@ export const Transition: React.FC<TransitionProps> = ({
     return "duration-1000";
   }, [duration, exitDuration, isVisible]);
 
-  // Memoize transition classes and styles for performance (BEFORE early return)
   const { transitionClass, transitionStyle } = useMemo(() => {
     let transitionClass: string;
-    let transitionStyle: React.CSSProperties = {};
+    const transitionStyle: React.CSSProperties = {};
 
     if (transitionProperties === "all") {
       transitionClass = "transition-all";
@@ -70,13 +68,12 @@ export const Transition: React.FC<TransitionProps> = ({
       transitionStyle.transitionProperty = transitionProperties;
     }
 
-    return { 
+    return {
       transitionClass: `${transitionClass} ${durationClass} ease-in-out`,
-      transitionStyle 
+      transitionStyle,
     };
   }, [transitionProperties, durationClass]);
 
-  // Memoize final classes (BEFORE early return)
   const finalClasses = useMemo(() => {
     // Custom from/to transitions take precedence
     if (from && to) {
@@ -151,8 +148,8 @@ export const Transition: React.FC<TransitionProps> = ({
   }
 
   return (
-    <div 
-      className={clsx(finalClasses, className)} 
+    <div
+      className={clsx(finalClasses, className)}
       style={{ ...transitionStyle, ...style }}
       {...rest}
     >
