@@ -65,7 +65,7 @@ A Progressive Web App (PWA) for managing court-based sports games through card-b
 1. **Clone the repository**
 
    ```bash
-   git clone https://github.com/yourusername/court-shuffle.git
+   git clone https://github.com/imathis/court-shuffle.git
    cd court-shuffle
    ```
 
