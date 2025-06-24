@@ -87,7 +87,7 @@ export const ActionButton = () => {
           size="none"
           className={cn(
             !drawDisabled ? ENABLED_STYLES : DISABLED_STYLES,
-            "animate-in fade-in",
+            "animate-in fade-in duration-200",
           )}
           onClick={handleDraw}
           disabled={drawDisabled}
@@ -102,7 +102,7 @@ export const ActionButton = () => {
           size="none"
           className={cn(
             showNextRound ? ENABLED_STYLES : DISABLED_STYLES,
-            "animate-in fade-in",
+            "animate-in fade-in duration-300",
           )}
           onClick={handleNextRound}
           disabled={!showNextRound}

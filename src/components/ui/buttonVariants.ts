@@ -26,9 +26,9 @@ export const buttonVariants = cva(
         "text-toggle":
           "uppercase text-foreground opacity-50 hover:opacity-100 data-selected:opacity-100 data-selected:text-accent",
         "action-draw":
-          "w-lg max-w-[90vw] rounded-full bg-linear-to-br from-30% py-4 text-4xl font-extrabold text-slate-900 uppercase shadow-lg/40 transition-all duration-300 select-none text-shadow-xs from-accent to-accent-dark text-shadow-accent",
+          "w-md max-w-[90vw] rounded-full bg-linear-to-br from-30% py-4 text-4xl font-extrabold text-slate-900 uppercase shadow-lg/40 transition-all duration-300 select-none text-shadow-xs from-accent to-accent-dark text-shadow-accent",
         "action-next":
-          "w-lg max-w-[90vw] rounded-full bg-linear-to-br from-30% py-4 text-4xl font-extrabold text-indigo-950 uppercase shadow-lg/40 transition-all duration-300 select-none text-shadow-xs from-cyan-400 to-indigo-600 text-shadow-cyan-400/60",
+          "w-md max-w-[90vw] rounded-full bg-linear-to-br from-30% py-4 text-4xl font-extrabold text-slate-950 shadow-lg/40 transition-all duration-300 select-none text-shadow-xs from-cyan-300 to-indigo-800 text-shadow-cyan-400/60",
         none: "",
       },
       size: {

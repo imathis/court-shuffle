@@ -5,7 +5,6 @@ import { Court } from "@/game/play/court";
 import { CourtStatus } from "@/game/play/courtStatus";
 import { ActionButton } from "@/game/play/actionButton";
 import { CardNav } from "@/game/play/nav";
-import { NextRound } from "@/game/play/nextRound";
 import { useSyncThemeColorToBackground } from "@/hooks/useSyncThemeColor";
 import { useGameStore } from "@/store/gameStore";
 import { Config } from "@/game/config/config";
@@ -80,7 +79,6 @@ const Play = () => {
     <PlayErrorBoundary>
       <PlayScreen>
         <Header />
-        <NextRound />
         <CourtCard />
         {cards ? (
           <div className="fixed right-0 bottom-0 left-0">
