@@ -67,61 +67,12 @@ export default defineConfig({
     react(),
     tailwindcss(),
     VitePWA({
-      registerType: "prompt",
+      registerType: "autoUpdate",
       workbox: {
-        skipWaiting: false,
-        clientsClaim: true,
         globPatterns: ["**/*.{js,css,html,ico,png,svg}"],
-        // Enable proper cache invalidation for JS assets
-        dontCacheBustURLsMatching: /\.(css|less|sass|scss|styl|stylus|pcss|postcss)$/,
-        // Cache external fonts
-        runtimeCaching: [
-          {
-            urlPattern: /^https:\/\/fonts\.googleapis\.com\/.*/i,
-            handler: "CacheFirst",
-            options: {
-              cacheName: "google-fonts-cache",
-              expiration: {
-                maxEntries: 10,
-                maxAgeSeconds: 60 * 60 * 24 * 365, // 365 days
-              },
-            },
-          },
-          // Cache-first for JS assets - more reliable on mobile
-          {
-            urlPattern: /\.js$/,
-            handler: "CacheFirst",
-            options: {
-              cacheName: "js-assets",
-              cacheableResponse: {
-                statuses: [0, 200],
-              },
-              plugins: [
-                {
-                  cacheKeyWillBeUsed: async ({ request }) => {
-                    // Use URL + content hash for cache key to ensure proper invalidation
-                    return request.url;
-                  },
-                  cachedResponseWillBeUsed: async ({ cachedResponse, request }) => {
-                    // If cached response is corrupted, fetch from network
-                    if (cachedResponse) {
-                      try {
-                        const clone = cachedResponse.clone();
-                        await clone.text(); // Test if response is readable
-                        return cachedResponse;
-                      } catch (error) {
-                        console.warn('Corrupted cache detected, fetching from network:', request.url);
-                        return fetch(request);
-                      }
-                    }
-                    return null;
-                  },
-                },
-              ],
-            },
-          },
-        ],
-        navigateFallback: "/index.html", // Serve index.html for all routes (SPA routing)
+        navigateFallback: "/index.html",
+        cacheId: "courtshuffle-v2", // One-time cache reset
+        cleanupOutdatedCaches: true, // Good practice - prevents cache bloat
       },
       includeAssets: ["favicon.ico", "apple-touch-icon.png"],
       manifest: {
