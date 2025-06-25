@@ -1,18 +1,8 @@
 import { cn } from "@/lib/utils";
-import { useGameStore } from "../store/gameStore";
 import { default as Logo } from "@/assets/icons/logo.svg";
 import { Card, SuitType } from "@/store/types";
-import { CSSProperties } from "react";
 
-export const Header = () => {
-  const currentCard = useGameStore((state) => state.currentCard);
-  return (
-    <div className="fixed w-full pt-4">
-      <Banner currentCard={currentCard} />
-    </div>
-  );
-};
-// --color-suit-red: hwb(0 3% 56%);
+import { CSSProperties } from "react";
 
 const cardStyles = (currentCard: Card | undefined) => {
   if (!currentCard) return;
@@ -38,7 +28,7 @@ const cardStyles = (currentCard: Card | undefined) => {
   }
 };
 
-export const Banner: React.FC<{ currentCard?: Card | undefined }> = ({
+export const LogoBanner: React.FC<{ currentCard?: Card | undefined }> = ({
   currentCard,
 }) => {
   return (

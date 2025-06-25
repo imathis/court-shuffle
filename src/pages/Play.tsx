@@ -8,10 +8,10 @@ import { CardNav } from "@/game/play/nav";
 import { useSyncThemeColorToBackground } from "@/hooks/useSyncThemeColor";
 import { useGameStore } from "@/store/gameStore";
 import { Config } from "@/game/config/config";
-import { Header } from "@/game/Header";
 import { preloadCards } from "@/components/ui/cardSvgUtils";
 import { Courts, SuitType } from "@/store/types";
 import { PlayErrorBoundary } from "@/components/PlayErrorBoundary";
+import { Header } from "@/game/play/header";
 
 const getSuitBgValue = (cardSuit: keyof typeof SuitType | undefined) => {
   const suit = cardSuit ? SuitType[cardSuit] : null;

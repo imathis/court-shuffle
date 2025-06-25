@@ -1,6 +1,6 @@
 import { Button } from "@/components/ui/button";
 import { ContinueGameDialog } from "@/components/ContinueGameDialog";
-import { Banner } from "@/game/Header";
+import { LogoBanner } from "@/components/LogoBanner";
 import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { toast } from "sonner";
@@ -31,7 +31,7 @@ const Landing = () => {
     <>
       <div className="bg-suit flex min-h-dvh flex-col items-center justify-center p-6">
         <div className="flex w-full max-w-2xl flex-col items-center gap-10 space-y-8">
-          <Banner />
+          <LogoBanner />
 
           {/* Game Description */}
           <section className="flex max-w-xl flex-col items-center gap-2">
@@ -42,8 +42,9 @@ const Landing = () => {
               Draw cards to select courts and partners
             </h1>
             <p className="mx-auto pb-10 text-center text-lg text-balance text-slate-400">
-              <span className="font-bold text-white italic">It's easy.</span> The
-              card's number matches your court. The suit helps you find a partner.
+              <span className="font-bold text-white italic">It's easy.</span>{" "}
+              The card's number matches your court. The suit helps you find a
+              partner.
             </p>
             <Button
               onClick={handleGetStarted}
@@ -53,7 +54,9 @@ const Landing = () => {
             >
               Shuffle Up &amp; Play
             </Button>
-            <div className="font-semibold text-slate-600 italic">IT'S FREE!</div>
+            <div className="font-semibold text-slate-600 italic">
+              IT'S FREE!
+            </div>
           </section>
         </div>
       </div>
