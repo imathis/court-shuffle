@@ -7,7 +7,6 @@ export const CourtStatus = () => {
   const cardsRemaining = players ? players - (lastDrawn + 1) : undefined;
 
   if (!players) return null;
-  // const status = cardStatus(lastDrawn, players);
 
   return (
     <div

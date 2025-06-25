@@ -1,5 +1,7 @@
 import { useGameStore } from "@/store/gameStore";
 import { useConvexConfig } from "@/hooks/useConvexConfig";
+import { useConvexDraw } from "@/hooks/useConvexDraw";
+import { useConvexGame } from "@/hooks/useConvexGame";
 import { Button } from "@/components/ui/button";
 import { useEffect, useState } from "react";
 import { cn } from "@/lib/utils";
@@ -8,17 +10,18 @@ const DISABLED_STYLES = "translate-y-28 scale-80 disabled:opacity-0";
 const ENABLED_STYLES = "translate-y-0 scale-100";
 
 export const ActionButton = () => {
+  useConvexGame(); // Sync game state from Convex into store
   const game = useGameStore((state) => state.game);
   const canPlay = useGameStore((state) => state.canPlay());
   const isComplete = useGameStore((state) => state.isComplete());
-  const drawCard = useGameStore((state) => state.drawCard);
+  const { drawCard } = useConvexDraw();
   const { configGameWithSync } = useConvexConfig();
   const [showNextRound, setShowNextRound] = useState(false);
   const [drawDisabled, setDrawDisabled] = useState(false);
   const [displayText, setDisplayText] = useState("Draw");
 
-  const handleDraw = () => {
-    drawCard();
+  const handleDraw = async () => {
+    await drawCard();
     // Disable draw button for 400ms to prevent double taps
     setDrawDisabled(true);
     setTimeout(() => setDrawDisabled(false), 400);
