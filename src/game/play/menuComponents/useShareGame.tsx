@@ -32,20 +32,19 @@ export const useShareGame = (slug: string | null) => {
     if (!slug) return;
 
     const url = getUrl(slug);
-    const shareText = `Draw courts with me on CourtShuffle. ${url}`;
 
     try {
       // Try native share API first (better for mobile)
       if (navigator.share) {
         await navigator.share({
           title: "Court Shuffle Game",
-          text: shareText,
+          url,
         });
         return;
       }
 
       // Fallback to clipboard for desktop
-      await navigator.clipboard.writeText(shareText);
+      await navigator.clipboard.writeText(url);
       setCopied(true);
       setTimeout(() => setCopied(false), 2000);
     } catch (err) {
