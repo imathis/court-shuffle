@@ -1,6 +1,9 @@
-import { Button } from "@/components/ui/button";
-import { ContinueGameDialog } from "@/components/ContinueGameDialog";
+import { ContinueGameDialog } from "@/components/landing/ContinueGameDialog";
+import { Feature } from "@/components/landing/feature";
+import { Matchup } from "@/components/landing/matchupCard";
 import { LogoBanner } from "@/components/LogoBanner";
+import { Button } from "@/components/ui/button";
+import { CloudOff, Maximize2, RefreshCw } from "lucide-react";
 import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { toast } from "sonner";
@@ -29,36 +32,88 @@ const Landing = () => {
 
   return (
     <>
-      <div className="bg-suit flex min-h-dvh flex-col items-center justify-center p-6">
-        <div className="flex w-full max-w-2xl flex-col items-center gap-10 space-y-8">
-          <LogoBanner />
-
-          {/* Game Description */}
-          <section className="flex max-w-xl flex-col items-center gap-2">
-            <h2 className="text-xl font-bold text-slate-500 italic">
-              How do we partner up?
-            </h2>
-            <h1 className="pb-10 text-center text-4xl font-black tracking-tight text-balance md:text-5xl">
-              Draw cards to select courts and partners
-            </h1>
-            <p className="mx-auto pb-10 text-center text-lg text-balance text-slate-400">
-              <span className="font-bold text-white italic">It's easy.</span>{" "}
-              The card's number matches your court. The suit helps you find a
-              partner.
-            </p>
-            <Button
-              onClick={handleGetStarted}
-              size="pill-xl"
-              variant="accent"
-              className="mt-10 px-8 py-6 text-2xl font-bold"
-            >
-              Shuffle Up &amp; Play
-            </Button>
-            <div className="font-semibold text-slate-600 italic">
-              IT'S FREE!
-            </div>
-          </section>
+      <div className="pt-safe min-h-dvh bg-slate-950">
+        <div className="flex flex-row justify-between gap-4 bg-slate-950 p-6">
+          <LogoBanner className="w-60" />
+          <Button onClick={handleGetStarted} size="pill" className="font-bold">
+            Play!
+          </Button>
         </div>
+        <section className="flex w-full flex-col items-center gap-12 bg-slate-900 py-15">
+          {/* Game Description */}
+          <header className="flex max-w-xl flex-col items-center gap-3 text-center">
+            <div className="text-2xl leading-5 font-normal text-slate-400">
+              No more asking
+            </div>{" "}
+            <h2 className="text-5xl leading-10 font-bold tracking-tight text-balance text-slate-200">
+              “How should we partner up?“
+            </h2>
+            <p className="text-lg text-balance text-slate-400">
+              Easy organize group play for Tennis or Pickleball. Draw virtual
+              playing cards to randomize courts and matchups.
+            </p>
+          </header>
+          <Button
+            onClick={handleGetStarted}
+            size="pill-xl"
+            variant="accent"
+            className="px-10 py-8 text-3xl font-bold"
+          >
+            Get Started
+          </Button>
+        </section>
+        <section className="flex w-full flex-col items-center gap-8 bg-linear-to-b from-slate-950 to-slate-900 px-10 py-15 lg:px-0">
+          <div className="grid max-w-xl gap-2">
+            <h3 className="text-3xl font-bold">How does it work?</h3>
+            <p className="mx-auto text-lg leading-5 text-slate-400">
+              Each player draws a card. The card's number matches the court, and
+              the suit helps you find a partner or opponent.
+            </p>
+          </div>
+          <div className="flex flex-col gap-5 md:flex-row">
+            <Matchup
+              court={4}
+              type="Opponents"
+              cards={["4H", "4S"]}
+              className="bg-red-900"
+            />
+            <Matchup
+              court={3}
+              type="Partners"
+              cards={["3H", "3D"]}
+              className="bg-indigo-900"
+            />
+          </div>
+        </section>
+        <section className="grid w-full bg-slate-900 py-15">
+          <div className="grid w-full max-w-5xl justify-around gap-x-5 gap-y-15 place-self-center px-5 text-center md:grid-flow-col md:px-10 md:text-left">
+            <Feature
+              title="Flexible Play"
+              desc="Singles, Doubles, and odd numbers.
+              Easily accomodate up to 52 players"
+              icon={Maximize2}
+            />
+            <Feature
+              title="Multi-device Sync"
+              desc="Share with others and draw from the same deck, synced instantly"
+              icon={RefreshCw}
+            />
+            <Feature
+              title="Offline Mode"
+              desc="Save to your homescreen and play any time, without internet"
+              icon={CloudOff}
+            />
+          </div>
+        </section>
+        <footer className="justify-self-end py-5 text-center text-slate-400">
+          Copyright © {new Date().getFullYear()}{" "}
+          <a
+            className="hover:text-accent cursor-pointer text-slate-300"
+            href="https://brandonmathis.com"
+          >
+            Brandon Mathis
+          </a>
+        </footer>
       </div>
       <ContinueGameDialog />
     </>
