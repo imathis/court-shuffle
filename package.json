@@ -17,12 +17,13 @@
   },
   "scripts": {
     "dev": "vite",
-    "build": "bun run optimize:svg && tsc -b && vite build",
-    "build:no-optimize": "tsc -b && vite build",
+    "build": "bun run optimize:svg && bun run generate:safe-areas && tsc -b && vite build",
+    "build:no-optimize": "bun run generate:safe-areas && tsc -b && vite build",
     "lint": "eslint src --ext js,jsx --report-unused-disable-directives --max-warnings 0",
     "preview": "vite preview",
     "optimize": "vite optimize",
     "optimize:svg": "svgo --config svgo.config.js src/assets/cards/*.svg --quiet",
+    "generate:safe-areas": "node scripts/generate-safe-areas.js",
     "test": "vitest",
     "test:run": "vitest run"
   },

@@ -1,5 +1,6 @@
 @import "tailwindcss";
 @import "tw-animate-css";
+@import "./styles/safe-areas.css";
 
 @custom-variant dark (&:is(.dark *));
 :root {
@@ -56,18 +57,20 @@
 }
 
 * {
-  margin: 0;
   box-sizing: border-box;
 }
 
+/* Reset margins for specific elements instead of universal selector */
+body, h1, h2, h3, h4, h5, h6, p, ul, ol, li, figure, figcaption, blockquote, dl, dd {
+  margin: 0;
+}
+
 html {
-  @apply fixed grid w-full overscroll-contain;
-  height: calc(100 * var(--vh));
+  @apply h-full w-full overscroll-contain;
 }
 
 body {
-  @apply grid min-w-xs overscroll-contain;
-  height: calc(100 * var(--vh));
+  @apply min-w-xs overscroll-contain;
 }
 
 #root {
