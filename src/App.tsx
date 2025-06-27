@@ -5,6 +5,7 @@ import { New } from "@/pages/New";
 import { Play } from "@/pages/Play";
 import { useFixVh } from "@/hooks/useFixVh";
 import { Toaster } from "@/components/ui/sonner";
+import { UpdatePrompt } from "@/components/UpdatePrompt";
 
 const App = () => {
   useFixVh();
@@ -19,6 +20,7 @@ const App = () => {
         </Route>
       </Routes>
       <Toaster />
+      <UpdatePrompt />
     </BrowserRouter>
   );
 };
