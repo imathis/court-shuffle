@@ -24,8 +24,8 @@ export const Court = () => {
       toggle={!!card}
       duration={200}
       transitionProperties="height, opacity"
-      from="h-0 opacity-0 origin-top overflow-hidden"
-      to="h-26 opacity-100 origin-top overflow-hidden"
+      from="h-0 opacity-0 origin-top"
+      to="h-26 opacity-100 origin-top"
       className="text-suit relative z-1 items-center justify-center bg-white text-center text-7xl font-extrabold tracking-tight uppercase shadow-[0_-10px_16px_-4px_rgba(0,0,0,0.2)] ease-out select-none"
     >
       {!card ? (

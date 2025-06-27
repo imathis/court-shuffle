@@ -31,7 +31,7 @@ class PlayErrorBoundaryClass extends Component<Props, State> {
   render() {
     if (this.state.hasError) {
       return (
-        <div className="flex min-h-dvh items-center justify-center bg-gray-100">
+        <div className="flex items-center justify-center bg-gray-100">
           <div className="text-center">
             <h2 className="mb-2 text-xl font-semibold">Something went wrong</h2>
             <p className="mb-4 text-gray-600">

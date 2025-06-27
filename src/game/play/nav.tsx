@@ -19,7 +19,7 @@ export const CardNav = ({ setConfigVisible }: CardNavProps) => {
     localDrawnCards.length === 0 || drawnIndex >= localDrawnCards.length - 1;
 
   return (
-    <div className="bg-background/90 relative z-5 grid h-18 grid-cols-3 items-stretch">
+    <nav className="[&_button]:pb-safe-min-5 relative z-5 grid grid-cols-3 items-stretch bg-slate-950/90 [&_button]:pt-5">
       <Button
         size="none"
         variant="ghostInverted"
@@ -49,6 +49,6 @@ export const CardNav = ({ setConfigVisible }: CardNavProps) => {
           height={32}
         />
       </Button>
-    </div>
+    </nav>
   );
 };

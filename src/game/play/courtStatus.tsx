@@ -11,7 +11,7 @@ export const CourtStatus = () => {
   return (
     <div
       className={cn(
-        "relative z-1 p-3 text-center text-2xl text-white select-none",
+        "relative z-1 flex items-center justify-center gap-2 p-3 text-center text-2xl text-white select-none",
         cardsRemaining ? "bg-slate-800" : "bg-slate-600",
       )}
     >

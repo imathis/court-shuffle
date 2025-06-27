@@ -1,17 +1,17 @@
-import React, { useEffect } from "react";
-import { useNavigate } from "react-router-dom";
-import { CourtCard } from "@/game/play/card";
+import { LogoBanner } from "@/components/LogoBanner";
+import { PlayErrorBoundary } from "@/components/PlayErrorBoundary";
+import { preloadCards } from "@/components/ui/cardSvgUtils";
+import { Config } from "@/game/config/config";
+import { ActionButton } from "@/game/play/actionButton";
+import { CourtCard } from "@/game/play/courtCard";
 import { Court } from "@/game/play/court";
 import { CourtStatus } from "@/game/play/courtStatus";
-import { ActionButton } from "@/game/play/actionButton";
 import { CardNav } from "@/game/play/nav";
 import { useSyncThemeColorToBackground } from "@/hooks/useSyncThemeColor";
 import { useGameStore } from "@/store/gameStore";
-import { Config } from "@/game/config/config";
-import { preloadCards } from "@/components/ui/cardSvgUtils";
 import { Courts, SuitType } from "@/store/types";
-import { PlayErrorBoundary } from "@/components/PlayErrorBoundary";
-import { Header } from "@/game/play/header";
+import React, { useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 
 const getSuitBgValue = (cardSuit: keyof typeof SuitType | undefined) => {
   const suit = cardSuit ? SuitType[cardSuit] : null;
@@ -33,7 +33,7 @@ const PlayScreen: React.FC<{ children: React.ReactNode }> = ({ children }) => {
 
   return (
     <div
-      className="bg-suit min-h-dvh overflow-hidden transition-colors duration-500"
+      className="bg-suit h-lvh transition-colors duration-500"
       style={
         {
           "--color-suit": suitVal,
@@ -41,7 +41,7 @@ const PlayScreen: React.FC<{ children: React.ReactNode }> = ({ children }) => {
       }
       ref={screenRef}
     >
-      <div className="grid h-max">{children}</div>
+      {children}
     </div>
   );
 };
@@ -78,7 +78,7 @@ const Play = () => {
   return (
     <PlayErrorBoundary>
       <PlayScreen>
-        <Header />
+        <LogoBanner matchCard className="pt-safe-min-4 fixed" />
         <CourtCard />
         {cards ? (
           <div className="fixed right-0 bottom-0 left-0">
