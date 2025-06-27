@@ -1,46 +1,40 @@
-import { useEffect, useState } from 'react';
+import { useState, useEffect } from "react";
 
 export const useServiceWorkerUpdate = () => {
   const [updateAvailable, setUpdateAvailable] = useState(false);
-  const [registration, setRegistration] = useState<ServiceWorkerRegistration | null>(null);
 
   useEffect(() => {
-    if ('serviceWorker' in navigator) {
-      navigator.serviceWorker.getRegistration().then(reg => {
-        if (reg) {
-          setRegistration(reg);
-          
-          // Check for updates
-          reg.addEventListener('updatefound', () => {
-            const newWorker = reg.installing;
+    // Simple service worker update detection
+    if ("serviceWorker" in navigator) {
+      navigator.serviceWorker.ready
+        .then((registration) => {
+          registration.addEventListener("updatefound", () => {
+            const newWorker = registration.installing;
             if (newWorker) {
-              newWorker.addEventListener('statechange', () => {
-                if (newWorker.state === 'installed' && navigator.serviceWorker.controller) {
+              newWorker.addEventListener("statechange", () => {
+                if (
+                  newWorker.state === "installed" &&
+                  navigator.serviceWorker.controller
+                ) {
                   setUpdateAvailable(true);
                 }
               });
             }
           });
-        }
-      });
-
-      // Listen for messages from service worker
-      navigator.serviceWorker.addEventListener('message', event => {
-        if (event.data && event.data.type === 'CACHE_UPDATED') {
-          setUpdateAvailable(true);
-        }
-      });
+        })
+        .catch((error) => {
+          console.log("SW ready error:", error);
+        });
     }
   }, []);
 
   const applyUpdate = () => {
-    if (registration?.waiting) {
-      registration.waiting.postMessage({ type: 'SKIP_WAITING' });
-      window.location.reload();
-    }
+    console.log("Applying update - reloading page");
+    window.location.reload();
   };
 
   const dismissUpdate = () => {
+    console.log("Dismissing update");
     setUpdateAvailable(false);
   };
 

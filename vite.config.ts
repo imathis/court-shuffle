@@ -74,23 +74,25 @@ export default defineConfig({
       workbox: {
         globPatterns: ["**/*.{js,css,html,ico,png,svg}"],
         navigateFallback: "/index.html",
-        cacheId: "courtshuffle-v3", // Force cache reset
+        cacheId: "courtshuffle-v4", // Force cache reset
         cleanupOutdatedCaches: true, // Good practice - prevents cache bloat
         skipWaiting: true, // Force immediate activation
         clientsClaim: true, // Take control of uncontrolled clients
-        runtimeCaching: [{
-          urlPattern: /\.js$/,
-          handler: 'StaleWhileRevalidate', // Serve cached JS instantly, update in background
-          options: {
-            cacheName: 'js-cache',
-          }
-        }]
+        runtimeCaching: [
+          {
+            urlPattern: /\.js$/,
+            handler: "StaleWhileRevalidate", // Serve cached JS instantly, update in background
+            options: {
+              cacheName: "js-cache",
+            },
+          },
+        ],
       },
       includeAssets: ["favicon.ico", "apple-touch-icon.png"],
       manifest: {
         name: "Court Shuffle",
         short_name: "CourtShuffle",
-        start_url: "/",
+        start_url: "/play",
         scope: "/",
         display: "standalone",
         background_color: "#333333",

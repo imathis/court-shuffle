@@ -25,7 +25,10 @@ export const UpdatePrompt = () => {
             Later
           </button>
           <button
-            onClick={applyUpdate}
+            onClick={() => {
+              console.log("Update button clicked");
+              applyUpdate();
+            }}
             className="bg-primary text-primary-foreground hover:bg-primary/90 rounded-md px-4 py-2 text-sm transition-colors"
           >
             Update
