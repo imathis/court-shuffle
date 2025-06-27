@@ -2,6 +2,7 @@ import { useGameStore } from "@/store/gameStore";
 import { useConvexConfig } from "@/hooks/useConvexConfig";
 import { useConvexDraw } from "@/hooks/useConvexDraw";
 import { useConvexGame } from "@/hooks/useConvexGame";
+import { useTouchOptimized } from "@/hooks/useTouchOptimized";
 import { Button } from "@/components/ui/button";
 import { useEffect, useState } from "react";
 import { cn } from "@/lib/utils";
@@ -39,6 +40,18 @@ export const ActionButton = () => {
       shortCourt: game.shortCourt,
     });
   };
+
+  const drawTouchHandlers = useTouchOptimized({
+    onAction: handleDraw,
+    disabled: drawDisabled,
+    preventDoubleTouch: true,
+    doubleTouchDelay: 400,
+  });
+
+  const nextRoundTouchHandlers = useTouchOptimized({
+    onAction: handleNextRound,
+    disabled: !showNextRound,
+  });
 
   // Delay showing next round actions when round ends
   useEffect(() => {
@@ -92,7 +105,7 @@ export const ActionButton = () => {
             !drawDisabled ? ENABLED_STYLES : DISABLED_STYLES,
             "animate-in fade-in duration-200",
           )}
-          onClick={handleDraw}
+          {...drawTouchHandlers}
           disabled={drawDisabled}
           aria-label="Draw next card"
           role="button"
@@ -107,7 +120,7 @@ export const ActionButton = () => {
             showNextRound ? ENABLED_STYLES : DISABLED_STYLES,
             "animate-in fade-in duration-300",
           )}
-          onClick={handleNextRound}
+          {...nextRoundTouchHandlers}
           disabled={!showNextRound}
           aria-label="Start next round"
           aria-describedby="round-complete"

@@ -1,47 +1,51 @@
 import React from "react";
 import { ConfigSection } from "./section";
-import { Label } from "@/components/ui/label";
+import { Button } from "@/components/ui/button";
+import { useTouchOptimized } from "@/hooks/useTouchOptimized";
 
 interface FormatProps {
   perCourt: number | undefined;
   update: (num: number) => void;
 }
 
-export const Format: React.FC<FormatProps> = ({ perCourt, update }) => {
-  const handleFormatChange: React.ChangeEventHandler<HTMLInputElement> =
-    React.useCallback(
-      (event) => {
-        const value = Number.parseInt(event.target.value, 10);
-        update(value);
-      },
-      [update],
-    );
+const FormatButton: React.FC<{
+  value: number;
+  selected: boolean;
+  onSelect: (value: number) => void;
+  children: React.ReactNode;
+}> = ({ value, selected, onSelect, children }) => {
+  const touchHandlers = useTouchOptimized({
+    onAction: () => onSelect(value),
+  });
 
   return (
+    <Button
+      variant="checkButton"
+      size="2xl"
+      {...touchHandlers}
+      aria-pressed={selected}
+      role="radio"
+      aria-checked={selected}
+    >
+      {children}
+    </Button>
+  );
+};
+
+export const Format: React.FC<FormatProps> = ({ perCourt, update }) => {
+  return (
     <ConfigSection>
-      <div className="grid auto-cols-auto grid-flow-col gap-2">
-        <Label className="">
-          <input
-            className="absolute -z-1 appearance-none"
-            name="format"
-            type="radio"
-            onChange={handleFormatChange}
-            checked={perCourt === 2}
-            value={2}
-          />
+      <div
+        className="grid auto-cols-auto grid-flow-col gap-2"
+        role="radiogroup"
+        aria-label="Game format"
+      >
+        <FormatButton value={2} selected={perCourt === 2} onSelect={update}>
           Singles
-        </Label>
-        <Label className="">
-          <input
-            className="absolute -z-1 appearance-none"
-            name="format"
-            type="radio"
-            onChange={handleFormatChange}
-            checked={perCourt === 4}
-            value={4}
-          />
+        </FormatButton>
+        <FormatButton value={4} selected={perCourt === 4} onSelect={update}>
           Doubles
-        </Label>
+        </FormatButton>
       </div>
     </ConfigSection>
   );

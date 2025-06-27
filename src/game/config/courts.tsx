@@ -1,7 +1,8 @@
 import React from "react";
 import { sort, allCourts } from "../../helpers/gameHelpers";
 import { ConfigSection } from "./section";
-import { Label } from "@/components/ui/label";
+import { Button } from "@/components/ui/button";
+import { useTouchOptimized } from "@/hooks/useTouchOptimized";
 
 interface CourtsProps {
   courts: number[] | undefined;
@@ -32,7 +33,11 @@ export const Courts: React.FC<CourtsProps> = ({
         disabled={!perCourt}
         title={courts.length ? "Courts" : "Select Courts"}
       >
-        <div className="grid grid-cols-5 items-center justify-stretch gap-2 *:nth-11:col-start-2">
+        <div
+          className="grid grid-cols-5 items-center justify-stretch gap-2 *:nth-11:col-start-2"
+          role="group"
+          aria-label="Select courts"
+        >
           {allCourts.map((court) => (
             <Court
               key={court}
@@ -64,19 +69,30 @@ const Court: React.FC<CourtProps> = ({
   checked,
   type,
   className,
-}) => (
-  <Label className={className}>
-    <input
-      className="absolute -z-1 appearance-none"
-      name={type === "checkbox" ? `court${court}` : "court"}
-      type={type}
-      onChange={onChange}
-      checked={checked}
-      value={court}
-    />
-    {court}
-  </Label>
-);
+}) => {
+  const touchHandlers = useTouchOptimized({
+    onAction: () => {
+      const syntheticEvent = {
+        target: { value: court.toString() },
+      } as React.ChangeEvent<HTMLInputElement>;
+      onChange(syntheticEvent);
+    },
+  });
+
+  return (
+    <Button
+      variant="checkButton"
+      size="3xl"
+      className={className}
+      {...touchHandlers}
+      aria-pressed={checked}
+      role={type === "checkbox" ? "checkbox" : "radio"}
+      aria-checked={checked}
+    >
+      {court}
+    </Button>
+  );
+};
 
 interface ShortCourtProps {
   courts: number[] | undefined;
@@ -130,6 +146,8 @@ export const ShortCourt: React.FC<ShortCourtProps> = ({
         style={{
           gridTemplateColumns: `repeat(${Math.min(courts?.length || 1, 5)}, auto)`,
         }}
+        role="radiogroup"
+        aria-label="Select short court"
       >
         {courts
           ? [...courts]
@@ -144,7 +162,7 @@ export const ShortCourt: React.FC<ShortCourtProps> = ({
                 />
               ))
           : null}
-      </div>
+      </div>{" "}
     </ConfigSection>
   );
 };

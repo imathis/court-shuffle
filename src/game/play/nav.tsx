@@ -1,4 +1,5 @@
 import { useGameStore } from "@/store/gameStore";
+import { useTouchOptimized } from "@/hooks/useTouchOptimized";
 import { Button } from "@/components/ui/button";
 import { GameMenu } from "./gameMenu";
 import { ArrowLeft, ArrowRight } from "lucide-react";
@@ -18,12 +19,22 @@ export const CardNav = ({ setConfigVisible }: CardNavProps) => {
   const disableNext =
     localDrawnCards.length === 0 || drawnIndex >= localDrawnCards.length - 1;
 
+  const backTouchHandlers = useTouchOptimized({
+    onAction: navigateBack,
+    disabled: disableBack,
+  });
+
+  const nextTouchHandlers = useTouchOptimized({
+    onAction: navigateNext,
+    disabled: disableNext,
+  });
+
   return (
     <nav className="[&_button]:pb-safe-min-5 relative z-5 grid grid-cols-3 items-stretch bg-slate-950/90 [&_button]:pt-5">
       <Button
         size="none"
         variant="ghostInverted"
-        onClick={navigateBack}
+        {...backTouchHandlers}
         aria-label="Previous Card"
         disabled={disableBack}
       >
@@ -38,7 +49,7 @@ export const CardNav = ({ setConfigVisible }: CardNavProps) => {
       <Button
         size="none"
         variant="ghostInverted"
-        onClick={navigateNext}
+        {...nextTouchHandlers}
         aria-label="Next Card"
         disabled={disableNext}
       >

@@ -29,6 +29,8 @@ export const buttonVariants = cva(
           "w-md max-w-[90vw] rounded-full bg-linear-to-br from-30% py-4 text-4xl font-extrabold text-slate-900 uppercase shadow-lg/40 transition-all duration-300 select-none text-shadow-xs from-accent to-accent-dark text-shadow-accent",
         "action-next":
           "w-md max-w-[90vw] rounded-full bg-linear-to-br from-30% py-4 text-4xl font-extrabold text-slate-950 shadow-lg/40 transition-all duration-300 select-none text-shadow-xs from-cyan-300 to-indigo-800 text-shadow-cyan-400/60",
+        checkButton:
+          "text-foreground rounded-xl bg-slate-500/10 p-3 text-center text-3xl font-extrabold uppercase select-none border shadow-xs dark:border-input transition-[background-color,color,opacity,border-color] duration-200 ease-in-out aria-pressed:bg-accent aria-pressed:text-slate-900 aria-pressed:opacity-100 aria-checked:bg-accent aria-checked:text-slate-900 aria-checked:opacity-100 aria-[pressed=false]:hover:opacity-100 aria-[pressed=false]:hover:bg-foreground aria-[pressed=false]:hover:text-accent-foreground aria-[checked=false]:hover:opacity-100 aria-[checked=false]:hover:bg-foreground aria-[checked=false]:hover:text-accent-foreground",
         none: "",
       },
       size: {
@@ -36,6 +38,10 @@ export const buttonVariants = cva(
         sm: "h-8 rounded-md gap-1.5 px-3 has-[>svg]:px-2.5",
         lg: "h-10 text-lg rounded-md px-6 has-[>svg]:px-4",
         xl: "h-12 text-xl rounded-md px-6 has-[>svg]:px-4 [&_svg:not([class*='size-'])]:size-6",
+        "2xl":
+          "h-14 text-2xl rounded-lg px-6 has-[>svg]:px-5 [&_svg:not([class*='size-'])]:size-7",
+        "3xl":
+          "h-15 text-3xl rounded-lg px-7 has-[>svg]:px-6 [&_svg:not([class*='size-'])]:size-8",
         icon: "size-9 rounded-full [&_svg:not([class*='size-'])]:size-5",
         "icon-lg":
           "size-10 text-lg rounded-full [&_svg:not([class*='size-'])]:size-5",
