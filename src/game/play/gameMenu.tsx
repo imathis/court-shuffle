@@ -9,6 +9,7 @@ import {
 import { Menu } from "lucide-react";
 import { MenuView, ShareView, useShareGame } from "./menuComponents";
 import { useConvexRedraw } from "@/hooks/useConvexRedraw";
+import { useConvexConfig } from "@/hooks/useConvexConfig";
 
 interface GameMenuProps {
   setConfigVisible: (visible: boolean) => void;
@@ -17,14 +18,14 @@ interface GameMenuProps {
 export const GameMenu: React.FC<GameMenuProps> = ({ setConfigVisible }) => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [showShareView, setShowShareView] = useState(false);
-  const { configGame, isPlaying, game, navigateBack, navigateNext } =
-    useGameStore();
+  const { isPlaying, game, navigateBack, navigateNext } = useGameStore();
 
   const slug = useGameStore((state) => state.game.slug);
   const localDrawnCards = useGameStore((state) => state.localDrawnCards);
   const drawnIndex = useGameStore((state) => state.drawnIndex);
   const shareLogic = useShareGame(slug);
   const { redrawCard } = useConvexRedraw();
+  const { configGameWithSync } = useConvexConfig();
 
   // Calculate if there are undrawn cards remaining
   const hasUndrawnCards = game.cards
@@ -35,7 +36,7 @@ export const GameMenu: React.FC<GameMenuProps> = ({ setConfigVisible }) => {
     setIsMenuOpen(false);
     setShowShareView(false);
     // Restart with current game settings
-    configGame({
+    configGameWithSync({
       courts: game.courts,
       players: game.players,
       perCourt: game.perCourt,
