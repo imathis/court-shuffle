@@ -2,13 +2,21 @@ import { describe, it, expect, beforeEach, vi } from "vitest";
 import { useGameStore } from "./gameStore";
 import type { GameStoreState } from "./types";
 
-// Mock localStorage
+// Mock localStorage functions
+const getItemMock = vi.fn();
+const setItemMock = vi.fn();
+const removeItemMock = vi.fn();
+const clearMock = vi.fn();
+const keyMock = vi.fn();
+
 const localStorageMock = {
-  getItem: vi.fn(),
-  setItem: vi.fn(),
-  removeItem: vi.fn(),
-  clear: vi.fn(),
-};
+  getItem: getItemMock,
+  setItem: setItemMock,
+  removeItem: removeItemMock,
+  clear: clearMock,
+  length: 0,
+  key: keyMock,
+} as Storage;
 
 // Mock localStorage for both browser and test environments
 if (typeof window !== 'undefined') {
@@ -18,7 +26,7 @@ if (typeof window !== 'undefined') {
   });
 } else {
   // Mock for test environment
-  globalThis.localStorage = localStorageMock as Storage;
+  globalThis.localStorage = localStorageMock;
 }
 
 describe("GameStore", () => {
@@ -57,10 +65,10 @@ describe("GameStore", () => {
 
   beforeEach(() => {
     // Clear localStorage mock
-    localStorageMock.getItem.mockClear();
-    localStorageMock.setItem.mockClear();
-    localStorageMock.removeItem.mockClear();
-    localStorageMock.clear.mockClear();
+    getItemMock.mockClear();
+    setItemMock.mockClear();
+    removeItemMock.mockClear();
+    clearMock.mockClear();
 
     // Reset the store to initial state
     useGameStore.setState({
@@ -210,7 +218,7 @@ describe("GameStore", () => {
       version: 1,
     });
 
-    localStorageMock.getItem.mockReturnValue(corruptedData);
+    getItemMock.mockReturnValue(corruptedData);
 
     // The store should handle corrupted data gracefully and fall back to defaults
     // Even with corrupted localStorage, the store should initialize properly
@@ -224,7 +232,7 @@ describe("GameStore", () => {
 
   it("should handle completely invalid localStorage data", () => {
     // Simulate completely invalid JSON
-    localStorageMock.getItem.mockReturnValue("invalid-json{");
+    getItemMock.mockReturnValue("invalid-json{");
 
     // The store should handle invalid JSON gracefully
     const store = useGameStore.getState();
