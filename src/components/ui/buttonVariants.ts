@@ -12,6 +12,8 @@ export const buttonVariants = cva(
           "bg-destructive text-white shadow-xs hover:bg-destructive/90 focus-visible:ring-destructive/20 dark:focus-visible:ring-destructive/40 dark:bg-destructive/60",
         outline:
           "border bg-background shadow-xs hover:bg-accent hover:text-accent-foreground dark:bg-input/30 dark:border-input dark:hover:bg-foreground",
+        "outline-dark":
+          "border bg-slate-900/80 shadow-xs hover:bg-accent hover:text-accent-foreground dark:border-input dark:hover:bg-foreground",
         secondary:
           "bg-secondary text-secondary-foreground shadow-xs hover:bg-secondary/80",
         ghost:
@@ -46,7 +48,7 @@ export const buttonVariants = cva(
         "icon-lg":
           "size-10 text-lg rounded-full [&_svg:not([class*='size-'])]:size-5",
         "icon-xl":
-          "size-12 text-xl rounded-full [&_svg:not([class*='size-'])]:size-6",
+          "size-12 text-xl rounded-full [&_svg:not([class*='size-'])]:size-7",
         pill: "h-9 px-5 min-w-[100px] rounded-full [&_svg:not([class*='size-'])]:size-5 text-xl",
         "pill-lg":
           "h-10 px-5 min-w-[100px] rounded-full [&_svg:not([class*='size-'])]:size-5 text-xl",

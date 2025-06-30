@@ -13,7 +13,7 @@ export const Court = () => {
   );
 
   const prevDrawnIndexRef = useRef(drawnIndex);
-  const forward = drawnIndex > prevDrawnIndexRef.current;
+  const forward = drawnIndex >= prevDrawnIndexRef.current;
 
   useEffect(() => {
     prevDrawnIndexRef.current = drawnIndex;

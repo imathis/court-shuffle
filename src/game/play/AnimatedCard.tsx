@@ -28,10 +28,10 @@ export const AnimatedCard = ({
     <Transition
       key={cardKey}
       toggle={shouldShow}
-      duration={400}
+      duration={300}
       unmountOnExit={true}
-      from="opacity-0 translate-y-[50vh] rotate-[140deg] md:translate-x-[50vw]"
-      to="opacity-100 translate-y-0 rotate-0"
+      from="translate-y-[30vh] rotate-[140deg] md:translate-x-[30vw]"
+      to="translate-y-0 rotate-0"
       className="absolute top-0 origin-bottom transform-gpu md:top-[6vh] md:place-self-center"
       style={{
         zIndex: 10 + stackIndex,
@@ -45,7 +45,7 @@ export const AnimatedCard = ({
           rotate: `${position.rotate}deg`,
           willChange: "transform, opacity",
           transition:
-            "top 300ms ease-in-out 150ms, rotate 300ms ease-in-out 150ms, transform 300ms ease-in-out 150ms, opacity 200ms ease-in-out 150ms",
+            "top 200ms ease-in-out 150ms, rotate 200ms ease-in-out 150ms, transform 200ms ease-in-out 150ms, opacity 200ms ease-in-out 150ms",
           opacity: shouldFade ? "0" : "1",
         }}
       />

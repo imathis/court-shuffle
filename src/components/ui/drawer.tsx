@@ -63,7 +63,7 @@ function DrawerContent({
         )}
         {...props}
       >
-        <div className="bg-foreground/20 mt-4 h-1.5 w-[100px] shrink-0 self-center rounded-full backdrop-brightness-150 group-data-[vaul-drawer-direction=bottom]/drawer-content:block" />
+        <div className="bg-foreground/20 mb-1 h-1.5 w-[40px] shrink-0 self-center rounded-full backdrop-brightness-150 group-data-[vaul-drawer-direction=bottom]/drawer-content:block" />
         {children}
       </DrawerPrimitive.Content>
     </DrawerPortal>
