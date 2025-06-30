@@ -4,6 +4,7 @@ import "./index.css";
 import App from "./App.tsx";
 import { ConvexProvider, ConvexReactClient } from "convex/react";
 import { ErrorBoundary } from "./components/ErrorBoundary.tsx";
+import { cleanReload } from "./lib/utils.ts";
 
 // Simple error recovery for cache issues
 window.addEventListener("error", (event) => {
@@ -12,8 +13,8 @@ window.addEventListener("error", (event) => {
     errorStr.includes("Unexpected EOF") ||
     errorStr.includes("Loading chunk")
   ) {
-    console.error("Cache issue detected, reloading:", errorStr);
-    location.reload();
+    console.error("Cache issue detected, doing clean reload:", errorStr);
+    cleanReload();
   }
 });
 

@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { cleanReload } from "@/lib/utils.ts";
 
 export const useServiceWorkerUpdate = () => {
   const [updateAvailable, setUpdateAvailable] = useState(false);
@@ -28,11 +29,6 @@ export const useServiceWorkerUpdate = () => {
     }
   }, []);
 
-  const applyUpdate = () => {
-    console.log("Applying update - reloading");
-    location.reload();
-  };
-
   const dismissUpdate = () => {
     console.log("Dismissing update");
     setUpdateAvailable(false);
@@ -40,7 +36,7 @@ export const useServiceWorkerUpdate = () => {
 
   return {
     updateAvailable,
-    applyUpdate,
+    applyUpdate: cleanReload,
     dismissUpdate,
   };
 };
