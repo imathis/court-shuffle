@@ -190,8 +190,7 @@ export const useGameStore = create<GameStore>()(
 
         // Check if this is a new round (lastDrawn went from positive to -1)
         // BUT NOT during sync initialization
-        const isNewRound =
-          currentGame.lastDrawn >= 0 && newGame.lastDrawn === -1;
+        const isNewRound = newGame.lastDrawn === -1;
         const isSyncInitialization =
           currentState.localDrawnCards.length > 0 &&
           newGame.slug &&

@@ -46,18 +46,6 @@ export function useConvexGame() {
         JSON.stringify(currentGame) !==
           JSON.stringify({ ...currentGame, ...convexGame })
       ) {
-        // Handle card reset when game is reset on server
-        if (
-          convexGame.lastDrawn === -1 &&
-          previousLastDrawn.current !== -1 &&
-          previousLastDrawn.current !== undefined
-        ) {
-          useGameStore.setState({
-            currentCard: undefined,
-            drawnIndex: -1,
-          });
-        }
-
         previousLastDrawn.current = convexGame.lastDrawn;
         setGame({ ...currentGame, ...convexGame });
       }
