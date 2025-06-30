@@ -2,7 +2,7 @@ import { useGameStore } from "@/store/gameStore";
 import { useConvexConfig } from "@/hooks/useConvexConfig";
 import { useConvexDraw } from "@/hooks/useConvexDraw";
 import { useConvexGame } from "@/hooks/useConvexGame";
-import { useTouchOptimized } from "@/hooks/useTouchOptimized";
+import { useTouchClick } from "@/hooks/useTouchClick";
 import { Button } from "@/components/ui/button";
 import { useEffect, useState } from "react";
 import { cn } from "@/lib/utils";
@@ -41,14 +41,14 @@ export const ActionButton = () => {
     });
   };
 
-  const drawTouchHandlers = useTouchOptimized({
+  const drawTouchHandlers = useTouchClick({
     onAction: handleDraw,
     disabled: drawDisabled,
     preventDoubleTouch: true,
     doubleTouchDelay: 400,
   });
 
-  const nextRoundTouchHandlers = useTouchOptimized({
+  const nextRoundTouchHandlers = useTouchClick({
     onAction: handleNextRound,
     disabled: !showNextRound,
   });
@@ -103,7 +103,7 @@ export const ActionButton = () => {
           size="none"
           className={cn(
             !drawDisabled ? ENABLED_STYLES : DISABLED_STYLES,
-            "animate-in fade-in duration-200",
+            "animate-in fade-in duration-200 touch-manipulation",
           )}
           {...drawTouchHandlers}
           disabled={drawDisabled}
@@ -118,7 +118,7 @@ export const ActionButton = () => {
           size="none"
           className={cn(
             showNextRound ? ENABLED_STYLES : DISABLED_STYLES,
-            "animate-in fade-in duration-300",
+            "animate-in fade-in duration-300 touch-manipulation",
           )}
           {...nextRoundTouchHandlers}
           disabled={!showNextRound}

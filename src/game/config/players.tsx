@@ -21,7 +21,7 @@ export const Players: React.FC<PlayersProps> = ({ players, max, update }) => {
     <ConfigSection disabled={!players}>
       <div className="flex items-center justify-around text-center">
         <Button
-          variant="subtle"
+          variant="outline"
           size="pill-xl"
           aria-label="remove a player"
           disabled={players < 3}
@@ -36,7 +36,7 @@ export const Players: React.FC<PlayersProps> = ({ players, max, update }) => {
           {players} Players
         </div>
         <Button
-          variant="subtle"
+          variant="outline"
           size="pill-xl"
           aria-label="add a player"
           disabled={players >= max}

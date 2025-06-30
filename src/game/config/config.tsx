@@ -168,7 +168,7 @@ const Config = ({ configVisible, setConfigVisible }: ConfigProps) => {
       direction="bottom"
       onOpenChange={handleDialogClose}
     >
-      <DrawerContent className="bg-slate-950/80 px-0 pt-1 pb-3 backdrop-blur-lg">
+      <DrawerContent className="bg-slate-800/80 px-0 pt-1 pb-3 backdrop-blur-lg">
         <DrawerHeader className="px-0 pt-1 pb-2">
           <DrawerDescription className="sr-only">
             Set up your play format, courts, and set the player numbers.

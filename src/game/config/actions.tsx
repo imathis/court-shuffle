@@ -83,8 +83,8 @@ export const ConfigActions: React.FC<ConfigActionsProps> = ({
     <>
       {container === "drawer" ? (
         <div className="flex items-center justify-between gap-3 px-4">
-          <Button variant="secondary" size="icon-xl" onClick={handleCancel}>
-            <X strokeWidth={3} />
+          <Button variant="outline-dark" size="icon-xl" onClick={handleCancel}>
+            <X strokeWidth={2} />
           </Button>
           <DrawerTitle className="text-3xl">Court Setup</DrawerTitle>
           <Button
@@ -93,7 +93,7 @@ export const ConfigActions: React.FC<ConfigActionsProps> = ({
             onClick={configGame}
             disabled={!(perCourt && players)}
           >
-            <Check strokeWidth={3} />
+            <Check strokeWidth={2} />
           </Button>
         </div>
       ) : (

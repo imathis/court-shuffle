@@ -1,7 +1,7 @@
 import React from "react";
 import { ConfigSection } from "./section";
 import { Button } from "@/components/ui/button";
-import { useTouchOptimized } from "@/hooks/useTouchOptimized";
+import { useTouchClick } from "@/hooks/useTouchClick";
 
 interface FormatProps {
   perCourt: number | undefined;
@@ -14,7 +14,7 @@ const FormatButton: React.FC<{
   onSelect: (value: number) => void;
   children: React.ReactNode;
 }> = ({ value, selected, onSelect, children }) => {
-  const touchHandlers = useTouchOptimized({
+  const touchHandlers = useTouchClick({
     onAction: () => onSelect(value),
   });
 
@@ -22,6 +22,7 @@ const FormatButton: React.FC<{
     <Button
       variant="checkButton"
       size="2xl"
+      className="touch-manipulation"
       {...touchHandlers}
       aria-pressed={selected}
       role="radio"

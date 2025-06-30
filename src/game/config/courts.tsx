@@ -2,7 +2,7 @@ import React from "react";
 import { sort, allCourts } from "../../helpers/gameHelpers";
 import { ConfigSection } from "./section";
 import { Button } from "@/components/ui/button";
-import { useTouchOptimized } from "@/hooks/useTouchOptimized";
+import { useTouchClick } from "@/hooks/useTouchClick";
 
 interface CourtsProps {
   courts: number[] | undefined;
@@ -70,7 +70,7 @@ const Court: React.FC<CourtProps> = ({
   type,
   className,
 }) => {
-  const touchHandlers = useTouchOptimized({
+  const touchHandlers = useTouchClick({
     onAction: () => {
       const syntheticEvent = {
         target: { value: court.toString() },
@@ -83,7 +83,7 @@ const Court: React.FC<CourtProps> = ({
     <Button
       variant="checkButton"
       size="3xl"
-      className={className}
+      className={`touch-manipulation ${className || ''}`}
       {...touchHandlers}
       aria-pressed={checked}
       role={type === "checkbox" ? "checkbox" : "radio"}
