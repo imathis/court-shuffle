@@ -58,7 +58,7 @@ export default defineConfig({
   },
   plugins: [
     svgr({
-      include: ["**/cards/*.svg", "**/icons/logo.svg"],
+      include: ["**/cards/*.svg"],
       svgrOptions: {
         dimensions: false,
         exportType: "default", // Ensure default export is a component
@@ -72,21 +72,9 @@ export default defineConfig({
         enabled: false, // Enable in dev for network testing
       },
       workbox: {
-        globPatterns: ["**/*.{js,css,html,ico,png,svg}"],
-        navigateFallback: "/index.html",
-        cacheId: "courtshuffle-v4", // Force cache reset
-        cleanupOutdatedCaches: true, // Good practice - prevents cache bloat
-        skipWaiting: true, // Force immediate activation
-        clientsClaim: true, // Take control of uncontrolled clients
-        runtimeCaching: [
-          {
-            urlPattern: /\.js$/,
-            handler: "StaleWhileRevalidate", // Serve cached JS instantly, update in background
-            options: {
-              cacheName: "js-cache",
-            },
-          },
-        ],
+        cleanupOutdatedCaches: true,
+        skipWaiting: true,
+        clientsClaim: true,
       },
       includeAssets: ["favicon.ico", "apple-touch-icon.png"],
       manifest: {
