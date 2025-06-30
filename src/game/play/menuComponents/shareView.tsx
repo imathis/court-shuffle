@@ -1,8 +1,8 @@
-import React from "react";
 import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
-import { ArrowLeft, ShareIcon, Check } from "lucide-react";
+import { Check, ShareIcon } from "lucide-react";
 import QRCode from "qrcode-svg";
+import React from "react";
 
 interface ShareViewProps {
   slug: string | null;
@@ -43,26 +43,14 @@ export const ShareView: React.FC<ShareViewProps> = ({
   isLoading,
   error,
   copied,
-  onBack,
   onRetry,
   onShare,
 }) => {
   return (
     <div className="flex flex-col gap-3 text-center">
-      <div className="flex items-center justify-between">
-        <Button
-          size="sm"
-          variant="ghost"
-          onClick={onBack}
-          className="h-8 w-8 p-0"
-        >
-          <ArrowLeft className="h-4 w-4" />
-        </Button>
-        <div className="flex-1">
-          <h3 className="text-2xl font-extrabold">Scan to Join</h3>
-          <p className="text-slate-300">Draw cards from multiple devices</p>
-        </div>
-        <div className="w-8" /> {/* Spacer for balance */}
+      <div>
+        <h3 className="text-2xl font-extrabold">Scan to Join</h3>
+        <p className="text-slate-300">Draw cards from multiple devices</p>
       </div>
 
       {/* QR Code Area */}
