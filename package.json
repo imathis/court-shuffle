@@ -4,7 +4,16 @@
   "version": "2.0.0",
   "type": "module",
   "description": "A Progressive Web App for managing court-based sports games through card-based player assignments",
-  "keywords": ["sports", "court", "game", "pwa", "react", "card", "player", "assignment"],
+  "keywords": [
+    "sports",
+    "court",
+    "game",
+    "pwa",
+    "react",
+    "card",
+    "player",
+    "assignment"
+  ],
   "author": "Your Name",
   "license": "MIT",
   "repository": {
@@ -19,7 +28,7 @@
     "dev": "vite",
     "build": "bun run optimize:svg && bun run generate:safe-areas && tsc -b && vite build",
     "build:no-optimize": "bun run generate:safe-areas && tsc -b && vite build",
-    "lint": "eslint src --ext js,jsx --report-unused-disable-directives --max-warnings 0",
+    "lint": "eslint src --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
     "preview": "vite preview",
     "optimize": "vite optimize",
     "optimize:svg": "svgo --config svgo.config.js src/assets/cards/*.svg --quiet",
